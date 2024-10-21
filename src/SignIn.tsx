@@ -35,6 +35,9 @@ const SignIn: React.FC = () => {
   const handleRedirect = () => {
     navigate("/signin");
   };
+  const redirectUserProfile = () => {
+    navigate("/userprofile");
+  };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
@@ -48,11 +51,12 @@ const SignIn: React.FC = () => {
     <Box className="main-bg">
     <Flex height="100vh" alignItems="center" justifyContent="center">
       <Box
-        width="650px"
-        height="auto"
-        borderRadius="md"
-        shadow="md"
-        borderWidth="1px"
+       width="550px"
+       height="100vh"
+       borderRadius="lg"
+       shadow="lg"
+       borderWidth="1px"
+       background="#fff"
       >
         <Header />
         <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
@@ -118,12 +122,11 @@ const SignIn: React.FC = () => {
                 </List>
               </ModalBody>
               <Divider />
-
               <ModalFooter>
-                <Button className="custom-outline-btn" type="submit" mt={4} m={2}>
+                <Button className="custom-outline-btn" type="button" mt={4} m={2} onClick={onClose}>
                   Deny
                 </Button>
-                <Button className="custom-btn" type="submit" mt={4} m={2}>
+                <Button className="custom-btn" type="submit" mt={4} m={2} onClick={redirectUserProfile}>
                   Accept
                 </Button>
               </ModalFooter>

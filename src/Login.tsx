@@ -37,12 +37,13 @@ const Login: React.FC = () => {
     <Box className="main-bg">
     <Flex height="100vh" alignItems="center" justifyContent="center">
       <Box
-        width="650px"
-        height="775px"
+        width="550px"
+        height="100vh"
         borderRadius="lg"
         shadow="lg"
         borderWidth="1px"
         background="#fff"
+        className="layout"
       >
         <Flex
           height="50%"

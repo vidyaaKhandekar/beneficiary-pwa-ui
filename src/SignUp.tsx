@@ -27,11 +27,12 @@ const Signup: React.FC = () => {
     <Box className="main-bg">
     <Flex height="100vh" alignItems="center" justifyContent="center">
       <Box
-        width="650px"
-        height="auto"
-        borderRadius="md"
-        shadow="md"
-        borderWidth="1px"
+       width="550px"
+       height="100vh"
+       borderRadius="lg"
+       shadow="lg"
+       borderWidth="1px"
+       background="#fff"
       >
         <Header />
         <Box p={5}>

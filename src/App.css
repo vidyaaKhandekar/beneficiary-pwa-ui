@@ -39,8 +39,18 @@ text-decoration: underline;
 
 .main-bg{
   min-height:100vh;
-  background-image:url('../src/assets/images/image (6).png');
+  background-image:url('../src/assets/images/image (7).png');
   background-position:center;
   background-repeat:no-repeat;
   background-size:cover;
+}
+.category-box{
+border: 1px solid blue;
+width: auto;
+color: blue;
+border-radius: 5px;
+padding: 2px 20px;
+}
+.text-blue{
+  color:#0037B9;
 }

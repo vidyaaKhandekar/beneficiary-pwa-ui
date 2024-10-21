@@ -54,3 +54,16 @@ padding: 2px 20px;
 .text-blue{
   color:#0037B9;
 }
+.badge-box{
+  background: #0B7B69;
+  color: #fff;
+  border-radius: 8px 16px 0px 15px;
+  width: auto;
+  float: right;
+  padding: 4px 31px;
+  margin: -21px;
+}
+.card-scroll{
+height: 80vh;
+overflow: scroll;
+}

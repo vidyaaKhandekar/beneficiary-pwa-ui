@@ -7,6 +7,7 @@ import SignIn from "./SignIn";
 import UserProfile from "./UserProfile";
 import Footer from "./component/Footer";
 import ExploreBenefits from "./ExploreBenefits";
+import BenefitsDetails from "./BenefitsDetails";
 
 
 function App() {
@@ -19,7 +20,8 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/userprofile" element={<UserProfile />} />
         <Route path="/footer" element={<Footer />} />
-        <Route path="explorebenefits" element={<ExploreBenefits/>} />
+        <Route path="/explorebenefits" element={<ExploreBenefits/>} />
+        <Route path="/benefitsdetails" element={<BenefitsDetails/>} />
       </Routes>
     </Router>
     </ChakraProvider>

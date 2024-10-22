@@ -19,7 +19,7 @@ import {
   ModalFooter,
   useDisclosure,
   FormControl,
-  FormLabel
+  FormLabel,
 } from "@chakra-ui/react";
 import "../../assets/styles/App.css";
 import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
@@ -29,14 +29,16 @@ import Footer from "../common/Footer";
 import { Link as RouterLink } from "react-router-dom";
 import { MdOutlineFilterAlt } from "react-icons/md";
 import FloatingSelect from "../common/FloatingSelect";
+import { scholarships } from "../../assets/mockdata/benefit";
+import BenefitCard from "../common/BenefitCard";
 
 const ExploreBenefits: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); 
-    onOpen(); 
+    event.preventDefault();
+    onOpen();
   };
 
   const [formData, setFormData] = useState({ name: "" });
@@ -80,223 +82,28 @@ const ExploreBenefits: React.FC = () => {
                   </Heading>
                 </Box>
               </GridItem>
-              <GridItem >
+              <GridItem>
                 <Box float={"right"} onClick={handleSubmit}>
                   <MdOutlineFilterAlt fontSize={"25px"} />
                 </Box>
               </GridItem>
             </Grid>
-            <Card
-              maxW="2xl"
-              m={4}
-              shadow="lg"
-              sx={{ border: "1px solid #ebe4e4c9", borderRadius: "10px" }}
-            >
-              <CardBody>
-                <Box className="badge-box">31st July,2024</Box>
-                <Heading size="md">Pre-Matric Scholarship-SC</Heading>
-                <Heading size="sm" color="#484848" fontWeight={400} mt={2}>
-                  Ministry of Social Justice
-                </Heading>
-                <Text fontSize="md" mt={2}>
-                  ₹ 3500 INR 7700
-                </Text>
-                <Flex alignItems="center" mt={2} mb={2}>
-                  <Box className="category-box" mr={2}>
-                    sc
-                  </Box>
-                  <Box className="category-box" mr={2}>
-                    madhya pradesh
-                  </Box>
-                  <Box className="category-box" mr={2}>
-                    All genders
-                  </Box>
-                </Flex>
-                <Text mt={4}>
-                  The Pre-matric Scholarship-SC is provided by the Ministry of
-                  Social Justice and the Tribal Welfare Department of Madhya
-                  Pradesh. It supports Class 9 and 10 students from low-income
-                  families with an annual income below ₹2,50,000. Both genders
-                  are eligible.
-                </Text>
-              </CardBody>
-              <Flex
-                align="center"
-                justify="center"
-                width="100%"
-                pt={2}
-                mb={4}
-                fontWeight={400}
-              >
-                <Link
-                  className="text-blue"
-                  as={RouterLink}
-                  to="/benefitsdetails"
-                >
-                  View Details <ArrowForwardIcon />
-                </Link>
-              </Flex>
-            </Card>
-            <Card
-              maxW="2xl"
-              m={4}
-              shadow="lg"
-              sx={{ border: "1px solid #ebe4e4c9", borderRadius: "10px" }}
-            >
-              <CardBody>
-                <Box className="badge-box">31st July,2024</Box>
-                <Heading size="md">Pre-Matric Scholarship-SC</Heading>
-                <Heading size="sm" color="#484848" fontWeight={400} mt={2}>
-                  Ministry of Social Justice
-                </Heading>
-                <Text fontSize="md" mt={2}>
-                  ₹ 3500 INR 7700
-                </Text>
-                <Flex alignItems="center" mt={2} mb={2}>
-                  <Box className="category-box" mr={2}>
-                    sc
-                  </Box>
-                  <Box className="category-box" mr={2}>
-                    madhya pradesh
-                  </Box>
-                  <Box className="category-box" mr={2}>
-                    All genders
-                  </Box>
-                </Flex>
-                <Text mt={4}>
-                  The Pre-matric Scholarship-SC is provided by the Ministry of
-                  Social Justice and the Tribal Welfare Department of Madhya
-                  Pradesh. It supports Class 9 and 10 students from low-income
-                  families with an annual income below ₹2,50,000. Both genders
-                  are eligible.
-                </Text>
-              </CardBody>
-              <Flex
-                align="center"
-                justify="center"
-                width="100%"
-                pt={2}
-                mb={4}
-                fontWeight={400}
-              >
-                <Link
-                  className="text-blue"
-                  as={RouterLink}
-                  to="/benefitsdetails"
-                >
-                  View Details <ArrowForwardIcon />
-                </Link>
-              </Flex>
-            </Card>
-            <Card
-              maxW="2xl"
-              m={4}
-              shadow="lg"
-              sx={{ border: "1px solid #ebe4e4c9", borderRadius: "10px" }}
-            >
-              <CardBody>
-                <Box className="badge-box">31st July,2024</Box>
-                <Heading size="md">Pre-Matric Scholarship-SC</Heading>
-                <Heading size="sm" color="#484848" fontWeight={400} mt={2}>
-                  Ministry of Social Justice
-                </Heading>
-                <Text fontSize="md" mt={2}>
-                  ₹ 3500 INR 7700
-                </Text>
-                <Flex alignItems="center" mt={2} mb={2}>
-                  <Box className="category-box" mr={2}>
-                    sc
-                  </Box>
-                  <Box className="category-box" mr={2}>
-                    madhya pradesh
-                  </Box>
-                  <Box className="category-box" mr={2}>
-                    All genders
-                  </Box>
-                </Flex>
-                <Text mt={4}>
-                  The Pre-matric Scholarship-SC is provided by the Ministry of
-                  Social Justice and the Tribal Welfare Department of Madhya
-                  Pradesh. It supports Class 9 and 10 students from low-income
-                  families with an annual income below ₹2,50,000. Both genders
-                  are eligible.
-                </Text>
-              </CardBody>
-              <Flex
-                align="center"
-                justify="center"
-                width="100%"
-                pt={2}
-                mb={4}
-                fontWeight={400}
-              >
-                <Link
-                  className="text-blue"
-                  as={RouterLink}
-                  to="/benefitsdetails"
-                >
-                  View Details <ArrowForwardIcon />
-                </Link>
-              </Flex>
-            </Card>
-            <Card
-              maxW="2xl"
-              m={4}
-              shadow="lg"
-              sx={{ border: "1px solid #ebe4e4c9", borderRadius: "10px" }}
-            >
-              <CardBody>
-                <Box className="badge-box">31st July,2024</Box>
-                <Heading size="md">Pre-Matric Scholarship-SC</Heading>
-                <Heading size="sm" color="#484848" fontWeight={400} mt={2}>
-                  Ministry of Social Justice
-                </Heading>
-                <Text fontSize="md" mt={2}>
-                  ₹ 3500 INR 7700
-                </Text>
-                <Flex alignItems="center" mt={2} mb={2}>
-                  <Box className="category-box" mr={2}>
-                    sc
-                  </Box>
-                  <Box className="category-box" mr={2}>
-                    madhya pradesh
-                  </Box>
-                  <Box className="category-box" mr={2}>
-                    All genders
-                  </Box>
-                </Flex>
-                <Text mt={4}>
-                  The Pre-matric Scholarship-SC is provided by the Ministry of
-                  Social Justice and the Tribal Welfare Department of Madhya
-                  Pradesh. It supports Class 9 and 10 students from low-income
-                  families with an annual income below ₹2,50,000. Both genders
-                  are eligible.
-                </Text>
-              </CardBody>
-              <Flex
-                align="center"
-                justify="center"
-                width="100%"
-                pt={2}
-                mb={4}
-                fontWeight={400}
-              >
-                <Link
-                  className="text-blue"
-                  as={RouterLink}
-                  to="/benefitsdetails"
-                >
-                  View Details <ArrowForwardIcon />
-                </Link>
-              </Flex>
-            </Card>
+            {/* {created seperate component for scholarship card and map mock data  to it} */}
+            {scholarships.map((scholarship, index) => (
+              <BenefitCard key={index} {...scholarship} />
+            ))}
             <Box m={4}>
               <Button className="custom-btn" type="submit" mt={4} width="100%">
                 Load More
               </Button>
             </Box>
           </Box>
-          <Modal  isCentered finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+          <Modal
+            isCentered
+            finalFocusRef={finalRef}
+            isOpen={isOpen}
+            onClose={onClose}
+          >
             <ModalOverlay />
             <ModalContent>
               <ModalHeader className="border-bottom">
@@ -306,47 +113,52 @@ const ExploreBenefits: React.FC = () => {
 
               <ModalCloseButton />
               <ModalBody>
-                
-              <FormControl>
-                <FloatingSelect
-                  label="Education level"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  options={options}
-                />
-                <FloatingSelect
-                  label="Gender"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  options={options}
-                />
-                <FloatingSelect
-                  label="Annual Income"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  options={options}
-                />
-                <FloatingSelect
-                  label="Benefit Amount"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  options={options}
-                />
-                <FloatingSelect
-                  label="Subject"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  options={options}
-                />
-              </FormControl>
+                <FormControl>
+                  <FloatingSelect
+                    label="Education level"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    options={options}
+                  />
+                  <FloatingSelect
+                    label="Gender"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    options={options}
+                  />
+                  <FloatingSelect
+                    label="Annual Income"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    options={options}
+                  />
+                  <FloatingSelect
+                    label="Benefit Amount"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    options={options}
+                  />
+                  <FloatingSelect
+                    label="Subject"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    options={options}
+                  />
+                </FormControl>
               </ModalBody>
               <ModalFooter>
-                <Button className="custom-btn" type="submit" mt={4} m={2} width='100%'>
+                <Button
+                  className="custom-btn"
+                  type="submit"
+                  mt={4}
+                  m={2}
+                  width="100%"
+                >
                   Apply Filters
                 </Button>
               </ModalFooter>

@@ -23,13 +23,13 @@ import {
   ModalBody,
   ModalFooter,
 } from "@chakra-ui/react";
-import "./App.css";
+import '../../assets/styles/App.css'
 import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
-import Header from "./component/Header";
-import Footer from "./component/Footer";
+import Header from "../common/Header";
+import Footer from "../common/Footer";
 
-const BenefitsDetails: React.FC = () => {
+const List: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
 
@@ -124,7 +124,7 @@ const BenefitsDetails: React.FC = () => {
               </UnorderedList>
 
               <Heading size="md" color="#484848" fontWeight={500} mt={6}>
-                Key Points:
+                Mandatory Documents:
               </Heading>
               <UnorderedList mt={4}>
                 <ListItem>Marksheet</ListItem>

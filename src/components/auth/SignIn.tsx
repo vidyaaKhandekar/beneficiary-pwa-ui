@@ -24,11 +24,12 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { BiCheck } from "react-icons/bi";
-import Header from "./component/Header";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { Link, useNavigate } from "react-router-dom";
-import FlotingInput from "./component/FlotingInput";
 import { Link as RouterLink } from "react-router-dom";
+
+import Header from "../common/Header";
+import FlotingInput from "../common/FlotingInput";
 
 const SignIn: React.FC = () => {
   const navigate = useNavigate();

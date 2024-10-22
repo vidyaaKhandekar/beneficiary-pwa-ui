@@ -8,9 +8,9 @@ import {
   FormLabel,
   Image,
 } from "@chakra-ui/react";
-import "./App.css";
+import "../../assets/styles/App.css"
 import { useNavigate } from "react-router-dom";
-import FloatingSelect from "./component/FloatingSelect";
+import FloatingSelect from "../common/FloatingSelect";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();

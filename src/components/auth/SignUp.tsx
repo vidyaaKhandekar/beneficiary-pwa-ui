@@ -12,10 +12,11 @@ import {
 // import Header from "./Header";
 import { Link, useNavigate } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
-import FlotingInput from "./component/FlotingInput";
-import Header from "./component/Header";
+import Header from "../common/Header";
+import FlotingInput from "../common/FlotingInput";
+import FloatingPasswordInput from "../common/FloatingPasswordInput";
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import FloatingPasswordInput from "./component/FloatingPasswordInput";
+
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();

@@ -21,14 +21,14 @@ import {
   FormControl,
   FormLabel
 } from "@chakra-ui/react";
-import "./App.css";
+import "../../assets/styles/App.css";
 import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
-import Header from "./component/Header";
-import Footer from "./component/Footer";
+import Header from "../common/Header";
+import Footer from "../common/Footer";
 import { Link as RouterLink } from "react-router-dom";
 import { MdOutlineFilterAlt } from "react-icons/md";
-import FloatingSelect from "./component/FloatingSelect";
+import FloatingSelect from "../common/FloatingSelect";
 
 const ExploreBenefits: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

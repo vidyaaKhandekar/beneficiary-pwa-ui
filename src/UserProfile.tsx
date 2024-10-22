@@ -25,7 +25,7 @@ const UserProfile: React.FC = () => {
 
   return (
     <Box className="main-bg">
-    <Flex height="100vh" alignItems="center" justifyContent="center">
+    <Flex height="100vh" alignItems="center" justifyContent="center" position="relative">
    
       <Box
          width="550px"
@@ -47,7 +47,7 @@ const UserProfile: React.FC = () => {
 </Wrap>
       <Box pl={4}>
         <Text fontSize="lg" fontWeight="600">
-        Anaya Gupta
+        Anay Gupta
         </Text>
         <Text color="gray.600"> Logged with DG locker</Text>
       </Box>

@@ -10,7 +10,14 @@ import {
 const Footer: React.FC = () => {
   return (
     
-    <Box bg="#EDEFFF" p="4">
+    <Box bg="#EDEFFF" p="4" 
+    borderRadius="lg"
+    shadow="lg"
+    borderWidth="1px"
+    background="#fff"
+    position={"absolute"}
+    bottom={0}
+    width="550px">
          <Grid templateColumns="repeat(3, 1fr)" gap={4}>
       <Box> 
         <Center flexDirection="column">

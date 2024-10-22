@@ -79,7 +79,7 @@ const SignIn: React.FC = () => {
               </Button>
             </VStack>
           </form>
-          <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+          <Modal  isCentered finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
               <ModalHeader className="border-bottom">

@@ -26,14 +26,14 @@ const MyApplications: React.FC = () => {
   };
 
   return (
-    <Layout isNavbar={true}>
+    <Layout
+      isNavbar={true}
+      _heading={{
+        heading: "Pre-matric Scholarship-ST",
+        handleBack,
+      }}
+    >
       <Box className="card-scroll">
-        <HeadingText
-          heading="My Applications"
-          subHeading="Track your application progress"
-          beneficiary={false}
-          handleBack={handleBack}
-        />
         <Stack spacing="4">
           <Box
             m={4}
@@ -58,7 +58,6 @@ const MyApplications: React.FC = () => {
           </Box>
         </Stack>
       </Box>
-      <Footer />
     </Layout>
   );
 };

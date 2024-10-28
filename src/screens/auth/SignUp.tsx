@@ -1,24 +1,11 @@
 import React from "react";
-import {
-  Box,
-  FormControl,
-  Heading,
-  Text,
-  VStack,
-  Flex,
-  Center,
-} from "@chakra-ui/react";
+import { Box, FormControl, Text, VStack, Center } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
-import { ArrowBackIcon } from "@chakra-ui/icons";
 import CommonButton from "../../components/common/button/Button";
 import Layout from "../../components/common/layout/Layout";
-import HeadingText from "../../components/common/layout/HeadingText";
-import Navbar from "../../components/common/layout/Navbar";
-
-import FlotingInput from "../../components/common/FlotingInput";
-import FloatingSelect from "../../components/common/FloatingSelect";
-import FloatingPasswordInput from "../../components/common/FloatingPasswordInput";
+import FlotingInput from "../../components/common/inputs/FlotingInput";
+import FloatingPasswordInput from "../../components/common/inputs/FloatingPasswordInput";
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
@@ -31,13 +18,15 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <Layout isNavbar={false}>
-      <Navbar isMenu={false} />
-      <HeadingText
-        heading="Sign Up with E-Wallet"
-        beneficiary={false}
-        handleBack={handleBack}
-      />
+    <Layout
+      isNavbar={true}
+      isMenu={false}
+      _heading={{
+        heading: "Sign Up with E-Wallet",
+        handleBack,
+      }}
+      isBottombar={false}
+    >
       <Box p={5}>
         <form>
           <VStack align="stretch">
@@ -54,7 +43,7 @@ const Signup: React.FC = () => {
                 name="confirmpassword"
               />
             </FormControl>
-            <CommonButton label="Sign Up" />
+            <CommonButton label="Sign Up" onClick={handleRedirect} />
           </VStack>
         </form>
         <Center>

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Box,
   Button,
   Flex,
   FormControl,
@@ -12,11 +11,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import i18n from "../../components/common/i18n";
 import Layout from "../../components/common/layout/Layout";
-// import FloatingSelect from "../common/FloatingSelect";
-// import i18n from "../common/i18n";
 import { useTranslation } from "react-i18next";
-import FloatingSelect from "../../components/common/FloatingSelect";
-// import Layout from "../common/layout/Layout";
+import FloatingSelect from "../../components/common/inputs/FloatingSelect";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -39,11 +35,11 @@ const Login: React.FC = () => {
   ];
 
   const handleRedirect = () => {
-    navigate("/signup");
+    navigate("/signin");
   };
 
   return (
-    <Layout isNavbar={false}>
+    <Layout isNavbar={false} isBottombar={false}>
       <Flex height="50%" justifyContent="flex-end" className="purple-bg">
         <Image
           src="../src/assets/images/frame.png"

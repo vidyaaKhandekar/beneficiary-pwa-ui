@@ -28,7 +28,6 @@ const BenefitCard: React.FC<BenefitCardProps> = ({
   amount,
   categories,
   description,
-  link,
 }) => {
   return (
     <Card
@@ -38,8 +37,12 @@ const BenefitCard: React.FC<BenefitCardProps> = ({
       sx={{ border: "1px solid #ebe4e4c9", borderRadius: "10px" }}
     >
       <CardBody>
-        <Box className="badge-box">{date}</Box>
-        <Heading size="md">{title}</Heading>
+        <Box className="badge-box" width={"auto"}>
+          {date}
+        </Box>
+        <Heading marginTop={"15px"} size="md">
+          {title}
+        </Heading>
         <Heading size="sm" color="#484848" fontWeight={400} mt={2}>
           {ministry}
         </Heading>
@@ -63,7 +66,12 @@ const BenefitCard: React.FC<BenefitCardProps> = ({
         mb={4}
         fontWeight={400}
       >
-        <Link className="text-blue" as={RouterLink} to={"/benefitsdetails"}>
+        <Link
+          className="text-blue"
+          as={RouterLink}
+          to={"/benefitsdetails"}
+          color={"#0037b9"}
+        >
           View Details <ArrowForwardIcon />
         </Link>
       </Flex>

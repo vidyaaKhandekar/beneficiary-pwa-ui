@@ -64,11 +64,12 @@
 .badge-box {
   background: #0b7b69;
   color: #fff;
-  border-radius: 8px 16px 0px 15px;
+  border-radius: 0px 10px 0px 5px;
   width: auto;
   float: right;
-  padding: 4px 31px;
+  padding: 3px 28px;
   margin: -21px;
+  text-align: center;
 }
 
 .card-scroll {

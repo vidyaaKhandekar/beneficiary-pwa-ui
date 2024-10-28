@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Box, Text, IconButton, Avatar, VStack } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
+import { MdOutlineFilterAlt } from "react-icons/md";
 
 interface HeadingTextProps {
   beneficiary?: boolean;
@@ -8,11 +9,16 @@ interface HeadingTextProps {
   subHeading?: string;
   handleBack?: () => void; // This should always expect a function
   label?: string;
+  isFilter?: boolean; // New prop to determine if the filter icon should be shown
+  onOpen?: () => void; // Function to call when the filter icon is clicked
 }
 
-const LeftContent: React.FC<{ label: string }> = ({ label }) => (
+const LeftContent: React.FC<{ label: string; size?: string }> = ({
+  label,
+  size = "45px", // Default size if not provided
+}) => (
   <Avatar
-    size="sm"
+    boxSize={size} // Use boxSize for custom dimensions
     name={label}
     src="https://bit.ly/broken-link"
     marginRight={1}
@@ -37,8 +43,10 @@ const HeadingText: React.FC<HeadingTextProps> = ({
   heading,
   subHeading,
   handleBack, // Expecting a function or undefined
-  label,
+  isFilter, // New prop
+  handleOpen,
 }) => {
+  console.log("beneficiary", beneficiary);
   return (
     <Box
       display="flex"
@@ -51,8 +59,8 @@ const HeadingText: React.FC<HeadingTextProps> = ({
       {(handleBack || heading || subHeading) && (
         <VStack align="start">
           {(handleBack || heading) && (
-            <Box display="flex" alignItems="center">
-              {beneficiary && label && <LeftContent label={heading} />}
+            <Box display="flex" alignItems="center" width="100%">
+              {beneficiary && <LeftContent label={heading} />}
               {handleBack && <BackIcon onClick={handleBack} />}
               {heading && (
                 <Text
@@ -66,6 +74,17 @@ const HeadingText: React.FC<HeadingTextProps> = ({
                   {heading}
                 </Text>
               )}
+              {/* Use IconButton for the filter icon */}
+              {isFilter && (
+                <IconButton
+                  aria-label="Filter"
+                  icon={<MdOutlineFilterAlt />}
+                  fontSize="25px"
+                  marginLeft="auto"
+                  onClick={handleOpen}
+                  variant="ghost" // You can change this variant if you want a different style
+                />
+              )}
             </Box>
           )}
           {beneficiary && subHeading ? (
@@ -75,7 +94,7 @@ const HeadingText: React.FC<HeadingTextProps> = ({
               fontWeight="500"
               lineHeight="16px"
               color="#4D4639"
-              marginLeft="10"
+              marginLeft="12"
             >
               {subHeading}
             </Text>

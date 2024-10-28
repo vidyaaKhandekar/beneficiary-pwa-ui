@@ -8,9 +8,7 @@ interface HeadingTextProps {
   heading?: string;
   subHeading?: string;
   handleBack?: () => void; // This should always expect a function
-  label?: string;
   isFilter?: boolean; // New prop to determine if the filter icon should be shown
-  onOpen?: () => void; // Function to call when the filter icon is clicked
 }
 
 const LeftContent: React.FC<{ label: string; size?: string }> = ({

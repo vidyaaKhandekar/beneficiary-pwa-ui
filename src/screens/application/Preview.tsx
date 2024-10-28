@@ -1,31 +1,16 @@
 import React from "react";
-import {
-  Box,
-  Heading,
-  useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  Divider,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Stack,
-} from "@chakra-ui/react";
+import { Box, useDisclosure, Stack } from "@chakra-ui/react";
 import "../../assets/styles/App.css";
-import Footer from "../../components/common/Footer";
 import CustomDisableInput from "../../components/common/inputs/DisabledInput";
 import CommonButton from "../../components/common/button/Button";
 import Layout from "../../components/common/layout/Layout";
-import HeadingText from "../../components/common/layout/HeadingText";
 import { useNavigate } from "react-router-dom";
 import ConfirmationDialog from "../../components/common/ConfirmationDialog";
 import BottomBar from "../../components/common/layout/Bottombar";
 
 const Preview: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const finalRef = React.useRef(null);
+
   const navigate = useNavigate();
 
   const openModal = (event: React.FormEvent<HTMLFormElement>) => {
@@ -33,9 +18,9 @@ const Preview: React.FC = () => {
     onOpen();
   };
 
-  const closeModal = () => {
-    onClose();
-  };
+  // const closeModal = () => {
+  //   onClose();
+  // };
 
   const handleBack = () => {
     navigate(-1);

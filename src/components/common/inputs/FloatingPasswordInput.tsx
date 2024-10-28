@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Box,
   FormControl,
@@ -7,7 +8,6 @@ import {
   Button,
   Icon,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 export default function FloatingPasswordInput({ value, onChange, label }) {
@@ -50,7 +50,6 @@ export default function FloatingPasswordInput({ value, onChange, label }) {
             borderColor: "blue.500",
           }}
           sx={{
-            // Remove part of the border under the label when it's focused
             "&::before": {
               content: '""',
               position: "absolute",
@@ -58,7 +57,7 @@ export default function FloatingPasswordInput({ value, onChange, label }) {
               left: "10px",
               width: "30px", // adjust based on your label size
               height: "2px",
-              background: "white", // same color as background
+              background: "white",
               zIndex: 2,
             },
           }}
@@ -66,8 +65,7 @@ export default function FloatingPasswordInput({ value, onChange, label }) {
         />
         <InputRightElement width="4.5rem" sx={{ marginTop: "3%" }}>
           <Button h="1.75rem" size="sm" onClick={handleClick}>
-            {show ? <Icon as={ViewOffIcon} /> : <Icon as={ViewIcon} />}{" "}
-            {/* Toggle between icons */}
+            {show ? <Icon as={ViewIcon} /> : <Icon as={ViewOffIcon} />}
           </Button>
         </InputRightElement>
       </InputGroup>

@@ -54,7 +54,7 @@ const ExploreBenefits: React.FC = () => {
         {/* Map through the scholarships data and render BenefitCard */}
         {scholarships.map((scholarship, index) => (
           <BenefitCard
-            key={index}
+            key={scholarship.title}
             date={scholarship.date}
             title={scholarship.title}
             ministry={scholarship.ministry}

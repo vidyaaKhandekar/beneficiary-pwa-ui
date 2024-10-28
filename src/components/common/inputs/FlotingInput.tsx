@@ -1,7 +1,7 @@
-import { Box, FormControl, Input } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { Box, FormControl, Input } from "@chakra-ui/react";
 
-export default function FlotingInput({ value, onChange, label }) {
+export default function FloatingInput({ value, onChange, label }) {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
@@ -36,15 +36,14 @@ export default function FlotingInput({ value, onChange, label }) {
           borderColor: "blue.500",
         }}
         sx={{
-          // Remove part of the border under the label when it's focused
           "&::before": {
             content: '""',
             position: "absolute",
             top: isFocused ? "-10px" : "50%",
             left: "10px",
-            width: "30px", // adjust based on your label size
+            width: "30px",
             height: "2px",
-            background: "white", // same color as background
+            background: "white",
             zIndex: 2,
           },
         }}

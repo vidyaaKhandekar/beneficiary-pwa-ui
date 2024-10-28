@@ -1,21 +1,7 @@
 import React from "react";
-import {
-  Box,
-  Stack,
-  Button,
-  Card,
-  Input,
-  FormControl,
-  FormLabel,
-  VStack,
-  HStack,
-  Icon,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Stack, VStack, HStack, Text } from "@chakra-ui/react";
 import "../../assets/styles/App.css";
-import Footer from "../../components/common/Footer";
 import Layout from "../../components/common/layout/Layout";
-import HeadingText from "../../components/common/layout/HeadingText";
 import { useNavigate } from "react-router-dom";
 import { CheckIcon } from "@chakra-ui/icons";
 

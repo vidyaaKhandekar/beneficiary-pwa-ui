@@ -18,7 +18,6 @@ interface BenefitCardProps {
   amount: string;
   categories: string[];
   description: string;
-  link: string;
 }
 
 const BenefitCard: React.FC<BenefitCardProps> = ({

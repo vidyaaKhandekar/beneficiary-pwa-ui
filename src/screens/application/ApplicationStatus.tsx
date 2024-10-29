@@ -1,21 +1,7 @@
 import React from "react";
-import {
-  Box,
-  Stack,
-  Button,
-  Card,
-  Input,
-  FormControl,
-  FormLabel,
-  VStack,
-  HStack,
-  Icon,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Stack, VStack, HStack, Text } from "@chakra-ui/react";
 import "../../assets/styles/App.css";
-import Footer from "../../components/common/Footer";
 import Layout from "../../components/common/layout/Layout";
-import HeadingText from "../../components/common/layout/HeadingText";
 import { useNavigate } from "react-router-dom";
 import { CheckIcon } from "@chakra-ui/icons";
 
@@ -26,14 +12,13 @@ const MyApplications: React.FC = () => {
   };
 
   return (
-    <Layout isNavbar={true}>
+    <Layout
+      _heading={{
+        heading: "Pre-matric Scholarship-ST",
+        handleBack,
+      }}
+    >
       <Box className="card-scroll">
-        <HeadingText
-          heading="My Applications"
-          subHeading="Track your application progress"
-          beneficiary={false}
-          handleBack={handleBack}
-        />
         <Stack spacing="4">
           <Box
             m={4}
@@ -58,7 +43,6 @@ const MyApplications: React.FC = () => {
           </Box>
         </Stack>
       </Box>
-      <Footer />
     </Layout>
   );
 };

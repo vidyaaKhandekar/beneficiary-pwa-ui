@@ -1,10 +1,5 @@
 import React, { useState, ChangeEvent } from "react";
-import {
-  FormControl,
-  Select,
-  FormLabel,
-  FormHelperText,
-} from "@chakra-ui/react";
+import { FormControl, Select, FormLabel } from "@chakra-ui/react";
 
 interface Option {
   value: string;

@@ -1,12 +1,10 @@
 import React from "react";
 import {
   Box,
-  Button,
   FormControl,
   Heading,
   Text,
   VStack,
-  Flex,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -22,15 +20,12 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { BiCheck } from "react-icons/bi";
-import { ArrowBackIcon } from "@chakra-ui/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
 import CommonButton from "../../components/common/button/Button";
-import FlotingInput from "../../components/common/FlotingInput";
+import FlotingInput from "../../components/common/inputs/FlotingInput";
 import OutlineButton from "../../components/common/button/OutlineButton";
 import Layout from "../../components/common/layout/Layout";
-import HeadingText from "../../components/common/layout/HeadingText";
-import Navbar from "../../components/common/layout/Navbar";
 
 const SignIn: React.FC = () => {
   const navigate = useNavigate();
@@ -54,13 +49,14 @@ const SignIn: React.FC = () => {
   };
 
   return (
-    <Layout>
-      <Navbar isMenu={false} />
-      <HeadingText
-        heading="Sign In with E-Wallet"
-        beneficiary={false}
-        handleBack={handleBack}
-      />
+    <Layout
+      isMenu={false}
+      _heading={{
+        heading: "Sign In with E-Wallet",
+        handleBack,
+      }}
+      isBottombar={false}
+    >
       <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
         <form onSubmit={handleSubmit}>
           <VStack align="stretch">

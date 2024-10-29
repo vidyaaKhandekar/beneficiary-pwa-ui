@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Flex, Spinner } from "@chakra-ui/react";
 import Navbar from "./Navbar"; // Import your Navbar component
 import HeadingText from "./HeadingText"; // Import your HeadingText component
+import BottomBar from "./Bottombar";
 
 interface LayoutProps {
   isScrollable?: boolean;
@@ -10,7 +11,8 @@ interface LayoutProps {
   isMenu?: boolean;
   isNavbar?: boolean;
   afterHeader?: React.ReactNode; // Optional: Additional components to render after the header
-  _heading?: object; // Optional: Props to pass to HeadingText
+  _heading?: object; // Optional: Props to pass to HeadingText,
+  isBottombar: boolean;
 }
 
 const Layout: React.FC<LayoutProps> = ({
@@ -18,9 +20,10 @@ const Layout: React.FC<LayoutProps> = ({
   loading,
   children,
   isMenu = true,
-  isNavbar,
+  isNavbar = true,
   afterHeader,
   _heading = {},
+  isBottombar = true,
 }) => {
   if (loading) {
     return (
@@ -46,6 +49,8 @@ const Layout: React.FC<LayoutProps> = ({
             shadow="lg"
             background="#fff"
             className="layout"
+            position="relative"
+            overflow="hidden"
           >
             {isNavbar && (
               <>
@@ -54,7 +59,10 @@ const Layout: React.FC<LayoutProps> = ({
                 {afterHeader}
               </>
             )}
-            <Box overflow={isScrollable ? "auto" : "hidden"}>{children}</Box>
+            <Box overflow={isScrollable ? "auto" : "hidden"} flex="1">
+              {children}
+            </Box>
+            {isBottombar && <BottomBar />}
           </Box>
         </Flex>
       </Box>

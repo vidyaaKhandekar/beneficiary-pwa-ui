@@ -15,7 +15,6 @@ const UserProfile: React.FC = () => {
 
   return (
     <Layout
-      isNavbar={true}
       _heading={{
         beneficiary: true,
         heading: "Vidya Khandekar",
@@ -60,92 +59,6 @@ const UserProfile: React.FC = () => {
                 <Box>Income Certificate</Box>
               </Flex>
             </ListItem>
-
-            {/* <ListItem className="border-bottom" pb={4}>
-              <Flex align="center">
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  backgroundColor="green.500"
-                  borderRadius="full"
-                  boxSize="25px"
-                  color="white"
-                  marginRight="10px"
-                >
-                  <CheckIcon boxSize="15px" />
-                </Box>
-                <Box> Domicile Certificate</Box>
-              </Flex>
-            </ListItem>
-            <ListItem className="border-bottom" pb={4}>
-              <Flex align="center">
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  backgroundColor="green.500"
-                  borderRadius="full"
-                  boxSize="25px"
-                  color="white"
-                  marginRight="10px"
-                >
-                  <CheckIcon boxSize="15px" />
-                </Box>
-                <Box> Income Certificate</Box>
-              </Flex>
-            </ListItem>
-            <ListItem className="border-bottom" pb={4}>
-              <Flex align="center">
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  backgroundColor="green.500"
-                  borderRadius="full"
-                  boxSize="25px"
-                  color="white"
-                  marginRight="10px"
-                >
-                  <CheckIcon boxSize="15px" />
-                </Box>
-                <Box> Domicile Certificate</Box>
-              </Flex>
-            </ListItem>
-            <ListItem className="border-bottom" pb={4}>
-              <Flex align="center">
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  backgroundColor="green.500"
-                  borderRadius="full"
-                  boxSize="25px"
-                  color="white"
-                  marginRight="10px"
-                >
-                  <CheckIcon boxSize="15px" />
-                </Box>
-                <Box> Birth Certificate</Box>
-              </Flex>
-            </ListItem>
-            <ListItem className="border-bottom" pb={4}>
-              <Flex align="center">
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  backgroundColor="green.500"
-                  borderRadius="full"
-                  boxSize="25px"
-                  color="white"
-                  marginRight="10px"
-                >
-                  <CheckIcon boxSize="15px" />
-                </Box>
-                <Box> Disability Certificate</Box>
-              </Flex>
-            </ListItem> */}
           </List>
           <CommonButton onClick={handleRedirect} label="Explore Benefits" />
         </VStack>

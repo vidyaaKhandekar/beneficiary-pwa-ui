@@ -43,7 +43,6 @@ const ExploreBenefits: React.FC = () => {
 
   return (
     <Layout
-      isNavbar={true}
       _heading={{
         heading: "Browse Benefits",
         isFilter: true,

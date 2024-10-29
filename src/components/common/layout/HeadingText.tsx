@@ -44,7 +44,6 @@ const HeadingText: React.FC<HeadingTextProps> = ({
   isFilter, // New prop
   handleOpen,
 }) => {
-  console.log("beneficiary", beneficiary);
   return (
     <Box
       display="flex"

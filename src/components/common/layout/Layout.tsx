@@ -20,7 +20,7 @@ const Layout: React.FC<LayoutProps> = ({
   loading,
   children,
   isMenu = true,
-  isNavbar,
+  isNavbar = true,
   afterHeader,
   _heading = {},
   isBottombar = true,
@@ -50,7 +50,7 @@ const Layout: React.FC<LayoutProps> = ({
             background="#fff"
             className="layout"
             position="relative"
-            overflow="hidden" // Ensures the BottomBar does not overflow the layout
+            overflow="hidden"
           >
             {isNavbar && (
               <>

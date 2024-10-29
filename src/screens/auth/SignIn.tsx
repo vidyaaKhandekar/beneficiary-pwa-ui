@@ -50,7 +50,6 @@ const SignIn: React.FC = () => {
 
   return (
     <Layout
-      isNavbar={true}
       isMenu={false}
       _heading={{
         heading: "Sign In with E-Wallet",

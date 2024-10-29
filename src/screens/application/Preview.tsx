@@ -6,7 +6,6 @@ import CommonButton from "../../components/common/button/Button";
 import Layout from "../../components/common/layout/Layout";
 import { useNavigate } from "react-router-dom";
 import ConfirmationDialog from "../../components/common/ConfirmationDialog";
-import BottomBar from "../../components/common/layout/Bottombar";
 
 const Preview: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -27,7 +26,6 @@ const Preview: React.FC = () => {
   };
   return (
     <Layout
-      isNavbar={true}
       _heading={{
         heading: "My Applications",
         subHeading: `Application ID 1308`,
@@ -67,10 +65,8 @@ const Preview: React.FC = () => {
         <Box m={4}>
           <CommonButton onClick={openModal} label="Confirm Submission" />
         </Box>
-        <Box height={"85px"}></Box>
       </Box>
       <ConfirmationDialog isOpen={isOpen} onClose={onClose} />
-      <BottomBar />
     </Layout>
   );
 };

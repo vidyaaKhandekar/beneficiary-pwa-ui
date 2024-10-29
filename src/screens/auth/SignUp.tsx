@@ -19,7 +19,6 @@ const Signup: React.FC = () => {
 
   return (
     <Layout
-      isNavbar={true}
       isMenu={false}
       _heading={{
         heading: "Sign Up with E-Wallet",

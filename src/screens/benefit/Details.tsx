@@ -30,7 +30,6 @@ const BenefitsDetails: React.FC = () => {
 
   return (
     <Layout
-      isNavbar={true}
       _heading={{
         heading: "Pre-matric Scholarship-ST",
         handleBack,

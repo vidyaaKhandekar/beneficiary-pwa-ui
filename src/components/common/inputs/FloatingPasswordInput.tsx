@@ -6,10 +6,10 @@ import {
   InputRightElement,
   Button,
   Icon,
+  BoxProps,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { BoxProps } from "@chakra-ui/react";
 
 interface FloatingPasswordInputProps {
   value?: string;

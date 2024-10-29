@@ -14,8 +14,6 @@ interface CustomSelectProps {
   width?: string;
   height?: string;
   border?: string;
-  labelStyle?: React.CSSProperties;
-  placeholderStyle?: React.CSSProperties;
 }
 
 const CustomDisableInput: React.FC<CustomSelectProps> = ({

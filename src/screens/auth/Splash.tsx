@@ -13,7 +13,7 @@ import i18n from "../../components/common/i18n";
 import Layout from "../../components/common/layout/Layout";
 import { useTranslation } from "react-i18next";
 import FloatingSelect from "../../components/common/inputs/FloatingSelect";
-
+import { ChangeEvent } from "react";
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();

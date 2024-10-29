@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, FormControl, Text, VStack, Center } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
-import { Link as RouterLink } from "react-router-dom";
 import CommonButton from "../../components/common/button/Button";
 import Layout from "../../components/common/layout/Layout";
 import FlotingInput from "../../components/common/inputs/FlotingInput";
@@ -30,17 +29,11 @@ const Signup: React.FC = () => {
         <form>
           <VStack align="stretch">
             <FormControl>
-              <FlotingInput label="First Name" name="firstname" />
-              <FlotingInput label="Last Name" name="lasttname" />
-              <FlotingInput label="Mobile Number" name="mobilenumber" />
-              <FloatingPasswordInput
-                label="Create Password"
-                name="createpassword"
-              />
-              <FloatingPasswordInput
-                label="Confirm Password"
-                name="confirmpassword"
-              />
+              <FlotingInput label="First Name" />
+              <FlotingInput label="Last Name" />
+              <FlotingInput label="Mobile Number" />
+              <FloatingPasswordInput label="Create Password" />
+              <FloatingPasswordInput label="Confirm Password" />
             </FormControl>
             <CommonButton label="Sign Up" onClick={handleRedirect} />
           </VStack>
@@ -48,11 +41,7 @@ const Signup: React.FC = () => {
         <Center>
           <Text mt={6}>
             Already Have An Account?{" "}
-            <Link
-              as={RouterLink}
-              to="/signin"
-              className="text-color text-decoration-underline"
-            >
+            <Link to="/signin" className="text-color text-decoration-underline">
               Sign in
             </Link>
           </Text>

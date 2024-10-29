@@ -1,11 +1,21 @@
 import React, { useState } from "react";
-import { Box, FormControl, Input } from "@chakra-ui/react";
+import { Box, FormControl, Input, BoxProps } from "@chakra-ui/react";
 
-export default function FloatingInput({ value, onChange, label }) {
+interface FloatingInputProps {
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // Accepts the event parameter
+  label: string;
+}
+
+const FloatingInput: React.FC<FloatingInputProps> = ({
+  value,
+  onChange,
+  label,
+}) => {
   const [isFocused, setIsFocused] = useState(false);
 
-  // Common label styles
-  const labelStyles = {
+  // Label styles with BoxProps type
+  const labelStyles: BoxProps = {
     position: "absolute",
     left: "12px",
     background: "white",
@@ -13,24 +23,12 @@ export default function FloatingInput({ value, onChange, label }) {
     zIndex: 100,
     transition: "all 0.2s ease-out",
     pointerEvents: "none",
+    top: isFocused ? "-10px" : "40%", // Dynamic top value based on focus
+    color: isFocused ? "blue.500" : "gray.500",
+    fontSize: isFocused ? "0.85rem" : "1rem",
+    transform: isFocused ? "scale(0.85)" : "translateY(-50%)",
   };
 
-  // Dynamic label styles based on focus
-  const focusedLabelStyles = isFocused
-    ? {
-        top: "-10px",
-        color: "blue.500",
-        fontSize: "0.85rem",
-        transform: "scale(0.85)",
-      }
-    : {
-        top: "40%",
-        color: "gray.500",
-        fontSize: "1rem",
-        transform: "translateY(-50%)",
-      };
-
-  // Input styles with dynamic border color on focus
   const inputStyles = {
     placeholder: isFocused ? "" : label,
     size: "md",
@@ -57,7 +55,7 @@ export default function FloatingInput({ value, onChange, label }) {
 
   return (
     <FormControl height="80px" position="relative" mt={2}>
-      <Box as="label" htmlFor="name" {...labelStyles} {...focusedLabelStyles}>
+      <Box as="label" htmlFor="name" {...labelStyles}>
         {label}
       </Box>
       <Input
@@ -69,4 +67,6 @@ export default function FloatingInput({ value, onChange, label }) {
       />
     </FormControl>
   );
-}
+};
+
+export default FloatingInput;

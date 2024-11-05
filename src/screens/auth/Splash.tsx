@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import i18n from "../../components/common/i18n";
 import Layout from "../../components/common/layout/Layout";
 import { useTranslation } from "react-i18next";
-import FloatingSelect from "../../components/common/inputs/FloatingSelect";
+import FloatingSelect from "../../components/common/input/FloatingSelect";
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -28,10 +28,7 @@ const Login: React.FC = () => {
     i18n.changeLanguage(value); // Change language based on selection
   };
 
-  const options = [
-    { label: t("ENGLISH"), value: "en" },
-    { label: t("HINDI"), value: "hi" },
-  ];
+  const options = [{ label: t("LOGIN_ENGLISH"), value: "en" }];
 
   const handleRedirect = () => {
     navigate("/signin");
@@ -53,17 +50,17 @@ const Login: React.FC = () => {
         <form>
           <FormControl>
             <FormLabel color={"#45464F"}>
-              {t("SELECT_PREFERRED_LANGUAGE")}
+              {t("LOGIN_SELECT_PREFERRED_LANGUAGE")}
             </FormLabel>
             <FloatingSelect
-              label={t("SELECT_LANGUAGE")}
+              label={t("LOGIN_SELECT_LANGUAGE")}
               name="name"
               value={formData.name}
               onChange={handleChange}
               options={options}
             />
             <FormHelperText marginTop={"-15px"}>
-              {t("CHANGE_LATER")}
+              {t("LOGIN_CHANGE_LATER")}
             </FormHelperText>
           </FormControl>
         </form>
@@ -74,7 +71,7 @@ const Login: React.FC = () => {
           onClick={handleRedirect}
           width="100%"
         >
-          {t("SIGN_IN/SIGN_UI_WITH_YOUR_E-WALLET")}
+          {t("LOGIN_SIGN_IN/SIGN_UI_WITH_YOUR_E-WALLET")}
         </Button>
       </Stack>
     </Layout>

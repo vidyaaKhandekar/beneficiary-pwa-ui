@@ -22,10 +22,12 @@ import Layout from "../../components/common/layout/Layout";
 const ExploreBenefits: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
+
   const handleOpen = () => {
     onOpen();
     console.log("Filter clicked");
   };
+
   const [formData, setFormData] = useState({ name: "" });
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -41,16 +43,23 @@ const ExploreBenefits: React.FC = () => {
     { value: "12th", label: "12th" },
   ];
 
+  // Search handler
+  const onSearch = (query: string) => {
+    console.log("Searching with query:", query);
+  };
+
   return (
     <Layout
       _heading={{
         heading: "Browse Benefits",
         isFilter: true,
-        handleOpen: { handleOpen },
+        handleOpen,
+        onSearch,
       }}
+      isSearchbar={true}
     >
       <Box className="card-scroll">
-        {/* Map through the scholarships data and render BenefitCard */}
+        {/* Render BenefitCard components */}
         {scholarships.map((scholarship) => (
           <BenefitCard
             key={scholarship.title}
@@ -70,6 +79,7 @@ const ExploreBenefits: React.FC = () => {
         </Box>
       </Box>
 
+      {/* Filter Modal */}
       <Modal
         isCentered
         finalFocusRef={finalRef}
@@ -82,7 +92,6 @@ const ExploreBenefits: React.FC = () => {
             <Box className="heading">Filters</Box>
           </ModalHeader>
           <Divider />
-
           <ModalCloseButton />
           <ModalBody>
             <FormControl>
@@ -93,34 +102,7 @@ const ExploreBenefits: React.FC = () => {
                 onChange={handleChange}
                 options={options}
               />
-              <FloatingSelect
-                label="Gender"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                options={options}
-              />
-              <FloatingSelect
-                label="Annual Income"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                options={options}
-              />
-              <FloatingSelect
-                label="Benefit Amount"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                options={options}
-              />
-              <FloatingSelect
-                label="Subject"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                options={options}
-              />
+              {/* Add other FloatingSelect components as needed */}
             </FormControl>
           </ModalBody>
           <ModalFooter>

@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { Link as RouterLink } from "react-router-dom";
-
+import { ROUTES } from "../../config/Routes";
 interface BenefitCardProps {
   date: string;
   title: string;
@@ -68,7 +68,7 @@ const BenefitCard: React.FC<BenefitCardProps> = ({
         <Link
           className="text-blue"
           as={RouterLink}
-          to={"/benefitsdetails"}
+          to={ROUTES.BENEFITS_DETAILS}
           color={"#0037b9"}
         >
           View Details <ArrowForwardIcon />

@@ -12,10 +12,24 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import CustomSelect from "../inputs/Select";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../config/Routes";
+
 const options = [{ value: "en", label: "English" }];
+
 const Navbar: React.FC<{ isMenu?: boolean }> = ({ isMenu = true }) => {
+  const navigate = useNavigate();
+
+  const handleProfileClick = () => {
+    navigate(ROUTES.USER_PROFILE); // Redirect to Profile
+  };
+
+  const handleLogoutClick = () => {
+    navigate(ROUTES.HOME); // Redirect to Home (Logout)
+  };
+
   return (
-    <Stack bg="#EDEFFF" p="6">
+    <Stack bg="#EDEFFF" p="6" h={66} justifyContent={"center"}>
       <Flex justifyContent="space-between" alignItems="center">
         <Box
           display="flex"
@@ -32,8 +46,8 @@ const Navbar: React.FC<{ isMenu?: boolean }> = ({ isMenu = true }) => {
                 paddingLeft={0}
               ></MenuButton>
               <MenuList>
-                <MenuItem>Profile</MenuItem>
-                <MenuItem>Logout</MenuItem>
+                <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
+                <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
               </MenuList>
             </Menu>
           )}

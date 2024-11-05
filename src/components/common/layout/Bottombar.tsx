@@ -4,6 +4,8 @@ import { FaFileAlt } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
 import { MdHome } from "react-icons/md";
 import { HiDocumentSearch } from "react-icons/hi";
+import { ROUTES } from "../../../config/Routes";
+
 const BottomBar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,33 +21,29 @@ const BottomBar: React.FC = () => {
   return (
     <Box
       bg="#EDEFFF"
-      borderRadius="lg"
-      shadow="lg"
       borderWidth="1px"
-      background="#fff"
-      position="absolute"
+      position="fixed"
       bottom={0}
-      left="50%"
-      transform="translateX(-50%)"
       width="100%"
       maxW="550px"
-      height="85px"
-      paddingBottom="8"
+      height="60px"
+      paddingBottom={10}
     >
-      <Flex justify="space-around" align="center" py={2}>
+      <Flex justify="space-around" pb={5}>
         <Flex
           direction="column"
           align="center"
-          onClick={() => handleNavigation("/userprofile")}
+          onClick={() => handleNavigation(ROUTES.USER_PROFILE)}
+          paddingBottom={5}
         >
           <IconButton
             aria-label="Home"
             icon={<MdHome />}
-            fontSize="29px"
+            fontSize="25px"
             variant="ghost"
-            color={getTabColor("/userprofile")}
+            color={getTabColor(ROUTES.USER_PROFILE)}
           />
-          <Text fontSize="xs" color={getTabColor("/userprofile")}>
+          <Text fontSize="10px" color={getTabColor(ROUTES.USER_PROFILE)}>
             Home
           </Text>
         </Flex>
@@ -53,16 +51,16 @@ const BottomBar: React.FC = () => {
         <Flex
           direction="column"
           align="center"
-          onClick={() => handleNavigation("/explorebenefits")}
+          onClick={() => handleNavigation(ROUTES.EXPLORE_BENEFITS)}
         >
           <IconButton
             aria-label="Search"
             icon={<HiDocumentSearch />}
             fontSize="29px"
             variant="ghost"
-            color={getTabColor("/explorebenefits")}
+            color={getTabColor(ROUTES.EXPLORE_BENEFITS)}
           />
-          <Text fontSize="xs" color={getTabColor("/explorebenefits")}>
+          <Text fontSize="10" color={getTabColor(ROUTES.EXPLORE_BENEFITS)}>
             Search
           </Text>
         </Flex>
@@ -70,16 +68,16 @@ const BottomBar: React.FC = () => {
         <Flex
           direction="column"
           align="center"
-          onClick={() => handleNavigation("/applicationstatus")}
+          onClick={() => handleNavigation(ROUTES.APPLICATION_STATUS)}
         >
           <IconButton
             aria-label="Applications"
             icon={<FaFileAlt />}
             fontSize="24px"
             variant="ghost"
-            color={getTabColor("/applicationstatus")}
+            color={getTabColor(ROUTES.APPLICATION_STATUS)}
           />
-          <Text fontSize="xs" color={getTabColor("/applicationstatus")}>
+          <Text fontSize="10" color={getTabColor(ROUTES.APPLICATION_STATUS)}>
             My Applications
           </Text>
         </Flex>

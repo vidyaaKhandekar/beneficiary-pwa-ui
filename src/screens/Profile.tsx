@@ -1,17 +1,18 @@
 import React from "react";
 import { Box, VStack } from "@chakra-ui/react";
-
 import { useNavigate } from "react-router-dom";
 
 import CommonButton from "../components/common/button/Button";
 import Layout from "../components/common/layout/Layout";
 import DocumentList from "../components/DocumentList";
 import { document } from "../assets/mockdata/document";
+import { ROUTES } from "../config/Routes";
 
 const UserProfile: React.FC = () => {
   const navigate = useNavigate();
+
   const handleRedirect = () => {
-    navigate("/explorebenefits");
+    navigate(ROUTES.EXPLORE_BENEFITS);
   };
 
   return (

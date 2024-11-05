@@ -6,6 +6,7 @@ interface CustomButton {
   mt?: number;
   width?: string;
   label?: string;
+  alignSelf?: string;
 }
 
 const CommonButton: React.FC<CustomButton> = ({
@@ -13,6 +14,7 @@ const CommonButton: React.FC<CustomButton> = ({
   mt = 4,
   width = "100%",
   label = "Submit",
+  alignSelf = "center",
 }) => {
   return (
     <Button
@@ -23,7 +25,7 @@ const CommonButton: React.FC<CustomButton> = ({
       onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
         onClick?.(event as unknown as React.FormEvent<HTMLFormElement>)
       }
-      alignSelf={"center"}
+      alignSelf={alignSelf}
     >
       {label}
     </Button>

@@ -6,54 +6,79 @@ interface Application {
   benefit_id: string;
   application_name: string;
   internal_application_id: string;
-  status: string;
+  status: "Submitted" | "Approved" | "Rejected";
 }
 
 interface ApplicationListProps {
   applicationList: Application[];
 }
 
+const STATUS = {
+  APPROVED: "Approved",
+  REJECTED: "Rejected",
+  SUBMITTED: "Submitted",
+  DISBURSAL_COMPLETE: "disbursalComplete",
+} as const;
+
+const COLORS = {
+  success: "#0B7B69",
+  warning: "#EDA145",
+  error: "#8C1823",
+  text: "#1F1B13",
+} as const;
+
+const ICON_SIZES = {
+  small: "8px",
+  default: "18px",
+} as const;
+
 const StatusIcon: React.FC<{ status: string }> = ({ status }) => {
-  let icon = <WarningIcon color="red.500" />;
+  let icon = <WarningIcon color={COLORS.error} boxSize={ICON_SIZES.default} />;
   let text = (
-    <Text fontSize="14px" color={"#1F1B13"}>
+    <Text fontSize="14px" color={COLORS.text}>
       {status}
     </Text>
   );
-  if (status === "Approved") {
-    icon = <CheckCircleIcon color="#0B7B69" boxSize="18px" />;
+
+  if (status === STATUS.APPROVED) {
+    icon = (
+      <CheckCircleIcon color={COLORS.success} boxSize={ICON_SIZES.default} />
+    );
     text = (
-      <Text fontSize="14px" color="#1F1B13" ml={"10px"}>
+      <Text fontSize="14px" color={COLORS.text} ml="10px">
         Approved For Disbursal
       </Text>
     );
-  } else if (status === "Rejected") {
+  } else if (status === STATUS.REJECTED) {
     icon = (
       <CloseIcon
-        boxSize="18px"
+        boxSize={ICON_SIZES.default}
         color="white"
-        bg={"#8C1823"}
-        p={"4px"}
-        borderRadius={"50px"}
+        bg={COLORS.error}
+        p="4px"
+        borderRadius="50px"
       />
     );
-  } else if (status === "Submitted") {
-    icon = <CheckCircleIcon color="#EDA145" boxSize="18px" />;
-  } else if (status === "disbursalComplete") {
+  } else if (status === STATUS.SUBMITTED) {
+    icon = (
+      <CheckCircleIcon color={COLORS.warning} boxSize={ICON_SIZES.default} />
+    );
+  } else if (status === STATUS.DISBURSAL_COMPLETE) {
     icon = (
       <CheckCircleIcon
-        color="#0B7B69"
-        bg="#0B7B69"
-        boxSize="8px"
+        color={COLORS.success}
+        bg={COLORS.success}
+        boxSize={ICON_SIZES.small}
         borderRadius="50px"
       />
     );
     text = (
-      <Text fontSize="10px" color="#0B7B69">
+      <Text fontSize="10px" color={COLORS.success}>
         Disbursal Complete
       </Text>
     );
   }
+
   return (
     <HStack alignItems="center">
       {icon}
@@ -65,11 +90,17 @@ const StatusIcon: React.FC<{ status: string }> = ({ status }) => {
 const ApplicationList: React.FC<ApplicationListProps> = ({
   applicationList,
 }) => {
-  const groupedApplications = {
-    Submitted: applicationList.filter((app) => app.status === "Submitted"),
-    Approved: applicationList.filter((app) => app.status === "Approved"),
-    Rejected: applicationList.filter((app) => app.status === "Rejected"),
-  };
+  const groupedApplications = applicationList.reduce((acc, app) => {
+    if (!acc[app.status]) {
+      acc[app.status] = [];
+    }
+    acc[app.status].push(app);
+    return acc;
+  }, {} as Record<Application["status"], Application[]>);
+
+  const statusOrder = [STATUS.SUBMITTED, STATUS.APPROVED, STATUS.REJECTED];
+
+  // Check for valid status applications
 
   return (
     <VStack
@@ -77,57 +108,58 @@ const ApplicationList: React.FC<ApplicationListProps> = ({
       h="500px"
       p={4}
       width="100%"
-      overflowY={"scroll"}
+      overflowY="scroll"
       pb={100}
+      role="region"
+      aria-label="Applications list"
+      tabIndex={0}
     >
-      {Object.keys(groupedApplications).map(
-        (status) =>
-          groupedApplications[status as keyof typeof groupedApplications]
-            .length > 0 && (
-            <Box
-              key={status}
-              borderRadius={10}
-              bg="#FFFFFF"
-              shadow="md"
-              borderWidth="0.5px"
+      {statusOrder.map((status) =>
+        groupedApplications[status as keyof typeof groupedApplications]
+          ?.length > 0 ? (
+          <Box
+            key={status}
+            borderRadius={10}
+            bg="#FFFFFF"
+            shadow="md"
+            borderWidth="0.5px"
+            borderColor="#DDDDDD"
+            width="100%"
+          >
+            <HStack
+              alignItems="center"
+              borderBottom="1px"
               borderColor="#DDDDDD"
+              height="56px"
+              alignContent="center"
               width="100%"
+              paddingLeft="16px"
             >
-              <HStack
-                alignItems="center"
-                borderBottom="1px"
-                borderColor="#DDDDDD"
-                height="56px"
-                alignContent={"center"}
-                width={"100%"}
-                paddingLeft={"16px"}
-              >
-                <StatusIcon status={status} />
-              </HStack>
+              <StatusIcon status={status} />
+            </HStack>
 
-              <VStack align="stretch" spacing={2}>
-                {groupedApplications[
-                  status as keyof typeof groupedApplications
-                ].map((app) => (
-                  <HStack
-                    key={app.benefit_id}
-                    width="100%"
-                    height={53}
-                    padding="20px 8px 16px 16px"
-                    justifyContent="space-between"
-                    // bg={"grey"}
-                  >
-                    <Text fontSize={"14px"} color="#1F1B13" border={"none"}>
-                      {app.application_name}
-                    </Text>
-                    {status === "Approved" && (
-                      <StatusIcon status="disbursalComplete" />
-                    )}
-                  </HStack>
-                ))}
-              </VStack>
-            </Box>
-          )
+            <VStack align="stretch" spacing={2}>
+              {groupedApplications[
+                status as keyof typeof groupedApplications
+              ].map((app) => (
+                <HStack
+                  key={app.benefit_id}
+                  width="100%"
+                  height={53}
+                  padding="20px 8px 16px 16px"
+                  justifyContent="space-between"
+                >
+                  <Text fontSize="14px" color={COLORS.text} border="none">
+                    {app.application_name}
+                  </Text>
+                  {status === STATUS.APPROVED && (
+                    <StatusIcon status={STATUS.DISBURSAL_COMPLETE} />
+                  )}
+                </HStack>
+              ))}
+            </VStack>
+          </Box>
+        ) : null
       )}
     </VStack>
   );

@@ -13,6 +13,7 @@ import i18n from "../../components/common/i18n";
 import Layout from "../../components/common/layout/Layout";
 import { useTranslation } from "react-i18next";
 import FloatingSelect from "../../components/common/inputs/FloatingSelect";
+import { ROUTES } from "../../config/Routes";
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ const Login: React.FC = () => {
   ];
 
   const handleRedirect = () => {
-    navigate("/signin");
+    navigate(ROUTES.SIGNIN);
   };
 
   return (

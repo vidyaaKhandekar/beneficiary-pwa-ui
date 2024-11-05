@@ -14,13 +14,13 @@ import { useNavigate } from "react-router-dom";
 import CommonButton from "../../components/common/button/Button";
 import Layout from "../../components/common/layout/Layout";
 import ConsentDialog from "../../components/common/ConsentDialog";
-
+import { ROUTES } from "../../config/Routes";
 const BenefitsDetails: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
 
   const redirectToPreviewApplication = () => {
-    navigate("/previewapplication");
+    navigate(ROUTES.PREVIEW_APPLICATION);
     onClose();
   };
 

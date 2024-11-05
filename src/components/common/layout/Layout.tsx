@@ -1,8 +1,9 @@
 import React from "react";
 import { Box, Flex, Spinner } from "@chakra-ui/react";
-import Navbar from "./Navbar"; // Import your Navbar component
-import HeadingText from "./HeadingText"; // Import your HeadingText component
+import Navbar from "./Navbar";
+import HeadingText from "./HeadingText";
 import BottomBar from "./Bottombar";
+import SearchBar from "./SearchBar";
 
 interface LayoutProps {
   isScrollable?: boolean;
@@ -10,9 +11,15 @@ interface LayoutProps {
   children: React.ReactNode;
   isMenu?: boolean;
   isNavbar?: boolean;
-  afterHeader?: React.ReactNode; // Optional: Additional components to render after the header
-  _heading?: object; // Optional: Props to pass to HeadingText,
+  afterHeader?: React.ReactNode;
+  _heading?: {
+    heading?: string;
+    isFilter?: boolean;
+    handleOpen?: () => void;
+    onSearch?: (query: string) => void;
+  };
   isBottombar?: boolean;
+  isSearchbar?: boolean;
 }
 
 const Layout: React.FC<LayoutProps> = ({
@@ -24,10 +31,18 @@ const Layout: React.FC<LayoutProps> = ({
   afterHeader,
   _heading = {},
   isBottombar = true,
+  isSearchbar = false,
 }) => {
+  const { onSearch } = _heading;
+
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
         <Spinner size="lg" />
       </Box>
     );
@@ -35,37 +50,33 @@ const Layout: React.FC<LayoutProps> = ({
 
   return (
     <Box>
-      <Box className="main-bg">
-        <Flex
+      <Flex
+        height="100vh"
+        alignItems="flex-start" // Align items to the start for proper layout
+        justifyContent="center"
+        position="relative"
+      >
+        <Box
+          width="550px"
           height="100vh"
-          alignItems="center"
-          justifyContent="center"
+          background="#fff"
+          className="layout"
           position="relative"
+          overflow="hidden"
         >
-          <Box
-            width="550px"
-            height="100vh"
-            borderRadius="lg"
-            shadow="lg"
-            background="#fff"
-            className="layout"
-            position="relative"
-            overflow="hidden"
-          >
-            {isNavbar && (
-              <>
-                <Navbar isMenu={isMenu} />
-                <HeadingText {..._heading} />
-                {afterHeader}
-              </>
-            )}
-            <Box overflow={isScrollable ? "auto" : "hidden"} flex="1">
-              {children}
-            </Box>
-            {isBottombar && <BottomBar />}
-          </Box>
-        </Flex>
-      </Box>
+          {isNavbar && (
+            <>
+              <Navbar isMenu={isMenu} />
+              <HeadingText {..._heading} />
+              {isSearchbar && onSearch && <SearchBar onSearch={onSearch} />}
+              {afterHeader}
+            </>
+          )}
+
+          {children}
+          {isBottombar && <BottomBar />}
+        </Box>
+      </Flex>
     </Box>
   );
 };

@@ -1,41 +1,42 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   FormControl,
   Text,
   VStack,
-  useDisclosure,
   Center,
+  Alert,
+  AlertIcon,
+  Stack,
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import CommonButton from "../../components/common/button/Button";
 import Layout from "../../components/common/layout/Layout";
-import ConsentDialog from "../../components/common/ConsentDialog";
-import FloatingInput from "../../components/common/inputs/FlotingInput";
-import FloatingPasswordInput from "../../components/common/inputs/FloatingPasswordInput";
+import FloatingInput from "../../components/common/input/Input";
+import FloatingPasswordInput from "../../components/common/input/PasswordInput";
 import {
-  getDocumentsList,
-  getUser,
   loginUser,
+  getUser,
+  getDocumentsList,
   sendConsent,
-} from "../../service/auth/auth";
-import { getTokenData, saveToken } from "../../service/auth/asyncStorage";
+} from "../../services/auth/auth";
+import { getTokenData, saveToken } from "../../services/auth/asyncStorage";
 import { AuthContext } from "../../utils/context/checkToken";
+import ConfirmationDialog from "../../components/ConfirmationDialog";
+import { useTranslation } from "react-i18next";
 
 const SignIn: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [error, setError] = useState("");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
+  const [dialogVisible, setDialogVisible] = useState(false);
 
-  console.log(password, "password");
-
-  // const { checkToken, documents, updateUserData, userData } =
-  //   useContext(AuthContext);
-
-  // const passwordRef = useRef(null);
+  const { checkToken, documents, updateUserData, userData } =
+    useContext(AuthContext);
 
   useEffect(() => {
     // Check for empty fields
@@ -45,65 +46,43 @@ const SignIn: React.FC = () => {
     setIsFormValid(isValid);
   }, [username, password]);
 
-  const redirectUserProfile = () => {
-    console.log("accepted");
-    navigate("/userprofile");
-  };
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   const handleLogin = async () => {
-    // Clear error after 3 seconds
-    const clearError = () => {
-      setTimeout(() => {
-        setError("");
-      }, 3000);
-    };
-
     try {
       setLoading(true); // Show loading indicator
       const response = await loginUser({ username, password });
       setLoading(false); // Hide loading indicator after response
       saveToken(response.data.access_token, response.data.refresh_token);
-      //init();
-      //setDialogVisible(true);
+      init();
+      setDialogVisible(true);
     } catch (error) {
-      setLoading(false); // Hide loading indicator
-      if (error.message === "INVALID_USERNAME_PASSWORD_MESSAGE") {
-        setError("Invalid username or password");
-      } else {
-        setError(error.message);
-      }
-      clearError();
+      setError(t("SIGNIN_ERROR_FETCHING_DATA"));
+      throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
-  // const init = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const { sub } = await getTokenData(); // Assuming sub is the user identifier
-  //     const result = await getUser(sub);
-  //     const data = await getDocumentsList();
-  //     updateUserData(result?.user, data.data);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.log("Error fetching user data or documents:", error.message);
-  //     setLoading(false);
-  //   }
-  // };
+  const init = async () => {
+    try {
+      setLoading(true);
+      const { sub } = await getTokenData(); // Assuming sub is the user identifier
+      const result = await getUser(sub);
+      const data = await getDocumentsList();
+      updateUserData(result?.data, data?.data);
+    } catch (error) {
+      setError(t("SIGNIN_ERROR_FETCHING_DATA"));
+      throw error;
+      setLoading(false);
+    }
+  };
 
-  const handleCofirmation = async () => {
+  const handleConfirmation = async () => {
     try {
       await sendConsent(userData?.user_id);
       checkToken();
     } catch (error) {
       console.log(error.message);
     }
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // Prevent the default form submission behavior
-    onOpen(); // Open the modal
   };
 
   const handleBack = () => {
@@ -127,7 +106,7 @@ const SignIn: React.FC = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               isInvalid={username.trim() === ""}
-              errorMessage="User Name is required."
+              errorMessage={t("SIGNIN_USER_NAME_IS_REQUIRED")}
             />
             <FloatingPasswordInput
               label="Create Password"
@@ -136,25 +115,36 @@ const SignIn: React.FC = () => {
                 setPassword(e.target.value)
               }
               isInvalid={password.trim() === ""}
-              errorMessage="Password is required."
+              errorMessage={t("SIGNIN_PASSWORD_IS_REQUIRED")}
             />
           </FormControl>
           <CommonButton
             isDisabled={!isFormValid || loading}
-            onClick={handleSubmit}
+            onClick={handleLogin}
             label="Sign In"
           />
+          <Stack mt={4}>
+            {error && (
+              <Alert status="error" variant="solid">
+                <AlertIcon />
+                {error}
+              </Alert>
+            )}
+          </Stack>
         </VStack>
-        <ConsentDialog
-          isOpen={isOpen}
-          onClose={onClose}
-          onAccept={redirectUserProfile}
+        <ConfirmationDialog
+          loading={loading}
+          dialogVisible={dialogVisible}
+          closeDialog={setDialogVisible}
+          handleConfirmation={handleConfirmation}
+          documents={documents}
+          consentText={t("SIGNIN_CONSENT_TEXT")}
         />
         <Center>
           <Text mt={6}>
-            Don't Have An Account?{" "}
+            {t("SIGNIN_DONT_HAVE_AN_ACCOUNT")}
             <Link to="/signup" className="text-color text-decoration-underline">
-              Sign Up
+              {t("SIGNUP_SIGN_UP")}
             </Link>
           </Text>
         </Center>

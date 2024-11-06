@@ -20,5 +20,18 @@
   "SIGNUP_PASSWORD_NOT_MATCHING": "Passwords do not match.",
   "SIGNUP_ALREADY_HAVE_AN_ACCOUNT": "Already Have An Account?",
   "SIGNUP_FIRST_NAME_REQUIRED": "First name is required.",
-  "SIGNUP_LAST_NAME_REQUIRED": "Last name is required."
+  "SIGNUP_LAST_NAME_REQUIRED": "Last name is required.",
+  "SIGNIN_INVALID_USERNAME_PASSWORD_MESSAGE": "Invalid Username and Password",
+  "SIGNIN_USER_NAME_IS_REQUIRED": "User Name is required",
+  "SIGNIN_PASSWORD_IS_REQUIRED": "Password is required",
+  "SIGNIN_DONT_HAVE_AN_ACCOUNT": "Don't Have An Account?",
+  "SIGNIN_ERROR_FETCHING_DATA": "Error fetching user data or documents",
+  "CONFIRMATION_DIALOGUE_SHARE_INFORMATION": "Share Information",
+  "CONFIRMATION_DIALOGUE_DENY": "Deny",
+  "CONFIRMATION_DIALOGUE_ACCEPT": "Accept",
+  "CONFIRMATION_DIALOGUE_CONSENT_TEXT": "Share my documents with the provider for processing my application",
+  "SIGNIN_CONSENT_TEXT": "Please provide your consent to share the following with Fast Pass",
+  "PROFILE_LOGGED_IN_WITH_E_Wallet": "Logged in with E-Wallet",
+  "PROFILE_EXPLORE_BENEFITS": "Explore Benefits",
+  "NAVBAR_LOGGED_OUT_SUCCESSFULLY": "Logged Out Successfully"
 }

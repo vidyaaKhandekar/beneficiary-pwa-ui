@@ -4,6 +4,7 @@ import { getToken, removeToken } from "./asyncStorage";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 export const registerUser = async (userData) => {
+  console.log("url", apiBaseUrl);
   try {
     const response = await axios.post(`${apiBaseUrl}/auth/register`, userData, {
       headers: {
@@ -22,6 +23,7 @@ export const registerUser = async (userData) => {
  * @param {Object} loginData - Contains phone_number, password
  */
 export const loginUser = async (loginData) => {
+  console.log("url", apiBaseUrl);
   try {
     const response = await axios.post(`${apiBaseUrl}/auth/login`, loginData, {
       headers: {
@@ -60,10 +62,9 @@ export const getUser = async () => {
   try {
     // Destructure and retrieve the token from getToken()
     const { token } = await getToken();
-
     // Make the API call to fetch user data
     const response = await axios.get(
-      `${apiBaseUrl}/users/get_one?decryptData=true`,
+      `${apiBaseUrl}/users/get_one/?decryptData=true`,
       {
         headers: {
           Accept: "application/json", // 'application/json' is more specific and commonly used for APIs
@@ -76,6 +77,7 @@ export const getUser = async () => {
     return response.data;
   } catch (error) {
     // Log more comprehensive error information
+
     console.error(`Failed to fetch user with ID ${userId}:`, error.message);
 
     // Re-throw the error for further handling if needed

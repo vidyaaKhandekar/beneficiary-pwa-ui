@@ -74,6 +74,7 @@ const UserProfile: React.FC = () => {
                 ))}
             </ListItem>
           </List>
+
           <CommonButton
             onClick={handleRedirect}
             label={t("PROFILE_EXPLORE_BENEFITS")}

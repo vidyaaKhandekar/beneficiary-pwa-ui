@@ -1,50 +1,55 @@
-import React from "react";
-import { Box, Stack, VStack, HStack, Text } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { Box, Stack } from "@chakra-ui/react";
 import "../../assets/styles/App.css";
 import Layout from "../../components/common/layout/Layout";
-import { useNavigate } from "react-router-dom";
-import { CheckIcon } from "@chakra-ui/icons";
+import ApplicationList from "../../components/ApplicationList";
+import { applicationList } from "../../assets/mockdata/applicationList";
+import { getTokenData } from "../../services/auth/asyncStorage";
+import { getApplicationList, getUser } from "../../services/auth/auth";
 
-const MyApplications: React.FC = () => {
-  const navigate = useNavigate();
-  const handleBack = () => {
-    navigate(-1);
+const ApplicationStatus: React.FC = () => {
+  const [aapplicationList, setApplicationList] = useState();
+
+  const init = async (SearchText) => {
+    try {
+      const result = await getUser();
+      console.log("application list ", result);
+
+      const user_id = result?.data?.user_id;
+      console.log("user_id list ", user_id);
+      const data = await getApplicationList(SearchText, user_id);
+      console.log("application list ", data.data.applications);
+      setApplicationList(data.data.applications);
+    } catch (error) {
+      console.error("Error fetching application list:", error);
+    }
   };
-
+  useEffect(() => {
+    init();
+  }, []);
   return (
     <Layout
       _heading={{
-        heading: "Pre-matric Scholarship-ST",
-        handleBack,
+        heading: "My Applications",
+        subHeading: "Track your application progress",
+        isFilter: true,
+        onSearch: init,
       }}
+      isSearchbar={true}
     >
-      <Box className="card-scroll">
-        <Stack spacing="4">
-          <Box
-            m={4}
-            p="2"
-            border="1px solid"
-            borderColor="gray.200"
-            borderRadius="md"
-            boxShadow="lg"
-          >
-            <VStack align="stretch" spacing="4">
-              {/* First Section: Icon and Text */}
-              <HStack spacing="3" className="border-bottom" mt="2" pb="2">
-                <CheckIcon />
-                <Text fontSize="lg" fontWeight="medium">
-                  Approved for Disbursal
-                </Text>
-              </HStack>
-
-              {/* Second Section: Only Text */}
-              <Text fontSize="md">Application 1303</Text>
-            </VStack>
-          </Box>
+      <Box>
+        <Stack spacing={4}>
+          {applicationList?.length ? (
+            <ApplicationList applicationList={aapplicationList} />
+          ) : (
+            <Box textAlign="center" pt={"30%"}>
+              No applications found
+            </Box>
+          )}
         </Stack>
       </Box>
     </Layout>
   );
 };
 
-export default MyApplications;
+export default ApplicationStatus;

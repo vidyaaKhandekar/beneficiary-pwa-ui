@@ -1,67 +1,96 @@
-import React, { useState, ChangeEvent } from "react";
-import {
-  Box,
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  Divider,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
-  FormControl,
-} from "@chakra-ui/react";
-import FloatingSelect from "../../components/common/input/FloatingSelect";
+import React, { useEffect, useState } from "react";
+import { Box, Button } from "@chakra-ui/react";
 import BenefitCard from "../../components/common/Card";
 import { scholarships } from "../../assets/mockdata/benefit";
-import CommonButton from "../../components/common/button/Button";
 import Layout from "../../components/common/layout/Layout";
+import { useNavigation } from "react-router-dom";
+import { getTokenData } from "../../services/auth/asyncStorage";
+import { getUser } from "../../services/auth/auth";
+import { getAll } from "../../services/benefit/benefits";
 
 const ExploreBenefits: React.FC = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const finalRef = React.useRef(null);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState({});
+  const [initState, setInitState] = useState("yes");
+  const [error, setError] = useState();
   const handleOpen = () => {
-    onOpen();
     console.log("Filter clicked");
   };
-  const [formData, setFormData] = useState({ name: "" });
+  const [benefits, setBenefits] = useState([]);
 
-  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const { sub } = await getTokenData();
+        const user = await getUser(sub);
+        console.log("user", user);
+        // const filters = {
+        //   "social-eligibility": user?.data?.caste,
+        //   "ann-hh-inc": user?.data?.income,
+        //   "gender-eligibility": user?.data?.gender,
+        // };
+        // const newFilter = {};
+        // Object.keys(filters).forEach((key) => {
+        //   if (filters[key] && filters[key] !== "") {
+        //     if (typeof filters[key] === "string") {
+        //       newFilter[key] = filters[key].toLowerCase();
+        //     } else {
+        //       newFilter[key] = filters[key];
+        //     }
+        //   }
+        // });
+        // setFilter(newFilter);
+        setInitState("no");
+      } catch (e) {
+        setError(e.message);
+        setInitState("no");
+      }
+    };
+    init();
+  }, []);
 
-  const options = [
-    { value: "10th", label: "10th" },
-    { value: "12th", label: "12th" },
-  ];
-
+  useEffect(() => {
+    const init = async () => {
+      try {
+        if (initState == "no") {
+          setLoading(true);
+          console.log("hello2");
+          const result = await getAll({
+            // filters: {
+            //   ...filter,
+            //   "ann-hh-inc": filter?.["ann-hh-inc"]
+            //     ? `0-${filter?.["ann-hh-inc"]}`
+            //     : "",
+            // },
+            search,
+          });
+          console.log(result, "result");
+          setBenefits(result?.data?.ubi_network_cache || []);
+          console.log("user data", result?.data?.ubi_network_cache);
+          setLoading(false);
+        }
+      } catch (e) {
+        setError(e.message);
+        setLoading(false);
+      }
+    };
+    init();
+  }, [filter, search, initState]);
   return (
     <Layout
       _heading={{
         heading: "Browse Benefits",
         isFilter: true,
-        handleOpen: { handleOpen },
+        handleOpen: handleOpen,
       }}
     >
       <Box className="card-scroll">
-        {/* Map through the scholarships data and render BenefitCard */}
-        {scholarships.map((scholarship) => (
-          <BenefitCard
-            key={scholarship.title}
-            date={scholarship.date}
-            title={scholarship.title}
-            ministry={scholarship.ministry}
-            amount={scholarship.amount}
-            categories={scholarship.categories}
-            description={scholarship.description}
-          />
-        ))}
+        {benefits.map((scholarship) => {
+          console.log(scholarship);
+
+          return <BenefitCard item={scholarship} />;
+        })}
 
         <Box m={4}>
           <Button className="custom-btn" type="submit" mt={4} width="100%">
@@ -70,7 +99,7 @@ const ExploreBenefits: React.FC = () => {
         </Box>
       </Box>
 
-      <Modal
+      {/* <Modal
         isCentered
         finalFocusRef={finalRef}
         isOpen={isOpen}
@@ -127,7 +156,7 @@ const ExploreBenefits: React.FC = () => {
             <CommonButton label="Apply Filters" />
           </ModalFooter>
         </ModalContent>
-      </Modal>
+      </Modal> */}
     </Layout>
   );
 };

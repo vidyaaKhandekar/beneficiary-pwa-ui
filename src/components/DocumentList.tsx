@@ -9,13 +9,24 @@ interface Document {
 interface DocumentListProps {
   documents: Document[];
 }
-
-const LeftIcon: React.FC<{ status: boolean }> = ({ status }) => {
+interface StatusIconProps {
+  status: boolean;
+  size?: number;
+  "aria-label"?: string;
+}
+const StatusIcon: React.FC<StatusIconProps> = ({
+  status,
+  size = 4,
+  "aria-label": ariaLabel,
+}) => {
   return (
     <Icon
       as={status ? CheckCircleIcon : WarningIcon}
       color={status ? "#0B7B69" : "#EDA145"}
-      boxSize={4}
+      boxSize={size}
+      aria-label={
+        ariaLabel || `Document status: ${status ? "verified" : "pending"}`
+      }
     />
   );
 };
@@ -35,7 +46,7 @@ const DocumentList: React.FC<DocumentListProps> = ({ documents }) => {
           width="100%"
           pl={7}
         >
-          <LeftIcon status={true} />
+          <StatusIcon status={document.status} />
           <Text fontSize="14px" fontWeight="400" color="#1F1B13">
             {document.name}
           </Text>

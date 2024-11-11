@@ -1,11 +1,6 @@
-import React, { useRef, useEffect } from "react";
-import { Box, Button, useToast } from "@chakra-ui/react";
-
-interface WebViewFormSubmitWithRedirectProps {
-  url: string;
-  formData: Record<string, string>;
-  setPageContent: (content: string) => void;
-}
+import { Box, useToast } from "@chakra-ui/react";
+import CommonButton from "./common/button/Button";
+import { useEffect, useRef } from "react";
 
 const WebViewFormSubmitWithRedirect: React.FC<
   WebViewFormSubmitWithRedirectProps
@@ -13,47 +8,17 @@ const WebViewFormSubmitWithRedirect: React.FC<
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const toast = useToast();
 
-  const formDataString = JSON.stringify(formData);
-  console.log("url", url);
   const handleFormSubmit = () => {
-    // Inject JavaScript to simulate form submission
     if (iframeRef.current?.contentWindow) {
-      const jsCode = `
-        (function() {
-          const form = document.querySelector('form');
-          if (form) {
-            form.submit();
-          }
-        })();
-      `;
-      iframeRef.current.contentWindow.eval(jsCode);
+      iframeRef.current.contentWindow.postMessage({ type: "submitForm" }, url);
       toast({ title: "Form Submitted", status: "success", duration: 2000 });
     }
   };
 
   const injectFormData = () => {
-    const iframeWindow = iframeRef.current?.contentWindow as any; // Type assertion to allow eval
+    const iframeWindow = iframeRef.current?.contentWindow;
     if (iframeWindow) {
-      const jsCode = `
-        (function() {
-          const formData = ${formDataString};
-          console.log("FormData1",${formDataString})
-             
-          const form = document.querySelector('form');
-  console.log("key in form",form)
-          if (form) {
-            Object.keys(formData).forEach((key) => {
-              console.log("key in form",key)
-              const input = form.querySelector('[name="' + key + '"]');
-              if (input) {
-
-                input.value = formData[key];
-              }
-            });
-          }
-        })();
-      `;
-      iframeWindow.eval(jsCode);
+      iframeWindow.postMessage({ type: "injectFormData", data: formData }, url);
     }
   };
 
@@ -69,7 +34,6 @@ const WebViewFormSubmitWithRedirect: React.FC<
   };
 
   useEffect(() => {
-    // Event listener for cross-origin communication
     window.addEventListener("message", handleMessage);
 
     return () => {
@@ -87,11 +51,8 @@ const WebViewFormSubmitWithRedirect: React.FC<
         style={{ width: "100%", height: "80vh", border: "1px solid #ccc" }}
         sandbox="allow-scripts allow-same-origin allow-forms"
       />
-      <Button mt={4} onClick={handleFormSubmit} colorScheme="blue">
-        Submit Form
-      </Button>
+      <CommonButton onClick={handleFormSubmit} label="Submit Form" />
     </Box>
   );
 };
-
 export default WebViewFormSubmitWithRedirect;

@@ -19,9 +19,9 @@ import { getAll } from "../../services/benefit/benefits";
 const ExploreBenefits: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [search] = useState("");
-  const [filter] = useState({});
+  const [filter, setFilter] = useState({});
   const [initState, setInitState] = useState("yes");
-  const [error, setError] = useState();
+  const [error, setError] = useState("");
   const handleOpen = () => {
     console.log("Filter clicked");
   };
@@ -32,26 +32,26 @@ const ExploreBenefits: React.FC = () => {
       try {
         const { sub } = await getTokenData();
         const user = await getUser(sub);
-        console.log("user", user);
-        // const filters = {
-        //   "social-eligibility": user?.data?.caste,
-        //   "ann-hh-inc": user?.data?.income,
-        //   "gender-eligibility": user?.data?.gender,
-        // };
-        // const newFilter = {};
-        // Object.keys(filters).forEach((key) => {
-        //   if (filters[key] && filters[key] !== "") {
-        //     if (typeof filters[key] === "string") {
-        //       newFilter[key] = filters[key].toLowerCase();
-        //     } else {
-        //       newFilter[key] = filters[key];
-        //     }
-        //   }
-        // });
-        // setFilter(newFilter);
+
+        const filters = {
+          "social-eligibility": user?.data?.caste,
+          "ann-hh-inc": user?.data?.income,
+          "gender-eligibility": user?.data?.gender,
+        };
+        const newFilter = {};
+        Object.keys(filters).forEach((key) => {
+          if (filters[key] && filters[key] !== "") {
+            if (typeof filters[key] === "string") {
+              newFilter[key] = filters[key].toLowerCase();
+            } else {
+              newFilter[key] = filters[key];
+            }
+          }
+        });
+        setFilter(newFilter);
         setInitState("no");
       } catch (e) {
-        setError(e.message);
+        setError(`Failed to initialize user data: ${e.message}`);
         setInitState("no");
       }
     };
@@ -60,10 +60,9 @@ const ExploreBenefits: React.FC = () => {
 
   useEffect(() => {
     const init = async () => {
+      setLoading(true);
       try {
         if (initState == "no") {
-          setLoading(true);
-          console.log("hello2");
           const result = await getAll({
             // filters: {
             //   ...filter,
@@ -73,13 +72,14 @@ const ExploreBenefits: React.FC = () => {
             // },
             search,
           });
-          console.log(result, "result");
+
           setBenefits(result?.data?.ubi_network_cache || []);
-          console.log("user data", result?.data?.ubi_network_cache);
+
           setLoading(false);
         }
       } catch (e) {
-        setError(e.message);
+        setError(`Failed to fetch benefits: ${e.message}`);
+      } finally {
         setLoading(false);
       }
     };

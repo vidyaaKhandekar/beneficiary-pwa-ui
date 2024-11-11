@@ -34,7 +34,13 @@ const ICON_SIZES = {
 } as const;
 
 const StatusIcon: React.FC<{ status: string }> = ({ status }) => {
-  let icon = <WarningIcon color={COLORS.error} boxSize={ICON_SIZES.default} />;
+  let icon = (
+    <WarningIcon
+      aria-label={`Status: ${status}`}
+      color={COLORS.error}
+      boxSize={ICON_SIZES.default}
+    />
+  );
   let text = (
     <Text fontSize="14px" color={COLORS.text}>
       {status}
@@ -91,13 +97,17 @@ const StatusIcon: React.FC<{ status: string }> = ({ status }) => {
 const ApplicationList: React.FC<ApplicationListProps> = ({
   applicationList = [],
 }) => {
-  const groupedApplications = applicationList.reduce((acc, app) => {
-    if (!acc[app.status]) {
-      acc[app.status] = [];
-    }
-    acc[app.status].push(app);
-    return acc;
-  }, {} as Record<Application["status"], Application[]>);
+  const groupedApplications = React.useMemo(
+    () =>
+      applicationList.reduce((acc, app) => {
+        if (!acc[app.status]) {
+          acc[app.status] = [];
+        }
+        acc[app.status].push(app);
+        return acc;
+      }, {} as Record<Application["status"], Application[]>),
+    [applicationList]
+  );
 
   const statusOrder = [STATUS.SUBMITTED, STATUS.APPROVED, STATUS.REJECTED];
 

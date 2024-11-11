@@ -18,7 +18,15 @@ import {
 } from "../../utils/jsHelper/helper";
 import { MdCurrencyRupee } from "react-icons/md";
 interface BenefitCardProps {
-  item: object;
+  item_id: string;
+  title: string;
+  provider_name: string;
+  description: string;
+  item: {
+    time?: { range?: { end?: string } };
+    tags?: Array<{ list?: string[] }>;
+    price?: { value?: number; currency?: string };
+  };
 }
 
 const BenefitCard: React.FC<BenefitCardProps> = ({ item }) => {
@@ -45,26 +53,35 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ item }) => {
         <Heading size="sm" color="#484848" fontWeight={400} mt={2}>
           {item?.provider_name}
         </Heading>
-        <HStack
-          align="center"
-          flexDirection={"row"}
-          alignItems={"center"}
-          mt={1.5}
-        >
-          <Icon as={MdCurrencyRupee} boxSize={4} color="#484848" />
-          <Text fontSize="12px" marginLeft="1">
-            {item?.item?.price?.value}
-          </Text>
-          <Text fontSize="12px" marginLeft="1">
-            {item?.item?.price?.currency}
-          </Text>
-        </HStack>
+        {item?.item?.price?.value && (
+          <HStack
+            align="center"
+            flexDirection={"row"}
+            alignItems={"center"}
+            mt={1.5}
+          >
+            {" "}
+            <Icon as={MdCurrencyRupee} boxSize={4} color="#484848" />{" "}
+            <Text fontSize="12px" marginLeft="1">
+              {" "}
+              {item?.item?.price?.value}{" "}
+            </Text>{" "}
+            <Text fontSize="12px" marginLeft="1">
+              {" "}
+              {item?.item?.price?.currency || "INR"}{" "}
+            </Text>{" "}
+          </HStack>
+        )}
         <Flex alignItems="center" mt={2} mb={2}>
-          {eligibility?.map((category) => (
-            <Box key={category} mr={2}>
-              {category.toUpperCase()}
-            </Box>
-          ))}
+          {eligibility?.length > 0 ? (
+            eligibility.map((category) => (
+              <Box key={category} mr={2}>
+                {category.toUpperCase()}
+              </Box>
+            ))
+          ) : (
+            <Box mr={2}>No eligibility criteria specified</Box>
+          )}
         </Flex>
         <Text mt={4}>{item?.description}</Text>
       </CardBody>

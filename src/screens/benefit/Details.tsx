@@ -11,6 +11,12 @@ import {
   HStack,
   Icon,
   Spinner,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "@chakra-ui/react";
 import "../../assets/styles/App.css";
 import { useNavigate, useParams } from "react-router-dom";
@@ -36,25 +42,29 @@ const BenefitsDetails: React.FC = () => {
   const [item, setItem] = useState();
   const [loading, setLoading] = useState(true);
   const [isApplied, setIsApplied] = useState(false);
-  // const [error, setError] = useState();
+  const [error, setError] = useState();
   const [authUser, setAuthUser] = useState();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const [webFromProp, setWebFromProp] = useState({});
+  const [webFormProp, setWebFormProp] = useState({});
   console.log("id", id);
   const handleConfirmation = async () => {
     setLoading(true);
-    console.log("authUser", authUser);
-    const result = await applyApplication({ id, context });
-    setWebFromProp({
-      url: result?.data?.responses?.[0]?.message?.order?.items?.[0]?.xinput
-        ?.form?.url,
-      formData: authUser,
-    });
-    setLoading(false);
-    console.log("url", setWebFromProp);
+    try {
+      const result = await applyApplication({ id, context });
+      setWebFormProp({
+        url: result?.data?.responses?.[0]?.message?.order?.items?.[0]?.xinput
+          ?.form?.url,
+        formData: authUser,
+      });
+      // setLoading(false);
+    } catch (error) {
+      console.error("Failed to apply application:", error);
+    } finally {
+      setLoading(false);
+    }
   };
-  const submitConfirm = async (submission_id) => {
+  const submitConfirm = async (submission_id: string) => {
     setLoading(true);
     try {
       const result = await confirmApplication({
@@ -63,6 +73,7 @@ const BenefitsDetails: React.FC = () => {
         context,
       });
       const orderId = result?.data?.responses?.[0]?.message?.order?.id;
+
       if (orderId) {
         const payload = {
           user_id: authUser?.user_id,
@@ -74,24 +85,25 @@ const BenefitsDetails: React.FC = () => {
           status: "submitted",
           application_data: authUser,
         };
+
         const appResult = await createApplication(payload);
+
         if (appResult) {
-          setWebFromProp();
-          // setVisibleDialog({ orderId, name: item?.descriptor?.name });
-          setLoading(false);
+          setWebFormProp({});
+          console.log("Application successfully created.");
         }
       } else {
         setError(
           "Error while creating application. Please try again later. (Status code 500)"
         );
-        setLoading(false);
       }
-    } catch (e) {
-      setError("Error:", e.message);
+    } catch (e: any) {
+      setError(`Error: ${e.message}`);
+    } finally {
       setLoading(false);
     }
-    setLoading(false);
   };
+
   const handleBack = () => {
     navigate(-1);
   };
@@ -113,13 +125,13 @@ const BenefitsDetails: React.FC = () => {
           ?.list.filter((e) => e.value)
           .map((e) => e.value);
         setItem({ ...resultItem, document: docs });
-        const formData =
-          {
-            ...(user?.data || {}),
-            class: user?.data?.current_class || "",
-            marks_previous_class: user?.data?.previous_year_marks || "",
-            phone_number: user?.data?.phone_number || "",
-          } || {};
+
+        const formData = {
+          ...(user?.data || {}),
+          class: user?.data?.current_class || "",
+          marks_previous_class: user?.data?.previous_year_marks || "",
+          phone_number: user?.data?.phone_number || "",
+        };
         setAuthUser(formData);
 
         const appResult = await getApplication({
@@ -132,7 +144,7 @@ const BenefitsDetails: React.FC = () => {
         }
         setLoading(false);
       } catch (e) {
-        setError("Error:", e.message);
+        setError(`Error: ${e.message}`);
       }
     };
     init();
@@ -144,18 +156,31 @@ const BenefitsDetails: React.FC = () => {
         flex="1"
         justifyContent="center"
         alignItems="center"
-        height="100vh" // This will make it full-screen height
+        height="100vh"
       >
         <Spinner size="xl" />
       </Box>
     );
   }
-
-  if (webFromProp?.url) {
+  if (error) {
+    <Modal isOpen={!!error} onClose={() => setError("")}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Error</ModalHeader>
+        <ModalBody>
+          <Text>{error}</Text>
+        </ModalBody>
+        <ModalFooter>
+          <CommonButton onClick={() => setError("")} label="Close" />
+        </ModalFooter>
+      </ModalContent>
+    </Modal>;
+  }
+  if (webFormProp?.url) {
     return (
       <WebViewFormSubmitWithRedirect
-        {...webFromProp}
-        formData={webFromProp?.formData}
+        {...webFormProp}
+        formData={webFormProp?.formData}
         setPageContent={submitConfirm}
       />
     );

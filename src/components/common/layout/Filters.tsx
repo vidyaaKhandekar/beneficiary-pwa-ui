@@ -16,7 +16,12 @@ import { MdOutlineFilterAlt } from "react-icons/md";
 import FloatingSelect from "../input/FloatingSelect";
 
 interface FilterDialogProps {
-  inputs: { label: string; key: string; value: string; data: any[] }[];
+  inputs: {
+    label: string;
+    key: string;
+    value: string;
+    data: Array<{ label: string; value: string }>;
+  }[];
   onFilter: (values: Record<string, string>) => void;
 }
 

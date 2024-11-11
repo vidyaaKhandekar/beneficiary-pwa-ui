@@ -163,18 +163,20 @@ const BenefitsDetails: React.FC = () => {
     );
   }
   if (error) {
-    <Modal isOpen={!!error} onClose={() => setError("")}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Error</ModalHeader>
-        <ModalBody>
-          <Text>{error}</Text>
-        </ModalBody>
-        <ModalFooter>
-          <CommonButton onClick={() => setError("")} label="Close" />
-        </ModalFooter>
-      </ModalContent>
-    </Modal>;
+    return (
+      <Modal isOpen={!error} onClose={() => setError("")}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Error</ModalHeader>
+          <ModalBody>
+            <Text>{error}</Text>
+          </ModalBody>
+          <ModalFooter>
+            <CommonButton onClick={() => setError("")} label="Close" />
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    );
   }
   if (webFormProp?.url) {
     return (

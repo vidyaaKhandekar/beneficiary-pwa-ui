@@ -21,7 +21,7 @@ const ApplicationStatus: React.FC = () => {
   const [applicationList, setApplicationList] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const init = async (SearchText) => {
+  const init = async (SearchText?: string) => {
     setIsLoading(true);
     setError(null);
     try {

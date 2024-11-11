@@ -7,7 +7,7 @@ interface Application {
   application_name: string;
   internal_application_id: string;
   status: "submitted" | "approved" | "rejected";
-  application_data: Record<string, any>; // Adjusted to reflect nested structure
+  application_data: Record<string, any>;
 }
 
 interface ApplicationListProps {
@@ -102,9 +102,9 @@ const ApplicationList: React.FC<ApplicationListProps> = ({
   const statusOrder = [STATUS.SUBMITTED, STATUS.APPROVED, STATUS.REJECTED];
 
   return (
-    <section
+    <Box
+      as="section"
       aria-label="Applications list"
-      tabIndex={0}
       style={{
         height: "500px",
         overflowY: "scroll",
@@ -158,7 +158,7 @@ const ApplicationList: React.FC<ApplicationListProps> = ({
           ) : null
         )}
       </VStack>
-    </section>
+    </Box>
   );
 };
 

@@ -127,7 +127,9 @@ const ExploreBenefits: React.FC = () => {
       ) : (
         <Box className="card-scroll">
           {benefits?.map((scholarship) => {
-            return <BenefitCard item={scholarship} />;
+            return (
+              <BenefitCard item={scholarship} key={scholarship?.item_id} />
+            );
           })}
         </Box>
       )}

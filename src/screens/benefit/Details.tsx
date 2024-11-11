@@ -13,10 +13,9 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import "../../assets/styles/App.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CommonButton from "../../components/common/button/Button";
 import Layout from "../../components/common/layout/Layout";
-import { useParams } from "react-router-dom";
 import { getTokenData } from "../../services/auth/asyncStorage";
 import { getUser } from "../../services/auth/auth";
 import {
@@ -117,7 +116,6 @@ const BenefitsDetails: React.FC = () => {
         const formData =
           {
             ...(user?.data || {}),
-            ...(user?.data || {}),
             class: user?.data?.current_class || "",
             marks_previous_class: user?.data?.previous_year_marks || "",
             phone_number: user?.data?.phone_number || "",
@@ -213,8 +211,8 @@ const BenefitsDetails: React.FC = () => {
             Mandatory Documents:
           </Heading>
           <UnorderedList mt={4}>
-            {item?.document?.map((document, index) => (
-              <ListItem key={index}>{document}</ListItem>
+            {item?.document?.map((document) => (
+              <ListItem key={document}>{document}</ListItem>
             ))}
           </UnorderedList>
           <Box m={4}>

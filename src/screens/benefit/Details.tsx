@@ -164,7 +164,7 @@ const BenefitsDetails: React.FC = () => {
   }
   if (error) {
     return (
-      <Modal isOpen={!error} onClose={() => setError("")}>
+      <Modal isOpen={!!error} onClose={() => setError("")}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Error</ModalHeader>

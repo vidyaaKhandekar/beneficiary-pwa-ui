@@ -33,8 +33,8 @@ const ApplicationStatus: React.FC = () => {
 
       setApplicationList(data.data.applications);
     } catch (error) {
-      throw new Error(`Failed to fetch applications: ${error.message}`);
       setError("Failed to fetch applications");
+      throw new Error(`Failed to fetch applications: ${error.message}`);
     } finally {
       setIsLoading(false);
     }

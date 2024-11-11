@@ -96,10 +96,8 @@ const BenefitsDetails: React.FC = () => {
           "Error while creating application. Please try again later. (Status code 500)"
         );
       }
-    } catch (e: Error | unknown) {
-      setError(
-        `Error: ${e instanceof Error ? e.message : "Unknown error occurred"}`
-      );
+    } catch (e: any) {
+      setError(`Error: ${e.message}`);
     } finally {
       setLoading(false);
     }

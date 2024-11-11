@@ -10,7 +10,6 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-  Button,
 } from "@chakra-ui/react";
 import { MdOutlineFilterAlt } from "react-icons/md";
 import FloatingSelect from "../input/FloatingSelect";

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
-import { Box, VStack, Flex, List, ListItem } from "@chakra-ui/react";
-import { CheckIcon } from "@chakra-ui/icons";
+import { Box, VStack } from "@chakra-ui/react";
+
 import { getUser, getDocumentsList } from "../services/auth/auth";
 import { useNavigate } from "react-router-dom";
 import CommonButton from "../components/common/button/Button";

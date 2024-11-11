@@ -22,9 +22,7 @@ const ExploreBenefits: React.FC = () => {
   const [filter, setFilter] = useState({});
   const [initState, setInitState] = useState("yes");
   const [error, setError] = useState("");
-  const handleOpen = () => {
-    console.log("Filter clicked");
-  };
+  const handleOpen = () => {};
   const [benefits, setBenefits] = useState([]);
 
   useEffect(() => {

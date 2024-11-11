@@ -42,12 +42,12 @@ const BenefitsDetails: React.FC = () => {
   const [item, setItem] = useState();
   const [loading, setLoading] = useState(true);
   const [isApplied, setIsApplied] = useState(false);
-  const [error, setError] = useState();
+  const [error, setError] = useState("");
   const [authUser, setAuthUser] = useState();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [webFormProp, setWebFormProp] = useState({});
-  console.log("id", id);
+
   const handleConfirmation = async () => {
     setLoading(true);
     try {
@@ -59,7 +59,7 @@ const BenefitsDetails: React.FC = () => {
       });
       // setLoading(false);
     } catch (error) {
-      console.error("Failed to apply application:", error);
+      setError(`Failed to apply application: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -90,15 +90,16 @@ const BenefitsDetails: React.FC = () => {
 
         if (appResult) {
           setWebFormProp({});
-          console.log("Application successfully created.");
         }
       } else {
         setError(
           "Error while creating application. Please try again later. (Status code 500)"
         );
       }
-    } catch (e: any) {
-      setError(`Error: ${e.message}`);
+    } catch (e: Error | unknown) {
+      setError(
+        `Error: ${e instanceof Error ? e.message : "Unknown error occurred"}`
+      );
     } finally {
       setLoading(false);
     }
@@ -108,47 +109,57 @@ const BenefitsDetails: React.FC = () => {
     navigate(-1);
   };
   useEffect(() => {
+    let mounted = true;
     const init = async () => {
       try {
         const { sub } = await getTokenData();
         const user = await getUser(sub);
         const result = await getOne({ id });
-        console.log("result", result?.data?.responses?.[0]);
+
         const resultItem =
           result?.data?.responses?.[0]?.message?.order?.items?.[0] || {};
         setContext(result?.data?.responses?.[0]?.context);
-        // console.log('getOne', result?.data);
-        console.log("result", resultItem);
 
         const docs = resultItem?.tags
           ?.find((e) => e?.descriptor?.code == "required-docs")
           ?.list.filter((e) => e.value)
           .map((e) => e.value);
-        setItem({ ...resultItem, document: docs });
+        if (mounted) {
+          setItem({ ...resultItem, document: docs });
 
-        const formData = {
-          ...(user?.data || {}),
-          class: user?.data?.current_class || "",
-          marks_previous_class: user?.data?.previous_year_marks || "",
-          phone_number: user?.data?.phone_number || "",
-        };
-        setAuthUser(formData);
+          const formData = {
+            ...(user?.data || {}),
+            class: user?.data?.current_class || "",
+            marks_previous_class: user?.data?.previous_year_marks || "",
+            phone_number: user?.data?.phone_number || "",
+          };
+          setAuthUser(formData);
 
-        const appResult = await getApplication({
-          user_id: formData?.user_id,
-          benefit_id: id,
-        });
+          const appResult = await getApplication({
+            user_id: formData?.user_id,
+            benefit_id: id,
+          });
 
-        if (appResult?.data?.applications?.length > 0) {
-          setIsApplied(true);
+          if (appResult?.data?.applications?.length > 0) {
+            setIsApplied(true);
+          }
+          setLoading(false);
         }
-        setLoading(false);
       } catch (e) {
-        setError(`Error: ${e.message}`);
+        if (mounted) {
+          setError(
+            `Error: ${
+              e instanceof Error ? e.message : "Unknown error occurred"
+            }`
+          );
+        }
       }
     };
     init();
-  }, []);
+    return () => {
+      mounted = false;
+    };
+  }, [id]);
   if (loading) {
     return (
       <Box

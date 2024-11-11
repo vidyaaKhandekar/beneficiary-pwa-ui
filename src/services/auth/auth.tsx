@@ -22,7 +22,6 @@ export const registerUser = async (userData) => {
  * @param {Object} loginData - Contains phone_number, password
  */
 export const loginUser = async (loginData) => {
-  console.log("url", apiBaseUrl);
   try {
     const response = await axios.post(`${apiBaseUrl}/auth/login`, loginData, {
       headers: {

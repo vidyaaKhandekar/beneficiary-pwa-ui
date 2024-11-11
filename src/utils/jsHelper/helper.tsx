@@ -20,7 +20,7 @@ export function formatDateString(dateString: string): string {
   }
 
   const date = new Date(dateString);
-  if (isNaN(date.getTime())) {
+  if (Number.isNaN(date.getTime())) {
     throw new Error("Invalid date string provided");
   }
   return date.toLocaleDateString("en-GB", DATE_FORMAT_OPTIONS);
@@ -58,7 +58,8 @@ export function generateUUID(): string {
   }
   const array = new Uint8Array(16);
   crypto.getRandomValues(array);
-  array[6] = (array[6] & 0x0f) | 0x40; // Version 4 + array[8] = (array[8] & 0x3f) | 0x80; // Variant 10xxxxxx +
+  array[6] = (array[6] & 0x0f) | 0x40; // Version 4 +
+  array[8] = (array[8] & 0x3f) | 0x80; // Variant 10xxxxxxVariant 10xxxxxx +
   // Convert array to UUID format: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
   return [
     array

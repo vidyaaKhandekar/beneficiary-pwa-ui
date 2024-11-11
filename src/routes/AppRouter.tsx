@@ -1,6 +1,3 @@
-// src/routes/AppRouter.js
-
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Login from "../screens/auth/Splash";
@@ -37,7 +34,7 @@ const AppRouter = () => (
         }
       />
       <Route
-        path="/benefitsdetails/:id"
+        path={`/benefitsdetails/:id`}
         element={
           <PrivateRoute>
             <BenefitsDetails />

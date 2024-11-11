@@ -69,10 +69,8 @@ const HeadingText: React.FC<HeadingTextProps> = ({
   handleBack,
   isFilter,
   filterInputs = dummyInputs,
-  onFilter = { handleFilter },
+  onFilter = handleFilter,
 }) => {
-  const handleCloseFilterDialog = () => setFilterDialogOpen(false);
-
   return (
     <Box
       display="flex"
@@ -106,7 +104,6 @@ const HeadingText: React.FC<HeadingTextProps> = ({
                   inputs={filterInputs}
                   onFilter={(values) => {
                     onFilter(values);
-                    handleCloseFilterDialog();
                   }}
                 />
               )}

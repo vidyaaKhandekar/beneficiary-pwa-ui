@@ -83,7 +83,7 @@ const SignIn: React.FC = () => {
       checkToken();
       navigate("/userprofile");
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     }
   };
 

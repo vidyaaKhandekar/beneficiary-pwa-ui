@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { MdOutlineFilterAlt } from "react-icons/md";
 import FloatingSelect from "../input/FloatingSelect";
+import CommonButton from "../button/Button";
 
 interface FilterDialogProps {
   inputs: {
@@ -76,15 +77,13 @@ const FilterDialog: React.FC<FilterDialogProps> = ({ inputs, onFilter }) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              colorScheme="teal"
+            <CommonButton
+              label=" Apply Filter"
               onClick={() => {
                 onFilter(values);
                 onClose();
               }}
-            >
-              Apply Filter
-            </Button>
+            />
           </ModalFooter>
         </ModalContent>
       </Modal>

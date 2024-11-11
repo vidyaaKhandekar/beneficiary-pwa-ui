@@ -1,33 +1,66 @@
 import React, { useEffect, useState } from "react";
-import { Box, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import "../../assets/styles/App.css";
 import Layout from "../../components/common/layout/Layout";
 import ApplicationList from "../../components/ApplicationList";
 
 import { getApplicationList, getUser } from "../../services/auth/auth";
+import CommonButton from "../../components/common/button/Button";
 
 const ApplicationStatus: React.FC = () => {
   const [applicationList, setApplicationList] = useState();
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const init = async (SearchText) => {
+    setIsLoading(true);
+    setError(null);
     try {
       const result = await getUser();
-      console.log("application list ", result);
 
       const user_id = result?.data?.user_id;
-      console.log("user_id list ", user_id);
+
       const data = await getApplicationList(SearchText, user_id);
-      console.log("application list ", data.data.applications);
+
       setApplicationList(data.data.applications);
     } catch (error) {
-      console.error("Error fetching application list:", error);
+      throw new Error(`Failed to fetch applications: ${error.message}`);
+      setError("Failed to fetch applications");
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
     init();
   }, []);
+  if (error) {
+    return (
+      <Modal isOpen={true} onClose={() => setError("")}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Error</ModalHeader>
+          <ModalBody>
+            <Text>{error}</Text>
+          </ModalBody>
+          <ModalFooter>
+            <CommonButton onClick={() => setError("")} label="Close" />
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    );
+  }
   return (
     <Layout
+      loading={isLoading}
       _heading={{
         heading: "My Applications",
         subHeading: "Track your application progress",

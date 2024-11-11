@@ -70,7 +70,7 @@ const Navbar: React.FC<{ isMenu?: boolean }> = ({ isMenu = true }) => {
             </Menu>
           )}
 
-          <Text>Fast Pass</Text>
+          <Text fontStyle={"italic"}>Fast Pass</Text>
         </Box>
         <Box>
           {success && (

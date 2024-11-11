@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+} from "@chakra-ui/react";
 import BenefitCard from "../../components/common/Card";
-import { scholarships } from "../../assets/mockdata/benefit";
 import Layout from "../../components/common/layout/Layout";
-import { useNavigation } from "react-router-dom";
 import { getTokenData } from "../../services/auth/asyncStorage";
 import { getUser } from "../../services/auth/auth";
 import { getAll } from "../../services/benefit/benefits";
 
 const ExploreBenefits: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState({});
+  const [search] = useState("");
+  const [filter] = useState({});
   const [initState, setInitState] = useState("yes");
   const [error, setError] = useState();
   const handleOpen = () => {
@@ -79,24 +87,55 @@ const ExploreBenefits: React.FC = () => {
   }, [filter, search, initState]);
   return (
     <Layout
+      loading={loading}
       _heading={{
         heading: "Browse Benefits",
         isFilter: true,
         handleOpen: handleOpen,
       }}
     >
-      <Box className="card-scroll">
-        {benefits.map((scholarship) => {
-          console.log(scholarship);
-
-          return <BenefitCard item={scholarship} />;
-        })}
-
-        <Box m={4}>
-          <Button className="custom-btn" type="submit" mt={4} width="100%">
-            Load More
-          </Button>
+      {error && (
+        <Modal isOpen={!!error} onClose={() => setError("")}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Error</ModalHeader>
+            <ModalBody>
+              <Text>{error}</Text>
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" onClick={() => setError("")}>
+                Close
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      )}
+      {benefits.length === 0 ? (
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          padding={5}
+          height="200px"
+          bg="#F7F7F7"
+          borderRadius="md"
+        >
+          <Text fontSize="lg" color="gray.600">
+            No benefits available
+          </Text>
         </Box>
+      ) : (
+        <Box className="card-scroll">
+          {benefits?.map((scholarship) => {
+            return <BenefitCard item={scholarship} />;
+          })}
+        </Box>
+      )}
+
+      <Box m={4}>
+        <Button className="custom-btn" type="submit" mt={4} width="100%">
+          Load More
+        </Button>
       </Box>
 
       {/* <Modal

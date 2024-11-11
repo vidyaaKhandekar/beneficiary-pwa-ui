@@ -23,10 +23,26 @@ export const extractEligibilityValues = (data) => {
   return data.map((item) => item.value);
 };
 
-export function generateUUID() {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-    const r = (Math.random() * 16) | 0,
-      v = c == "x" ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
+export function generateUUID(): string {
+  // Check if `crypto` is available in the browser or Node.js
+  const cryptoObj: Crypto =
+    typeof window !== "undefined" && window.crypto
+      ? window.crypto
+      : require("crypto");
+
+  const array = new Uint8Array(16);
+  cryptoObj.getRandomValues(array);
+
+  // Setting the version and variant bits according to RFC 4122
+  array[6] = (array[6] & 0x0f) | 0x40; // Version 4
+  array[8] = (array[8] & 0x3f) | 0x80; // Variant 10xxxxxx
+
+  // Convert array to UUID format: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
+  return [...array]
+    .map(
+      (b, i) =>
+        (i === 4 || i === 6 || i === 8 || i === 10 ? "-" : "") +
+        b.toString(16).padStart(2, "0")
+    )
+    .join("");
 }

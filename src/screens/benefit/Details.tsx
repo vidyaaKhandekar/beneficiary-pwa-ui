@@ -16,7 +16,6 @@ import "../../assets/styles/App.css";
 import { useNavigate } from "react-router-dom";
 import CommonButton from "../../components/common/button/Button";
 import Layout from "../../components/common/layout/Layout";
-import ConsentDialog from "../../components/common/ConsentDialog";
 import { useParams } from "react-router-dom";
 import { getTokenData } from "../../services/auth/asyncStorage";
 import { getUser } from "../../services/auth/auth";
@@ -34,11 +33,11 @@ import WebViewFormSubmitWithRedirect from "../../components/WebView";
 const BenefitsDetails: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [context, setContext] = useState({});
-  const [visibleDialog, setVisibleDialog] = useState(false);
+  // const [visibleDialog, setVisibleDialog] = useState(false);
   const [item, setItem] = useState();
   const [loading, setLoading] = useState(true);
   const [isApplied, setIsApplied] = useState(false);
-  const [error, setError] = useState();
+  // const [error, setError] = useState();
   const [authUser, setAuthUser] = useState();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -46,7 +45,7 @@ const BenefitsDetails: React.FC = () => {
   console.log("id", id);
   const handleConfirmation = async () => {
     setLoading(true);
-    console.log("confirmed");
+    console.log("authUser", authUser);
     const result = await applyApplication({ id, context });
     setWebFromProp({
       url: result?.data?.responses?.[0]?.message?.order?.items?.[0]?.xinput
@@ -54,11 +53,7 @@ const BenefitsDetails: React.FC = () => {
       formData: authUser,
     });
     setLoading(false);
-    console.log(
-      "url",
-      result?.data?.responses?.[0]?.message?.order?.items?.[0]?.xinput?.form
-        ?.url
-    );
+    console.log("url", setWebFromProp);
   };
   const submitConfirm = async (submission_id) => {
     setLoading(true);
@@ -83,7 +78,7 @@ const BenefitsDetails: React.FC = () => {
         const appResult = await createApplication(payload);
         if (appResult) {
           setWebFromProp();
-          setVisibleDialog({ orderId, name: item?.descriptor?.name });
+          // setVisibleDialog({ orderId, name: item?.descriptor?.name });
           setLoading(false);
         }
       } else {

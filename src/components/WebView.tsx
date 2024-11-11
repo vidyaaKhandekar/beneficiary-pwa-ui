@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { Box, Button, useToast } from "@chakra-ui/react";
 
 interface WebViewFormSubmitWithRedirectProps {
@@ -14,7 +14,7 @@ const WebViewFormSubmitWithRedirect: React.FC<
   const toast = useToast();
 
   const formDataString = JSON.stringify(formData);
-
+  console.log("url", url);
   const handleFormSubmit = () => {
     // Inject JavaScript to simulate form submission
     if (iframeRef.current?.contentWindow) {
@@ -31,22 +31,36 @@ const WebViewFormSubmitWithRedirect: React.FC<
     }
   };
 
-  const handleLoad = () => {
-    if (iframeRef.current?.contentWindow) {
-      // Inject form data into the iframe's form fields
+  const injectFormData = () => {
+    const iframeWindow = iframeRef.current?.contentWindow as any; // Type assertion to allow eval
+    if (iframeWindow) {
       const jsCode = `
         (function() {
           const formData = ${formDataString};
-          Object.keys(formData).forEach((key) => {
-            const input = document.querySelector('[name="' + key + '"]');
-            if (input) {
-              input.value = formData[key];
-            }
-          });
+          console.log("FormData1",${formDataString})
+             
+          const form = document.querySelector('form');
+  console.log("key in form",form)
+          if (form) {
+            Object.keys(formData).forEach((key) => {
+              console.log("key in form",key)
+              const input = form.querySelector('[name="' + key + '"]');
+              if (input) {
+
+                input.value = formData[key];
+              }
+            });
+          }
         })();
       `;
-      iframeRef.current.contentWindow.eval(jsCode);
+      iframeWindow.eval(jsCode);
     }
+  };
+
+  const handleLoad = () => {
+    setTimeout(() => {
+      injectFormData();
+    }, 1000);
   };
 
   const handleMessage = (event: MessageEvent) => {
@@ -54,18 +68,24 @@ const WebViewFormSubmitWithRedirect: React.FC<
     setPageContent(event.data);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
+    // Event listener for cross-origin communication
     window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
+
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
   }, []);
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" p={4}>
       <iframe
         ref={iframeRef}
+        title="Web Form Submission"
         src={url}
         onLoad={handleLoad}
         style={{ width: "100%", height: "80vh", border: "1px solid #ccc" }}
+        sandbox="allow-scripts allow-same-origin allow-forms"
       />
       <Button mt={4} onClick={handleFormSubmit} colorScheme="blue">
         Submit Form

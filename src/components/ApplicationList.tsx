@@ -89,7 +89,7 @@ const StatusIcon: React.FC<{ status: string }> = ({ status }) => {
 };
 
 const ApplicationList: React.FC<ApplicationListProps> = ({
-  applicationList = [], // Default to empty array if undefined
+  applicationList = [],
 }) => {
   const groupedApplications = applicationList.reduce((acc, app) => {
     if (!acc[app.status]) {
@@ -102,62 +102,63 @@ const ApplicationList: React.FC<ApplicationListProps> = ({
   const statusOrder = [STATUS.SUBMITTED, STATUS.APPROVED, STATUS.REJECTED];
 
   return (
-    <VStack
-      spacing={4}
-      h="500px"
-      p={4}
-      width="100%"
-      overflowY="scroll"
-      pb={100}
-      role="region"
+    <section
       aria-label="Applications list"
       tabIndex={0}
+      style={{
+        height: "500px",
+        overflowY: "scroll",
+        paddingBottom: "100px",
+        padding: "16px",
+        width: "100%",
+      }}
     >
-      {statusOrder.map((status) =>
-        groupedApplications[status]?.length > 0 ? (
-          <Box
-            key={status}
-            borderRadius={10}
-            bg="#FFFFFF"
-            shadow="md"
-            borderWidth="0.5px"
-            borderColor="#DDDDDD"
-            width="100%"
-          >
-            <HStack
-              alignItems="center"
-              borderBottom="1px"
+      <VStack spacing={4} align="stretch">
+        {statusOrder.map((status) =>
+          groupedApplications[status]?.length > 0 ? (
+            <Box
+              key={status}
+              borderRadius={10}
+              bg="#FFFFFF"
+              shadow="md"
+              borderWidth="0.5px"
               borderColor="#DDDDDD"
-              height="56px"
-              alignContent="center"
               width="100%"
-              paddingLeft="16px"
             >
-              <StatusIcon status={status} />
-            </HStack>
-
-            <VStack align="stretch" spacing={2}>
-              {groupedApplications[status].map((app) => (
-                <HStack
-                  key={app.benefit_id}
-                  width="100%"
-                  height={53}
-                  padding="20px 8px 16px 16px"
-                  justifyContent="space-between"
-                >
-                  <Text fontSize="14px" color={COLORS.text} border="none">
-                    {app.application_name}
-                  </Text>
-                  {status === STATUS.APPROVED && (
-                    <StatusIcon status={STATUS.DISBURSAL_COMPLETE} />
-                  )}
-                </HStack>
-              ))}
-            </VStack>
-          </Box>
-        ) : null
-      )}
-    </VStack>
+              <HStack
+                alignItems="center"
+                borderBottom="1px"
+                borderColor="#DDDDDD"
+                height="56px"
+                alignContent="center"
+                width="100%"
+                paddingLeft="16px"
+              >
+                <StatusIcon status={status} />
+              </HStack>
+              <VStack align="stretch" spacing={2}>
+                {groupedApplications[status].map((app) => (
+                  <HStack
+                    key={app.benefit_id}
+                    width="100%"
+                    height={53}
+                    padding="20px 8px 16px 16px"
+                    justifyContent="space-between"
+                  >
+                    <Text fontSize="14px" color={COLORS.text} border="none">
+                      {app.application_name}
+                    </Text>
+                    {status === STATUS.APPROVED && (
+                      <StatusIcon status={STATUS.DISBURSAL_COMPLETE} />
+                    )}
+                  </HStack>
+                ))}
+              </VStack>
+            </Box>
+          ) : null
+        )}
+      </VStack>
+    </section>
   );
 };
 

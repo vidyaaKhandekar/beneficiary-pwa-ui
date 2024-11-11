@@ -35,13 +35,13 @@ const Layout: React.FC<LayoutProps> = ({
 }) => {
   const { onSearch } = _heading;
 
-  if (loading) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center">
-        <Spinner size="lg" />
-      </Box>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <Box display="flex" justifyContent="center" alignItems="center">
+  //       <Spinner size="lg" />
+  //     </Box>
+  //   );
+  // }
 
   return (
     <Box>
@@ -70,9 +70,16 @@ const Layout: React.FC<LayoutProps> = ({
                 {afterHeader}
               </>
             )}
-            <Box overflow={isScrollable ? "auto" : "hidden"} flex="1">
-              {children}
-            </Box>
+            {loading ? (
+              <Flex align="center" justify="center" height="100vh" bg="#F7F7F7">
+                <Spinner size="xl" color="teal.500" />
+              </Flex>
+            ) : (
+              <Box overflow={isScrollable ? "auto" : "hidden"} flex="1">
+                {children}
+              </Box>
+            )}
+
             {isBottombar && <BottomBar />}
           </Box>
         </Flex>

@@ -60,8 +60,8 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ item }) => {
           </Text>
         </HStack>
         <Flex alignItems="center" mt={2} mb={2}>
-          {eligibility?.map((category, index) => (
-            <Box key={index} mr={2}>
+          {eligibility?.map((category) => (
+            <Box key={category} mr={2}>
               {category.toUpperCase()}
             </Box>
           ))}

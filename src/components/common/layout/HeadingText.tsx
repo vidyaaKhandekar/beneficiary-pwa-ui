@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Box, Text, IconButton, Avatar, VStack } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import { MdOutlineFilterAlt } from "react-icons/md";
 import FilterDialog from "./Filters";
 
 interface HeadingTextProps {
@@ -11,7 +10,6 @@ interface HeadingTextProps {
   handleBack?: () => void;
   isFilter?: boolean;
   filterInputs?: { label: string; key: string; value: string; data: any[] }[];
-  inputs;
   onFilter?: (values: Record<string, string>) => void;
 }
 

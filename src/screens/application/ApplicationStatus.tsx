@@ -3,12 +3,11 @@ import { Box, Stack } from "@chakra-ui/react";
 import "../../assets/styles/App.css";
 import Layout from "../../components/common/layout/Layout";
 import ApplicationList from "../../components/ApplicationList";
-import { applicationList } from "../../assets/mockdata/applicationList";
-import { getTokenData } from "../../services/auth/asyncStorage";
+
 import { getApplicationList, getUser } from "../../services/auth/auth";
 
 const ApplicationStatus: React.FC = () => {
-  const [aapplicationList, setApplicationList] = useState();
+  const [applicationList, setApplicationList] = useState();
 
   const init = async (SearchText) => {
     try {
@@ -40,7 +39,7 @@ const ApplicationStatus: React.FC = () => {
       <Box>
         <Stack spacing={4}>
           {applicationList?.length ? (
-            <ApplicationList applicationList={aapplicationList} />
+            <ApplicationList applicationList={applicationList} />
           ) : (
             <Box textAlign="center" pt={"30%"}>
               No applications found

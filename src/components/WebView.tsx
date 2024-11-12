@@ -1,7 +1,7 @@
 import { Box, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+
 import CommonButton from "./common/button/Button";
 interface FormData {
   [key: string]: string | number | boolean | string[];
@@ -104,13 +104,9 @@ const WebViewFormSubmitWithRedirect: React.FC<
       const formDataObj = new FormData(formRef.current);
       const urlencoded = new URLSearchParams();
       let formDataObject: Record<string, any> = {};
-      let isFormValid = true;
 
       // Check if any input is empty
       formDataObj.forEach((value, key) => {
-        if (!value) {
-          isFormValid = false; // Mark the form as invalid if any field is empty
-        }
         formDataObject[key] = value;
         urlencoded.append(key, value.toString());
       });

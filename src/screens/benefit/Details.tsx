@@ -34,6 +34,7 @@ import {
 import { MdCurrencyRupee } from "react-icons/md";
 import ConfirmationDialog from "../../components/ConfirmationDialog";
 import WebViewFormSubmitWithRedirect from "../../components/WebView";
+import SubmitDialog from "../../components/SubmitDialog";
 
 const BenefitsDetails: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -47,11 +48,12 @@ const BenefitsDetails: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [webFormProp, setWebFormProp] = useState({});
-
+  const [confirmationConsent, setConfirmationConsent] = useState(false);
   const handleConfirmation = async () => {
     setLoading(true);
     try {
       const result = await applyApplication({ id, context });
+      console.log("result===", result);
       setWebFormProp({
         url: result?.data?.responses?.[0]?.message?.order?.items?.[0]?.xinput
           ?.form?.url,
@@ -72,8 +74,9 @@ const BenefitsDetails: React.FC = () => {
         item_id: id,
         context,
       });
+      console.log("result", result);
       const orderId = result?.data?.responses?.[0]?.message?.order?.id;
-
+      console.log("orderId", orderId);
       if (orderId) {
         const payload = {
           user_id: authUser?.user_id,
@@ -85,16 +88,17 @@ const BenefitsDetails: React.FC = () => {
           status: "submitted",
           application_data: authUser,
         };
-
+        console.log("payload", payload);
         const appResult = await createApplication(payload);
 
+        console.log("appResult", appResult);
         if (appResult) {
           setWebFormProp({});
+          onClose(false);
+          setConfirmationConsent({ orderId, name: item?.descriptor?.name });
         }
       } else {
-        setError(
-          "Error while creating application. Please try again later. (Status code 500)"
-        );
+        setError("Error while creating application. Please try again later");
       }
     } catch (e: any) {
       setError(`Error: ${e.message}`);
@@ -269,6 +273,11 @@ const BenefitsDetails: React.FC = () => {
         closeDialog={onClose}
         handleConfirmation={handleConfirmation}
         documents={item.document}
+      />
+      <SubmitDialog
+        dialogVisible={confirmationConsent}
+        closeSubmit={setConfirmationConsent}
+        applicationName={item?.descriptor?.name}
       />
     </Layout>
   );

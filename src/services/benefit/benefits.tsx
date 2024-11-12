@@ -104,7 +104,12 @@ export const applyApplication = async ({ id, context }) => {
   }
 };
 
-export const confirmApplication = async ({ submission_id, context }) => {
+export const confirmApplication = async ({
+  submission_id,
+  item_id,
+  context,
+}) => {
+  console.log("Submission id", submission_id);
   const data = {
     context: {
       ...context,
@@ -115,20 +120,20 @@ export const confirmApplication = async ({ submission_id, context }) => {
     message: {
       order: {
         provider: {
-          id: "79",
+          id: item_id,
           descriptor: {
-            name: "",
+            name: "abc",
             images: [],
-            short_desc: "",
+            short_desc: "abc",
           },
           rateable: false,
         },
         items: [
           {
-            id: "79",
+            id: item_id,
             descriptor: {
-              name: "",
-              long_desc: "",
+              name: "abc",
+              long_desc: "sdad",
             },
             price: {
               currency: "INR",
@@ -140,7 +145,7 @@ export const confirmApplication = async ({ submission_id, context }) => {
                 url: "http://localhost:8001/bpp/public/getAdditionalDetails/1113/5d96c1e2-8963-4e71-8f13-83438d8780e6/1938a8597a944c7884bfa7f20abcdfe4",
                 data: {},
                 mime_type: "text/html",
-                submission_id,
+                submission_id: submission_id,
               },
             },
           },

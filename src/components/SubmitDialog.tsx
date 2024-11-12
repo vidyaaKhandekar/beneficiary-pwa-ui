@@ -22,12 +22,13 @@ interface SubmitDialogProps {
 const SubmitDialog: React.FC<SubmitDialogProps> = ({
   dialogVisible,
   closeSubmit,
+  applicationName,
 }) => {
   const navigate = useNavigate();
 
   const sendCloseDialog = () => {
     closeSubmit(false);
-    navigate("/BenefitsListing");
+    navigate("/explorebenefits");
   };
 
   return (
@@ -60,13 +61,15 @@ const SubmitDialog: React.FC<SubmitDialogProps> = ({
             <Text fontSize="md" color="gray.700">
               Your application to the{" "}
               <Text as="span" color="blue.600" fontWeight="medium">
-                {typeof dialogVisible === "object" && dialogVisible.name}
+                {dialogVisible.name}
               </Text>{" "}
               Benefit has been submitted!
             </Text>
             <Text fontSize="sm" color="gray.500" mt={3}>
               Application ID:{" "}
-              {typeof dialogVisible === "object" && dialogVisible.orderId}
+              <Text as="span" color="blue.600" fontWeight="medium">
+                {dialogVisible.orderId}
+              </Text>{" "}
             </Text>
           </ModalBody>
 

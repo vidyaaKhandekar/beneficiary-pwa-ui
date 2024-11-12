@@ -20,6 +20,7 @@ interface LayoutProps {
   };
   isBottombar?: boolean;
   isSearchbar?: boolean;
+  inputs?: object;
 }
 
 const Layout: React.FC<LayoutProps> = ({
@@ -32,6 +33,7 @@ const Layout: React.FC<LayoutProps> = ({
   _heading = {},
   isBottombar = true,
   isSearchbar = false,
+  inputs,
 }) => {
   const { onSearch } = _heading;
 
@@ -64,7 +66,7 @@ const Layout: React.FC<LayoutProps> = ({
             {isNavbar && (
               <>
                 <Navbar isMenu={isMenu} />
-                <HeadingText {..._heading} />
+                <HeadingText {..._heading} filterInputs={inputs} />
                 {isSearchbar && onSearch && <SearchBar onSearch={onSearch} />}
                 {afterHeader}
               </>

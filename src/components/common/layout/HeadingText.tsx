@@ -37,26 +37,6 @@ const BackIcon: React.FC<{ onClick: () => void; iconSize?: number }> = ({
     size="sm"
   />
 );
-const dummyInputs = [
-  {
-    label: "Category",
-    key: "category",
-    value: "1",
-    data: ["Scholarship", "Grant", "Loan"],
-  },
-  {
-    label: "Status",
-    key: "status",
-    value: "2",
-    data: ["Active", "Expired", "Upcoming", "sw", "dshva"],
-  },
-  {
-    label: "Amount",
-    key: "amount",
-    value: "3",
-    data: ["< 1000", "1000 - 5000", "> 5000"],
-  },
-];
 
 const handleFilter = (values: Record<string, string>) => {
   console.log("Applied Filter Values:", values);
@@ -68,7 +48,7 @@ const HeadingText: React.FC<HeadingTextProps> = ({
   subHeading,
   handleBack,
   isFilter,
-  filterInputs = dummyInputs,
+  filterInputs,
   onFilter = handleFilter,
 }) => {
   return (

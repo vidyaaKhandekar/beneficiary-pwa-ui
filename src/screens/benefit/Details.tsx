@@ -1,5 +1,3 @@
-// BenefitsDetails.tsx
-
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -277,7 +275,6 @@ const BenefitsDetails: React.FC = () => {
       <SubmitDialog
         dialogVisible={confirmationConsent}
         closeSubmit={setConfirmationConsent}
-        applicationName={item?.descriptor?.name}
       />
     </Layout>
   );

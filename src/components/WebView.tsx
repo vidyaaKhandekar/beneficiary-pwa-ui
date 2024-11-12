@@ -1,6 +1,6 @@
 import { Box, Button, useToast } from "@chakra-ui/react";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 interface WebViewFormSubmitWithRedirectProps {
   url: string;

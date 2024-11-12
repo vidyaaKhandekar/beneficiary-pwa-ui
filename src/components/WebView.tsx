@@ -1,7 +1,8 @@
-import { Box, Button, useToast } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useRef } from "react";
-
+import { useNavigate } from "react-router-dom";
+import CommonButton from "./common/button/Button";
 interface FormData {
   [key: string]: string | number | boolean | string[];
 }
@@ -16,7 +17,6 @@ const WebViewFormSubmitWithRedirect: React.FC<
 > = ({ url, formData, setPageContent }) => {
   const formRef = useRef<HTMLFormElement>(null); // Form reference
   const toast = useToast();
-
   const submitFormDetail = async (
     action: string,
     urlencoded: URLSearchParams
@@ -27,7 +27,7 @@ const WebViewFormSubmitWithRedirect: React.FC<
           "Content-Type": `application/x-www-form-urlencoded`,
         },
       });
-      console.log("Submission ID:", axiosResponse.data);
+
       if (
         axiosResponse.data &&
         typeof axiosResponse.data === "string" &&
@@ -115,24 +115,7 @@ const WebViewFormSubmitWithRedirect: React.FC<
         urlencoded.append(key, value.toString());
       });
 
-      if (!isFormValid) {
-        toast({
-          title: "Please fill all the fields",
-          status: "error",
-          duration: 2000,
-        });
-        return;
-      }
-
-      console.log("Form Data:", formDataObject);
-
       await submitFormDetail(formRef.current.action, urlencoded);
-
-      toast({
-        title: "Form Submitted Successfully",
-        status: "success",
-        duration: 2000,
-      });
     }
   };
 
@@ -145,9 +128,10 @@ const WebViewFormSubmitWithRedirect: React.FC<
       <div id="formContainer"></div>
 
       {/* External Button to Submit the Form */}
-      <Button onClick={handleExternalFormSubmit} colorScheme="teal" mt={4}>
+      {/* <Button onClick={handleExternalFormSubmit} colorScheme="teal" mt={4}>
         Submit Form
-      </Button>
+      </Button> */}
+      <CommonButton onClick={handleExternalFormSubmit} label="Submit Form" />
     </Box>
   );
 };

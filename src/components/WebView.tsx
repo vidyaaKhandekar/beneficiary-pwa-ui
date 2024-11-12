@@ -2,9 +2,12 @@ import { Box, Button, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useRef } from "react";
 
+interface FormData {
+  [key: string]: string | number | boolean | string[];
+}
 interface WebViewFormSubmitWithRedirectProps {
   url: string;
-  formData: Record<string, any>;
+  formData: FormData;
   setPageContent?: (content: string) => void;
 }
 
@@ -25,8 +28,14 @@ const WebViewFormSubmitWithRedirect: React.FC<
         },
       });
       console.log("Submission ID:", axiosResponse.data);
-      if (axiosResponse.data) {
+      if (
+        axiosResponse.data &&
+        typeof axiosResponse.data === "string" &&
+        setPageContent
+      ) {
         setPageContent(axiosResponse.data);
+      } else {
+        throw new Error("Invalid response format");
       }
     } catch (error) {
       console.error("Error submitting form:", error);

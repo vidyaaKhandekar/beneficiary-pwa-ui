@@ -92,14 +92,18 @@ const BenefitsDetails: React.FC = () => {
         console.log("appResult", appResult);
         if (appResult) {
           setWebFormProp({});
-          onClose(false);
+          onClose();
           setConfirmationConsent({ orderId, name: item?.descriptor?.name });
         }
       } else {
         setError("Error while creating application. Please try again later");
       }
-    } catch (e: any) {
-      setError(`Error: ${e.message}`);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        setError(`Error: ${e.message}`);
+      } else {
+        setError("An unknown error occurred.");
+      }
     } finally {
       setLoading(false);
     }

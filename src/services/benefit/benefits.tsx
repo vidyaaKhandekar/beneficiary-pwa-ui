@@ -109,7 +109,6 @@ export const confirmApplication = async ({
   item_id,
   context,
 }) => {
-  console.log("Submission id", submission_id);
   const data = {
     context: {
       ...context,
@@ -122,9 +121,10 @@ export const confirmApplication = async ({
         provider: {
           id: item_id,
           descriptor: {
-            name: "abc",
+            name: "Pre-matric Scholarship-SC",
             images: [],
-            short_desc: "abc",
+            short_desc:
+              "This scholarship supports SC students from Madhya Pradesh",
           },
           rateable: false,
         },
@@ -132,8 +132,9 @@ export const confirmApplication = async ({
           {
             id: item_id,
             descriptor: {
-              name: "abc",
-              long_desc: "sdad",
+              name: "Pre-matric Scholarship-SCc",
+              long_desc:
+                "This scholarship supports SC students from Madhya Pradesh",
             },
             price: {
               currency: "INR",

@@ -52,6 +52,7 @@ const SignIn: React.FC = () => {
       const response = await loginUser({ username, password });
       setLoading(false); // Hide loading indicator after response
       saveToken(response.data.access_token, response.data.refresh_token);
+      localStorage.setItem("authToken", response.data.access_token);
       init();
       setDialogVisible(true);
     } catch (error) {
@@ -80,8 +81,9 @@ const SignIn: React.FC = () => {
     try {
       await sendConsent(userData?.user_id);
       checkToken();
+      navigate("/userprofile");
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     }
   };
 

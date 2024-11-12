@@ -19,8 +19,6 @@ import {
 import { CloseIcon, CheckIcon } from "@chakra-ui/icons";
 import SubmitDialog from "./SubmitDialog";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-// import CustomButton from "./common/button/Button";
 
 interface Document {
   name: string;
@@ -46,7 +44,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   consentText,
 }) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+
   consentText = consentText || t("CONFIRMATION_DIALOGUE_CONSENT_TEXT");
 
   // Function to call the parent's function
@@ -57,7 +55,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   const openSubmitDialog = async () => {
     if (handleConfirmation) {
       handleConfirmation();
-      navigate("/userprofile");
+      // navigate("/userprofile");
     }
   };
   const closeSubmitDialog = () => {

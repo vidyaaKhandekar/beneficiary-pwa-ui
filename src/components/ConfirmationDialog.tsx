@@ -9,16 +9,15 @@ import {
   Text,
   IconButton,
   VStack,
-  Spinner,
-  ListItem,
   Button,
   HStack,
-  UnorderedList,
 } from "@chakra-ui/react";
 
-import { CloseIcon, CheckIcon } from "@chakra-ui/icons";
+import { CloseIcon } from "@chakra-ui/icons";
 import SubmitDialog from "./SubmitDialog";
 import { useTranslation } from "react-i18next";
+import Loader from "./common/Loader";
+import DocumentList from "./DocumentList";
 
 interface Document {
   name: string;
@@ -32,8 +31,6 @@ interface ConfirmationDialogProps {
   loading?: boolean;
   consentText?: string;
 }
-
-const LeftIcon: React.FC = () => <CheckIcon color="blue.600" w={5} h={5} />;
 
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   dialogVisible,
@@ -91,36 +88,18 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
               />
             </ModalHeader>
 
-            <ModalBody py={4}>
+            <ModalBody py={4} className="card-scroll invisible_scroll">
               <Text fontSize="md" mb={4} color="gray.600">
                 {consentText}
               </Text>
-              <VStack spacing={3}>
-                {loading ? (
-                  <Spinner color="blue.600" />
-                ) : (
-                  <UnorderedList mt={4}>
-                    {documents.map((document) => (
-                      <ListItem key={document.name} display="flex">
-                        <LeftIcon />
-                        <Text
-                          ml={3}
-                          fontSize="sm"
-                          fontWeight="normal"
-                          color="gray.700"
-                        >
-                          {document.name}
-                        </Text>
-                      </ListItem>
-                    ))}
-                  </UnorderedList>
-                )}
+              <VStack>
+                {loading ? <Loader /> : <DocumentList documents={documents} />}
               </VStack>
             </ModalBody>
 
             <ModalFooter display="flex" justifyContent="space-between" mt={4}>
               {loading ? (
-                <Spinner color="blue.600" />
+                <Loader />
               ) : (
                 <HStack spacing={4}>
                   <Button variant="outline" onClick={sendCloseDialog} size="md">

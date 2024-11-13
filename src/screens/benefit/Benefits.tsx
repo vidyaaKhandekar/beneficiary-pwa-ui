@@ -15,10 +15,11 @@ import Layout from "../../components/common/layout/Layout";
 import { getTokenData } from "../../services/auth/asyncStorage";
 import { getUser } from "../../services/auth/auth";
 import { getAll } from "../../services/benefit/benefits";
+import { Castes, Gender, IncomeRange } from "../../assets/mockdata/FilterData";
 
 const ExploreBenefits: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [search] = useState("");
+  const [search, setSearch] = useState("");
   const [filter, setFilter] = useState({});
   const [initState, setInitState] = useState("yes");
   const [error, setError] = useState("");
@@ -62,12 +63,12 @@ const ExploreBenefits: React.FC = () => {
       try {
         if (initState == "no") {
           const result = await getAll({
-            // filters: {
-            //   ...filter,
-            //   "ann-hh-inc": filter?.["ann-hh-inc"]
-            //     ? `0-${filter?.["ann-hh-inc"]}`
-            //     : "",
-            // },
+            filters: {
+              ...filter,
+              "ann-hh-inc": filter?.["ann-hh-inc"]
+                ? `0-${filter?.["ann-hh-inc"]}`
+                : "",
+            },
             search,
           });
 
@@ -83,6 +84,7 @@ const ExploreBenefits: React.FC = () => {
     };
     init();
   }, [filter, search, initState]);
+
   return (
     <Layout
       loading={loading}
@@ -90,7 +92,30 @@ const ExploreBenefits: React.FC = () => {
         heading: "Browse Benefits",
         isFilter: true,
         handleOpen: handleOpen,
+        setFilter: setFilter,
+        onSearch: setSearch,
+        inputs: [
+          {
+            label: "Caste",
+            data: Castes,
+            value: filter?.["social-eligibility"] || "",
+            key: "social-eligibility",
+          },
+          {
+            label: "Income Range",
+            data: IncomeRange,
+            value: filter?.["ann-hh-inc"] || "",
+            key: "ann-hh-inc",
+          },
+          {
+            label: "Gender",
+            data: Gender,
+            value: filter?.["gender-eligibility"] || "",
+            key: "gender-eligibility",
+          },
+        ],
       }}
+      isSearchbar={true}
     >
       {error && (
         <Modal isOpen={!!error} onClose={() => setError("")}>

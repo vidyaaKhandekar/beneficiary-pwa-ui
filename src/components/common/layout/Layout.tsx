@@ -17,6 +17,8 @@ interface LayoutProps {
     isFilter?: boolean;
     handleOpen?: () => void;
     onSearch?: (query: string) => void;
+    setFilter?: (query: string) => void;
+    inputs?: { label: string; key: string; value: string; data: [] }[];
   };
   isBottombar?: boolean;
   isSearchbar?: boolean;

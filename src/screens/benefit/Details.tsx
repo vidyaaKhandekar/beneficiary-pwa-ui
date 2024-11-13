@@ -77,7 +77,7 @@ const BenefitsDetails: React.FC = () => {
       });
 
       const orderId = result?.data?.responses?.[0]?.message?.order?.id;
-
+      console.log("orderId", orderId);
       if (orderId) {
         const payload = {
           user_id: authUser?.user_id,
@@ -89,9 +89,10 @@ const BenefitsDetails: React.FC = () => {
           status: "submitted",
           application_data: authUser,
         };
-
+        console.log("payload", payload);
         const appResult = await createApplication(payload);
 
+        console.log("appResult", appResult);
         if (appResult) {
           setWebFormProp({});
           onClose();

@@ -1,22 +1,7 @@
 import * as React from "react";
-import {
-  VStack,
-  Text,
-  Spinner,
-  Icon,
-  HStack,
-  useTheme,
-} from "@chakra-ui/react";
-import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
-
-interface Document {
-  name: string;
-  status: boolean; // Added status field for your component logic
-}
-
-interface DocumentListProps {
-  documents: Document[];
-}
+import { VStack, Text, Icon, HStack, useTheme } from "@chakra-ui/react";
+import { CheckCircleIcon } from "@chakra-ui/icons";
+import Loader from "./common/Loader";
 
 interface StatusIconProps {
   status: boolean;
@@ -26,23 +11,23 @@ interface StatusIconProps {
 
 const StatusIcon: React.FC<StatusIconProps> = ({
   status,
-  size = 4,
+  size = 5,
   "aria-label": ariaLabel,
 }) => {
   const theme = useTheme();
   return (
     <Icon
-      as={status ? CheckCircleIcon : WarningIcon}
-      color={status ? theme.colors.success : theme.colors.warning} // Use theme tokens
+      as={status ? CheckCircleIcon : ""}
+      color={status ? theme.colors.success : ""} // Use theme tokens
       boxSize={size}
       aria-label={
-        ariaLabel || `Document status: ${status ? "Available" : "Missing"}`
+        ariaLabel || `Document status: ${status ? "Available" : "incomplete"}`
       }
     />
   );
 };
 
-const DocumentList: React.FC<DocumentListProps> = ({ documents }) => {
+const DocumentList: React.FC = ({ documents }) => {
   const theme = useTheme();
   return documents && documents.length > 0 ? (
     <VStack
@@ -61,10 +46,10 @@ const DocumentList: React.FC<DocumentListProps> = ({ documents }) => {
           spacing={3}
           height={61}
           width="100%"
-          pl={7}
+          pl={2}
         >
           <StatusIcon status={document.status} />
-          <Text fontSize="14px" fontWeight="400" color={theme.colors.text}>
+          <Text fontSize="16px" fontWeight="400" color={theme.colors.text}>
             {" "}
             {document.name}
           </Text>
@@ -72,7 +57,7 @@ const DocumentList: React.FC<DocumentListProps> = ({ documents }) => {
       ))}
     </VStack>
   ) : (
-    <Spinner />
+    <Loader />
   );
 };
 

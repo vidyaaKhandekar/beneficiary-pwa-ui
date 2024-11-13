@@ -46,6 +46,7 @@ const BenefitsDetails: React.FC = () => {
   const [authUser, setAuthUser] = useState();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+
   const [webFormProp, setWebFormProp] = useState({});
   const [confirmationConsent, setConfirmationConsent] = useState(false);
   const { t } = useTranslation();
@@ -233,23 +234,6 @@ const BenefitsDetails: React.FC = () => {
             {t("BENEFIT_DETAILS_HEADING_DETAILS")}
           </Heading>
           <Text mt={4}> {item?.descriptor?.long_desc}</Text>
-          {/* <Heading size="md" color="#484848" fontWeight={500} mt={6}>
-            Objectives of the Pre-matric Scholarship-ST:
-          </Heading>
-          <UnorderedList mt={4}>
-            <ListItem>
-              Provide financial assistance to ST students in Classes 9 and 10 to
-              encourage continued education.
-            </ListItem>
-            <ListItem>
-              Support low-income families by reducing the financial burden of
-              schooling.
-            </ListItem>
-            <ListItem>
-              Promote equal educational opportunities for students with
-              disabilities through higher financial aid.
-            </ListItem>
-          </UnorderedList> */}
           <Heading size="md" color="#484848" fontWeight={500} mt={6}>
             {t("BENEFIT_DETAILS_MANDATORY_DOCUMENTS")}
           </Heading>

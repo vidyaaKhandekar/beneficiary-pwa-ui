@@ -9,8 +9,8 @@ interface HeadingTextProps {
   subHeading?: string;
   handleBack?: () => void;
   isFilter?: boolean;
-  filterInputs?: { label: string; key: string; value: string; data: any[] }[];
-  onFilter?: (values: Record<string, string>) => void;
+  inputs?: { label: string; key: string; value: string; data: any[] }[];
+  setFilter?: (values: Record<string, string>) => void;
 }
 
 const LeftContent: React.FC<{ label: string; size?: string }> = ({
@@ -38,18 +38,14 @@ const BackIcon: React.FC<{ onClick: () => void; iconSize?: number }> = ({
   />
 );
 
-const handleFilter = (values: Record<string, string>) => {
-  console.log("Applied Filter Values:", values);
-};
-
 const HeadingText: React.FC<HeadingTextProps> = ({
   beneficiary,
   heading,
   subHeading,
   handleBack,
   isFilter,
-  filterInputs,
-  onFilter = handleFilter,
+  inputs,
+  setFilter,
 }) => {
   return (
     <Box
@@ -79,13 +75,8 @@ const HeadingText: React.FC<HeadingTextProps> = ({
                 </Text>
               )}
 
-              {isFilter && filterInputs && onFilter && (
-                <FilterDialog
-                  inputs={filterInputs}
-                  onFilter={(values) => {
-                    onFilter(values);
-                  }}
-                />
+              {isFilter && inputs && setFilter && (
+                <FilterDialog inputs={inputs} setFilter={setFilter} />
               )}
             </Box>
           )}

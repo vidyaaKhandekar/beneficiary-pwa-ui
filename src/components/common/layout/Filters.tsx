@@ -10,6 +10,7 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
+  useTheme,
 } from "@chakra-ui/react";
 import { MdOutlineFilterAlt } from "react-icons/md";
 import FloatingSelect from "../input/FloatingSelect";
@@ -22,13 +23,13 @@ interface FilterDialogProps {
     value: string;
     data: Array<{ label: string; value: string }>;
   }[];
-  onFilter: (values: Record<string, string>) => void;
+  setFilter: (values: Record<string, string>) => void;
 }
 
-const FilterDialog: React.FC<FilterDialogProps> = ({ inputs, onFilter }) => {
+const FilterDialog: React.FC<FilterDialogProps> = ({ inputs, setFilter }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [values, setValues] = useState<Record<string, string>>({});
-
+  const [values, setValues] = useState<object>({});
+  const theme = useTheme();
   useEffect(() => {
     const inputsValues = inputs?.reduce((acc, item) => {
       acc[item.key] = item.value;
@@ -37,7 +38,7 @@ const FilterDialog: React.FC<FilterDialogProps> = ({ inputs, onFilter }) => {
     setValues(inputsValues);
   }, [inputs]);
 
-  const getValue = (item: { key: string }, value: string) => {
+  const getValue = (item: { key: string }, value?: string) => {
     setValues((prevValues) => ({ ...prevValues, [item.key]: value }));
   };
 
@@ -45,16 +46,20 @@ const FilterDialog: React.FC<FilterDialogProps> = ({ inputs, onFilter }) => {
     return null;
   }
 
+  const handleFilter = () => {
+    setFilter(values);
+    onClose();
+  };
   return (
     <Box>
       <IconButton
         aria-label="Filter"
         icon={<MdOutlineFilterAlt />}
         fontSize="25px"
-        marginLeft="auto"
+        marginLeft="100%"
         onClick={onOpen}
         variant="ghost"
-        colorScheme="teal"
+        colorScheme="#484848"
       />
 
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -68,21 +73,17 @@ const FilterDialog: React.FC<FilterDialogProps> = ({ inputs, onFilter }) => {
                 key={item.key}
                 label={item.label}
                 options={item.data}
-                value={values[item.key]}
-                onChange={(value) => getValue(item, value)}
+                value={values?.[item?.key] || ""}
+                onChange={(e) => {
+                  getValue(item, e.target.value);
+                }}
                 name="label"
               />
             ))}
           </ModalBody>
 
           <ModalFooter>
-            <CommonButton
-              label=" Apply Filter"
-              onClick={() => {
-                onFilter(values);
-                onClose();
-              }}
-            />
+            <CommonButton label="Apply Filter" onClick={handleFilter} />
           </ModalFooter>
         </ModalContent>
       </Modal>

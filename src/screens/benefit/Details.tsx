@@ -1,5 +1,3 @@
-// BenefitsDetails.tsx
-
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -34,6 +32,8 @@ import {
 import { MdCurrencyRupee } from "react-icons/md";
 import ConfirmationDialog from "../../components/ConfirmationDialog";
 import WebViewFormSubmitWithRedirect from "../../components/WebView";
+import SubmitDialog from "../../components/SubmitDialog";
+import { useTranslation } from "react-i18next";
 
 const BenefitsDetails: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -48,11 +48,13 @@ const BenefitsDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
   const [webFormProp, setWebFormProp] = useState({});
-
+  const [confirmationConsent, setConfirmationConsent] = useState(false);
+  const { t } = useTranslation();
   const handleConfirmation = async () => {
     setLoading(true);
     try {
       const result = await applyApplication({ id, context });
+
       setWebFormProp({
         url: result?.data?.responses?.[0]?.message?.order?.items?.[0]?.xinput
           ?.form?.url,
@@ -73,6 +75,7 @@ const BenefitsDetails: React.FC = () => {
         item_id: id,
         context,
       });
+
       const orderId = result?.data?.responses?.[0]?.message?.order?.id;
 
       if (orderId) {
@@ -91,14 +94,18 @@ const BenefitsDetails: React.FC = () => {
 
         if (appResult) {
           setWebFormProp({});
+          onClose();
+          setConfirmationConsent({ orderId, name: item?.descriptor?.name });
         }
       } else {
-        setError(
-          "Error while creating application. Please try again later. (Status code 500)"
-        );
+        setError("Error while creating application. Please try again later");
       }
-    } catch (e: any) {
-      setError(`Error: ${e.message}`);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        setError(`Error: ${e.message}`);
+      } else {
+        setError("An unknown error occurred.");
+      }
     } finally {
       setLoading(false);
     }
@@ -207,7 +214,7 @@ const BenefitsDetails: React.FC = () => {
       <Box className="card-scroll invisible_scroll">
         <Box maxW="2xl" m={4}>
           <Heading size="md" color="#484848" fontWeight={500} mt={2}>
-            Benefits
+            {t("BENEFIT_DETAILS_HEADING_TITLE")}
           </Heading>
           <HStack
             align="center"
@@ -224,11 +231,11 @@ const BenefitsDetails: React.FC = () => {
             </Text>
           </HStack>
           <Heading size="md" color="#484848" fontWeight={500} mt={6}>
-            Details
+            {t("BENEFIT_DETAILS_HEADING_DETAILS")}
           </Heading>
           <Text mt={4}> {item?.descriptor?.long_desc}</Text>
           <Heading size="md" color="#484848" fontWeight={500} mt={6}>
-            Mandatory Documents:
+            {t("BENEFIT_DETAILS_MANDATORY_DOCUMENTS")}
           </Heading>
           <UnorderedList mt={4}>
             {item?.document?.map((document) => (
@@ -239,7 +246,9 @@ const BenefitsDetails: React.FC = () => {
             <CommonButton
               onClick={onOpen}
               label={
-                isApplied ? "Application Already Submitted" : "Proceed To Apply"
+                isApplied
+                  ? t("BENEFIT_DETAILS_APPLICATION_SUBMITTED")
+                  : t("BENEFIT_DETAILS_PROCEED_TO_APPLY")
               }
               isDisabled={isApplied}
             />
@@ -253,6 +262,10 @@ const BenefitsDetails: React.FC = () => {
         closeDialog={onClose}
         handleConfirmation={handleConfirmation}
         documents={item.document}
+      />
+      <SubmitDialog
+        dialogVisible={confirmationConsent}
+        closeSubmit={setConfirmationConsent}
       />
     </Layout>
   );

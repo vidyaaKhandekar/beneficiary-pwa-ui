@@ -38,5 +38,19 @@
   "NAVBAR_LOGOUT": "Logout",
   "NAVBAR_FAST_PASS": "Fast Pass",
   "NAVBAR_PROFILE": "Profile",
-  "GENERAL_LOADING": "Loading..."
+  "GENERAL_LOADING": "Loading...",
+  "NAVBAR_LOGGED_OUT_SUCCESSFULLY": "Logged Out Successfully",
+  "BENEFIT_DETAILS_HEADING_TITLE": "Benefit",
+ "BENEFIT_DETAILS_HEADING_DETAILS": "Details",
+ "BENEFIT_DETAILS_MANDATORY_DOCUMENTS": "Mandatory Documents",
+  "BENEFIT_DETAILS_APPLICATION_SUBMITTED": "Application Already Submitted",
+  "BENEFIT_DETAILS_PROCEED_TO_APPLY": "Proceed To Apply",
+  "SUBMIT_DIALOGUE_HEADING_TEXT":"Application Submitted",
+  "SUBMIT_DIALOGUE_SUBHEADING_TEXT":"Confirmation",
+  "SUBMIT_DIALOGUE_CONTENT_TEXT":"Your application to the",
+  "SUBMIT_DIALOGUE_SUBMITTED_TEXT":"Benefit has been submitted",
+  "SUBMIT_DIALOGUE_APPLICATION_ID_TEXT":" Application ID",
+  "SUBMIT_DIALOGUE_BUTTON":"Okay"
+
+  
 }

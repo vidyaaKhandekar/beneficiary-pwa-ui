@@ -251,7 +251,7 @@ const BenefitsDetails: React.FC = () => {
             </ListItem>
           </UnorderedList> */}
           <Heading size="md" color="#484848" fontWeight={500} mt={6}>
-            Mandatory Documents:
+            {t("BENEFIT_DETAILS_MANDATORY_DOCUMENTS")}
           </Heading>
           <UnorderedList mt={4}>
             {item?.document?.map((document) => (
@@ -264,7 +264,7 @@ const BenefitsDetails: React.FC = () => {
               label={
                 isApplied
                   ? t("BENEFIT_DETAILS_APPLICATION_SUBMITTED")
-                  : t("BENEFIT_DETAILS_PROCCED_TO_APPLY")
+                  : t("BENEFIT_DETAILS_PROCEED_TO_APPLY")
               }
               isDisabled={isApplied}
             />

@@ -45,7 +45,7 @@ const SubmitDialog: React.FC<SubmitDialogProps> = ({
             borderBottomColor="gray.200"
           >
             <Text fontSize="lg" fontWeight="medium" color="gray.700">
-              Application Submitted
+              {t("SUBMIT_DIALOGUE_HEADING_TEXT")}
             </Text>
             <IconButton
               icon={<CloseIcon />}
@@ -59,14 +59,14 @@ const SubmitDialog: React.FC<SubmitDialogProps> = ({
             <Text fontSize="md" color="gray.700">
               {t("SUBMIT_DIALOGUE_CONTENT_TEXT")}
               <Text as="span" color="blue.600" fontWeight="medium">
-                {dialogVisible.name}
+                {dialogVisible?.name || ""}
               </Text>{" "}
               {t("SUBMIT_DIALOGUE_SUBMITTED_TEXT")}!
             </Text>
             <Text fontSize="sm" color="gray.500" mt={3}>
               {t("SUBMIT_DIALOGUE_APPLICATION_ID_TEXT")}:{" "}
               <Text as="span" fontWeight="medium">
-                {dialogVisible.orderId}
+                {dialogVisible?.orderId || ""}
               </Text>{" "}
             </Text>
           </ModalBody>

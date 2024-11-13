@@ -103,7 +103,7 @@ const WebViewFormSubmitWithRedirect: React.FC<
     if (formRef.current) {
       const formDataObj = new FormData(formRef.current);
       const urlencoded = new URLSearchParams();
-      let formDataObject: Record<string, any> = {};
+      const formDataObject: FormData = {};
 
       // Check if any input is empty
       formDataObj.forEach((value, key) => {

@@ -1,6 +1,5 @@
 import * as React from "react";
 import {
-  Button,
   Text,
   IconButton,
   VStack,
@@ -13,17 +12,19 @@ import {
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import CommonButton from "./common/button/Button";
 
 interface SubmitDialogProps {
-  dialogVisible: boolean | { name?: string; orderId?: string };
+  dialogVisible: { name?: string; orderId?: string };
   closeSubmit: (visible: boolean) => void;
 }
 
 const SubmitDialog: React.FC<SubmitDialogProps> = ({
   dialogVisible,
   closeSubmit,
-  applicationName,
 }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const sendCloseDialog = () => {
@@ -44,7 +45,7 @@ const SubmitDialog: React.FC<SubmitDialogProps> = ({
             borderBottomColor="gray.200"
           >
             <Text fontSize="lg" fontWeight="medium" color="gray.700">
-              Share Information
+              {t("SUBMIT_DIALOGUE_HEADING_TEXT")}
             </Text>
             <IconButton
               icon={<CloseIcon />}
@@ -55,33 +56,27 @@ const SubmitDialog: React.FC<SubmitDialogProps> = ({
           </ModalHeader>
 
           <ModalBody py={4}>
-            <Text fontSize="md" mb={4} color="gray.600">
-              Confirmation
-            </Text>
             <Text fontSize="md" color="gray.700">
-              Your application to the{" "}
+              {t("SUBMIT_DIALOGUE_CONTENT_TEXT")}
               <Text as="span" color="blue.600" fontWeight="medium">
-                {dialogVisible.name}
+                {dialogVisible?.name || ""}
               </Text>{" "}
-              Benefit has been submitted!
+              {t("SUBMIT_DIALOGUE_SUBMITTED_TEXT")}!
             </Text>
             <Text fontSize="sm" color="gray.500" mt={3}>
-              Application ID:{" "}
-              <Text as="span" color="blue.600" fontWeight="medium">
-                {dialogVisible.orderId}
+              {t("SUBMIT_DIALOGUE_APPLICATION_ID_TEXT")}:{" "}
+              <Text as="span" fontWeight="medium">
+                {dialogVisible?.orderId || ""}
               </Text>{" "}
             </Text>
           </ModalBody>
 
           <ModalFooter display="flex" justifyContent="center">
-            <Button
-              colorScheme="blue"
+            <CommonButton
               onClick={sendCloseDialog}
-              size="md"
-              w={32}
-            >
-              Okay
-            </Button>
+              width={"40%"}
+              label={t("SUBMIT_DIALOGUE_BUTTON")}
+            />
           </ModalFooter>
         </ModalContent>
       </Modal>

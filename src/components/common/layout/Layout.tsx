@@ -22,7 +22,6 @@ interface LayoutProps {
   };
   isBottombar?: boolean;
   isSearchbar?: boolean;
-  inputs?: object;
 }
 
 const Layout: React.FC<LayoutProps> = ({

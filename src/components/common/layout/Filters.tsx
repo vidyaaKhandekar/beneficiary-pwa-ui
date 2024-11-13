@@ -10,7 +10,6 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-  useTheme,
 } from "@chakra-ui/react";
 import { MdOutlineFilterAlt } from "react-icons/md";
 import FloatingSelect from "../input/FloatingSelect";
@@ -28,8 +27,8 @@ interface FilterDialogProps {
 
 const FilterDialog: React.FC<FilterDialogProps> = ({ inputs, setFilter }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [values, setValues] = useState<object>({});
-  const theme = useTheme();
+  const [values, setValues] = useState<Record<string, string>>({});
+
   useEffect(() => {
     const inputsValues = inputs?.reduce((acc, item) => {
       acc[item.key] = item.value;

@@ -9,8 +9,13 @@ interface HeadingTextProps {
   subHeading?: string;
   handleBack?: () => void;
   isFilter?: boolean;
-  inputs?: { label: string; key: string; value: string; data: any[] }[];
-  setFilter?: (values: Record<string, string>) => void;
+  inputs?: {
+    label: string;
+    key: string;
+    value: string;
+    data: Array<{ label: string; value: string }>;
+  }[];
+  setFilter?: React.Dispatch<React.SetStateAction<unknown>>;
 }
 
 const LeftContent: React.FC<{ label: string; size?: string }> = ({

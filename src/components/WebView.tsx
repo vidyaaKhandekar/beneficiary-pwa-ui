@@ -1,21 +1,21 @@
 import { Box, useToast } from "@chakra-ui/react";
 import axios from "axios";
-import { useEffect, useRef } from "react";
+import { MutableRefObject, useEffect, useRef } from "react";
 
 import CommonButton from "./common/button/Button";
 interface FormData {
   [key: string]: string | number | boolean | string[];
 }
 interface WebViewFormSubmitWithRedirectProps {
-  url: string;
-  formData: FormData;
+  url?: string;
+  formData?: FormData;
   setPageContent?: (content: string) => void;
 }
 
 const WebViewFormSubmitWithRedirect: React.FC<
   WebViewFormSubmitWithRedirectProps
 > = ({ url, formData, setPageContent }) => {
-  const formRef = useRef<HTMLFormElement>(null); // Form reference
+  const formRef = useRef<HTMLFormElement>(null);
   const toast = useToast();
   const submitFormDetail = async (
     action: string,
@@ -56,17 +56,19 @@ const WebViewFormSubmitWithRedirect: React.FC<
 
         const form = container.querySelector("form");
         if (form) {
-          formRef.current = form; // Store form reference
+          (formRef as MutableRefObject<HTMLFormElement | null>).current = form; // Store form reference
 
           // Autofill form inputs
           const inputElements = form.querySelectorAll("input");
           inputElements.forEach((input) => {
             const inputName = input.getAttribute("name");
-            if (formData[inputName] !== undefined) {
+            // Provide a default empty object if formData is undefined
+            const data = formData || {};
+            if (inputName && data[inputName] !== undefined) {
               if (input.type === "checkbox" || input.type === "radio") {
-                input.checked = formData[inputName] === input.value;
+                input.checked = data[inputName] === input.value;
               } else {
-                input.value = formData[inputName];
+                input.value = data[inputName] as string;
               }
             }
           });
@@ -74,25 +76,38 @@ const WebViewFormSubmitWithRedirect: React.FC<
           const selectElements = form.querySelectorAll("select");
           selectElements.forEach((select) => {
             const selectName = select.getAttribute("name");
-            if (formData[selectName] !== undefined) {
-              select.value = formData[selectName];
+            // Provide a default empty object if formData is undefined
+            const data = formData || {};
+            if (selectName && data[selectName] !== undefined) {
+              const value = data[selectName];
+              if (typeof value === "string") {
+                select.value = value;
+              } else if (
+                typeof value === "number" ||
+                typeof value === "boolean"
+              ) {
+                select.value = value.toString();
+              } else if (Array.isArray(value) && value.length > 0) {
+                select.value = value[0]; // Select the first value if it's an array of strings
+              }
             }
           });
 
           // Hide the submit button inside the form loaded from the URL
           const submitButton = form.querySelector(
             'input[type="submit"], button[type="submit"]'
-          );
+          ) as HTMLElement;
           if (submitButton) {
-            submitButton.style.display = "none"; // Hide only the submit button from the external form
+            submitButton.style.display = "none";
           }
         }
       }
     } catch (error) {
-      console.error("Error loading form:", error);
+      const err = error as Error;
+      console.error("Error loading form:", err);
       toast({
         title: "Error loading form",
-        description: error.message,
+        description: err.message,
         status: "error",
         duration: 3000,
       });
@@ -107,7 +122,8 @@ const WebViewFormSubmitWithRedirect: React.FC<
 
       // Check if any input is empty
       formDataObj.forEach((value, key) => {
-        formDataObject[key] = value;
+        formDataObject[key] =
+          typeof value === "string" ? value : value.toString();
         urlencoded.append(key, value.toString());
       });
 
@@ -116,7 +132,9 @@ const WebViewFormSubmitWithRedirect: React.FC<
   };
 
   useEffect(() => {
-    searchForm(url);
+    if (url) {
+      searchForm(url);
+    }
   }, [url]);
 
   return (

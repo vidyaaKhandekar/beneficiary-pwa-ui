@@ -38,7 +38,7 @@ const FilterDialog: React.FC<FilterDialogProps> = ({ inputs, setFilter }) => {
   }, [inputs]);
 
   const getValue = (item: { key: string }, value?: string) => {
-    setValues((prevValues) => ({ ...prevValues, [item.key]: value }));
+    setValues((prevValues) => ({ ...prevValues, [item.key]: value ?? "" }));
   };
 
   if (!Array.isArray(inputs) || inputs.length === 0) {

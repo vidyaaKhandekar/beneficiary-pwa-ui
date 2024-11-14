@@ -44,11 +44,11 @@ export const getAll = async (userData: {
  * @param {Object} loginData - Contains phone_number, password
  */
 
-interface getOneProps {
+interface GetOneProps {
   id: string | undefined;
 }
 
-export const getOne = async ({ id }: getOneProps) => {
+export const getOne = async ({ id }: GetOneProps) => {
   const loginData = {
     context: {
       domain: "onest:financial-support",
@@ -78,7 +78,7 @@ export const getOne = async ({ id }: getOneProps) => {
   };
   try {
     const tokenData = await getToken();
-    if (!tokenData || !tokenData.token) {
+    if (tokenData?.token) {
       throw new Error("Token not found");
     }
     const { token } = tokenData;
@@ -229,7 +229,7 @@ export const confirmApplication = async ({
     handleError(error);
   }
 };
-interface createApplicationParams {
+interface CreateApplicationParams {
   user_id: string | undefined;
   benefit_id: string | undefined;
   benefit_provider_id: string | undefined;
@@ -240,7 +240,7 @@ interface createApplicationParams {
   application_data: unknown;
 }
 
-export const createApplication = async (data: createApplicationParams) => {
+export const createApplication = async (data: CreateApplicationParams) => {
   try {
     const tokenData = await getToken();
     if (!tokenData?.token) {

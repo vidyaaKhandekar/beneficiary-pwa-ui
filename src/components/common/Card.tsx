@@ -18,20 +18,22 @@ import {
 } from "../../utils/jsHelper/helper";
 import { MdCurrencyRupee } from "react-icons/md";
 interface BenefitCardProps {
-  item_id: string;
-  title: string;
-  provider_name: string;
-  description: string;
   item: {
-    time?: { range?: { end?: string } };
-    tags?: Array<{ list?: string[] }>;
-    price?: { value?: number; currency?: string };
+    item_id: number;
+    title: string;
+    provider_name: string;
+    description: string;
+    item: {
+      price?: { value?: number; currency?: string };
+      tags: Array<{ list?: string[] }>;
+      time?: { range?: { end?: string } };
+    };
   };
 }
 
 const BenefitCard: React.FC<BenefitCardProps> = ({ item }) => {
   const dateStr = item?.item?.time?.range?.end;
-  const formattedDate = formatDateString(dateStr);
+  const formattedDate = dateStr ? formatDateString(dateStr) : "";
   const eligibility = extractEligibilityValues(item?.item?.tags[0]?.list);
   const id = item?.item_id;
 

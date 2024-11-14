@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 import CommonButton from "./common/button/Button";
 
 interface SubmitDialogProps {
-  dialogVisible: { name?: string; orderId?: string };
+  dialogVisible: { name?: string; orderId?: string } | undefined;
   closeSubmit: (visible: boolean) => void;
 }
 

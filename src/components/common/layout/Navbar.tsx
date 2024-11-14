@@ -21,9 +21,12 @@ import { AuthContext } from "../../../utils/context/checkToken";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const options = [];
+const options: { value: string; label: string }[] = [];
 const Navbar: React.FC<{ isMenu?: boolean }> = ({ isMenu = true }) => {
-  const { checkToken, removeContextData } = useContext(AuthContext);
+  const { checkToken, removeContextData } = useContext(AuthContext) as {
+    checkToken: () => void;
+    removeContextData: () => void;
+  };
   const [success, setSuccess] = useState<string>("");
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -40,7 +43,7 @@ const Navbar: React.FC<{ isMenu?: boolean }> = ({ isMenu = true }) => {
           navigate("/signin");
         }
       } catch (error) {
-        console.error("Logout failed:", error.massage);
+        console.error("Logout failed:", (error as Error).message);
       }
     } else {
       console.error("No tokens found, user is not logged in");
@@ -64,7 +67,12 @@ const Navbar: React.FC<{ isMenu?: boolean }> = ({ isMenu = true }) => {
                 paddingLeft={0}
               ></MenuButton>
               <MenuList bg="var(--menu-background)">
-                <MenuItem bg="var(--menu-background)">
+                <MenuItem
+                  bg="var(--menu-background)"
+                  onClick={() => {
+                    navigate("/userprofile");
+                  }}
+                >
                   {" "}
                   {t("NAVBAR_PROFILE")}
                 </MenuItem>

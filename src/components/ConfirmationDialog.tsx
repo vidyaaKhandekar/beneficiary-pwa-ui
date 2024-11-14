@@ -18,15 +18,10 @@ import SubmitDialog from "./SubmitDialog";
 import { useTranslation } from "react-i18next";
 import Loader from "./common/Loader";
 
-interface Document {
-  name: string;
-}
-
 interface ConfirmationDialogProps {
   dialogVisible: boolean;
   closeDialog: (isVisible: boolean) => void;
   handleConfirmation: () => Promise<void>;
-  documents?: Document[];
   loading?: boolean;
   consentText?: string;
 }

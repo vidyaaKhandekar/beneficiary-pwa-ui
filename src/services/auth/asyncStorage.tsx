@@ -47,7 +47,7 @@ interface JwtPayload {
 
 export const getTokenData = async (): Promise<JwtPayload | null> => {
   const tokenResponse = await getToken();
-  if (tokenResponse && tokenResponse.token) {
+  if (tokenResponse?.token) {
     try {
       const decoded = jwtDecode<JwtPayload>(tokenResponse.token); // Type assertion here
       return decoded;

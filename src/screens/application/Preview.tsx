@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 // import ConfirmationDialog from "../../components/common/ConfirmationDialog";
 
 const Preview: React.FC = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { onOpen } = useDisclosure();
 
   const navigate = useNavigate();
 

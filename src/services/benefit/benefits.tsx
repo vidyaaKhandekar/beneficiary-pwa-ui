@@ -19,7 +19,7 @@ export const getAll = async (userData: {
 }) => {
   try {
     const tokenData = await getToken();
-    if (!tokenData || !tokenData.token) {
+    if (!tokenData?.token) {
       throw new Error("Token not found");
     }
     const { token } = tokenData;
@@ -44,11 +44,11 @@ export const getAll = async (userData: {
  * @param {Object} loginData - Contains phone_number, password
  */
 
-interface getOneParams {
+interface getOneProps {
   id: string | undefined;
 }
 
-export const getOne = async ({ id }: getOneParams) => {
+export const getOne = async ({ id }: getOneProps) => {
   const loginData = {
     context: {
       domain: "onest:financial-support",
@@ -122,7 +122,7 @@ export const applyApplication = async ({
   };
   try {
     const tokenData = await getToken();
-    if (!tokenData || !tokenData.token) {
+    if (!tokenData?.token) {
       throw new Error("Token not found");
     }
     const { token } = tokenData;
@@ -214,7 +214,7 @@ export const confirmApplication = async ({
   };
   try {
     const tokenData = await getToken();
-    if (!tokenData || !tokenData.token) {
+    if (!tokenData?.token) {
       throw new Error("Token not found");
     }
     const { token } = tokenData;
@@ -243,7 +243,7 @@ interface createApplicationParams {
 export const createApplication = async (data: createApplicationParams) => {
   try {
     const tokenData = await getToken();
-    if (!tokenData || !tokenData.token) {
+    if (!tokenData?.token) {
       throw new Error("Token not found");
     }
     const { token } = tokenData;
@@ -273,7 +273,7 @@ interface Filters {
 export const getApplication = async (filters: Filters) => {
   try {
     const tokenData = await getToken();
-    if (!tokenData || !tokenData.token) {
+    if (!tokenData?.token) {
       throw new Error("Token not found");
     }
     const { token } = tokenData;

@@ -48,19 +48,20 @@ const Preview: React.FC = () => {
   const handleBack = () => {
     navigate("/applicationstatus");
   };
-  if (!id) {
-    toast({
-      title: "Error",
-      description: "Invalid application ID",
-      status: "error",
-      duration: 3000,
-      isClosable: true,
-    });
-    navigate("/applicationstatus");
-    return;
-  }
+
   const init = async () => {
     try {
+      if (!id) {
+        toast({
+          title: "Error",
+          description: "Invalid application ID",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        navigate("/applicationstatus");
+        return;
+      }
       const result = await getApplicationDetails(id);
       setUserData(result?.data?.application_data);
       setBenefitName(result?.data?.external_application_id);

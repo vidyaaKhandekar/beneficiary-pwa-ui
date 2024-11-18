@@ -71,7 +71,7 @@ const UserProfile: React.FC = () => {
             lineHeight="24px"
             color="#433E3F"
           >
-            phone no
+            {userData?.phone_number || "Phone No"}
           </Text>
         </VStack>
       </HStack>

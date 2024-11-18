@@ -16,48 +16,57 @@ const valueStyles = {
 };
 
 interface UserData {
-  aadhaar?: string;
-  age?: string | null;
-  caste?: string;
-  created_at?: string;
+  first_name?: string;
+  middle_name?: string | null;
+  last_name?: string;
+  father_name?: string;
+  mother_name?: string;
+  date_of_birth?: string | null;
+  gender?: string;
+
+  // Contact Information
+  email?: string;
+  phone_number?: string;
+
+  // Educational Information
   current_class?: string;
+  current_school_name?: string | null;
   current_school_address?: string | null;
   current_school_district?: string | null;
-  current_school_name?: string | null;
-  date_of_birth?: string | null;
-  disability?: string | null;
-  email?: string;
-  father_name?: string;
-  first_name?: string;
-  gender?: string;
-  image?: string | null;
-  income?: string;
-  last_name?: string;
-  middle_name?: string | null;
-  phone_number?: string;
   previous_year_marks?: string;
-  samagra_id?: string;
+
+  // Demographic Information
+  caste?: string;
+  disability?: string | null;
+  income?: string;
+  student_type?: string;
+
+  // System Information
+  user_id?: string;
   sso_id?: string;
   sso_provider?: string;
+  samagra_id?: string;
+  aadhaar?: string;
   status?: string;
-  student_type?: string;
+  created_at?: string;
   updated_at?: string;
-  user_id?: string;
-  mother_name?: string;
+  image?: string | null;
 }
 
 interface UserDetailsProps {
   userData: UserData;
 }
+type FieldValue = string | number | null | undefined;
+interface FieldProps {
+  label: string;
+  value?: FieldValue;
+  defaultValue?: string;
+}
 
-// Reusable Field Component
-const Field: React.FC<{ label: string; value?: string | number }> = ({
-  label,
-  value = "__",
-}) => (
+const Field: React.FC<FieldProps> = ({ label, value, defaultValue = "__" }) => (
   <Box flex={1}>
     <Text {...labelStyles}>{label}</Text>
-    <Text {...valueStyles}>{value || "__"}</Text>
+    <Text {...valueStyles}>{value ?? defaultValue}</Text>
   </Box>
 );
 

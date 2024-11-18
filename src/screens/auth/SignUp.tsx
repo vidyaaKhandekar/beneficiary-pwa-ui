@@ -1,20 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { Box, FormControl, Text, VStack, Center } from "@chakra-ui/react";
+import {
+  Box,
+  FormControl,
+  Text,
+  VStack,
+  Center,
+  PinInput,
+  PinInputField,
+  HStack,
+} from "@chakra-ui/react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import CommonButton from "../../components/common/button/Button";
 import Layout from "../../components/common/layout/Layout";
-import FloatingPasswordInput from "../../components/common/input/PasswordInput";
-import { registerUser } from "../../services/auth/auth";
+// import { registerUser } from "../../services/auth/auth";
 import FloatingInput from "../../components/common/input/Input";
 import { useTranslation } from "react-i18next";
-import Toaster from "../../components/common/ToasterMessage";
+// import Toaster from "../../components/common/ToasterMessage";
+import CommonDialogue from "../../components/common/layout/Dialogue";
 
 interface UserDetails {
   firstName: string;
   lastName: string;
   mobile: string;
-  password: string;
-  confirmPassword: string;
+  otp?: string;
 }
 
 const Signup: React.FC = () => {
@@ -25,17 +33,21 @@ const Signup: React.FC = () => {
     firstName: "",
     lastName: "",
     mobile: "",
-    password: "",
-    confirmPassword: "",
+    otp: "",
   });
 
-  const [error, setError] = useState<string>("");
-  const [success, setSuccess] = useState<string>("");
+  // const [error, setError] = useState<string>("");
+  // const [success, setSuccess] = useState<string>("");
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [passwordMatchError, setPasswordMatchError] = useState<string>("");
+  // const [loading, setLoading] = useState<boolean>(false);
   const [mobileError, setMobileError] = useState<string>("");
-  const [toastMessage, setToastMessage] = useState(false);
+  // const [toastMessage, setToastMessage] = useState(false);
+  const otpArray = Array(6).fill("");
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const termsAndConditions = true;
+  // const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
 
   const handleBack = () => {
     navigate(-1);
@@ -43,23 +55,14 @@ const Signup: React.FC = () => {
 
   useEffect(() => {
     const mobileError = validateMobile(userDetails.mobile);
-    const passwordMatchError = validatePasswordMatch(
-      userDetails.password,
-      userDetails.confirmPassword
-    );
-
     setMobileError(mobileError);
-    setPasswordMatchError(passwordMatchError);
-
     // Ensure isFormValid is strictly boolean
     setIsFormValid(
       !!userDetails.firstName.trim() &&
         !!userDetails.lastName.trim() &&
         !!userDetails.mobile.trim() &&
-        !!userDetails.password.trim() &&
-        !!userDetails.confirmPassword.trim() &&
-        !mobileError && // Mobile validation result is now boolean
-        !passwordMatchError // Password validation result is now boolean
+        userDetails.otp?.length === 6 &&
+        !mobileError
     );
   }, [userDetails]);
 
@@ -83,74 +86,57 @@ const Signup: React.FC = () => {
     return "";
   };
 
-  const validatePasswordMatch = (password: string, confirmPassword: string) => {
-    // Check if either password or confirmPassword is empty
-    if (password.trim() === "" || confirmPassword.trim() === "") {
-      return t("SIGNUP_PASSWORD_CONFIRM_PASSWORD_IS_REQUIRED");
-    }
-    // Check if password and confirmPassword are the same
-    if (password !== confirmPassword) {
-      return t("SIGNUP_PASSWORD_NOT_MATCHING");
-    }
-    // Regular expression to ensure the password contains letters, special characters, and numbers
-    const passwordPattern = /^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[@!#$%]).{8,}$/;
-    // Validate password format
-    if (!passwordPattern.test(password)) {
-      return t("SIGNUP_PASSWORD_VALIDATION_MESSAGE");
-    }
-    // Return an empty string if all validations pass
-    return "";
-  };
-
   const handleSignUp = async () => {
-    const clearError = () => {
-      setTimeout(() => {
-        setError("");
-      }, 3000);
-    };
-
-    try {
-      setLoading(true);
-      const response = await registerUser({
-        first_name: userDetails.firstName,
-        last_name: userDetails.lastName,
-        phone_number: userDetails.mobile,
-        password: userDetails.password,
-      });
-
-      if (response && response?.statusCode === 200) {
-        setLoading(false);
-        setSuccess(
-          response.message || t("SIGNUP_REGISTRATION_SUCCESS_MESSAGE")
-        );
-        setToastMessage(true);
-        setTimeout(() => {
-          navigate("/signin");
-        }, 3000);
-      } else {
-        setLoading(false);
-        setToastMessage(true);
-        setError(response.message || "An error occurred.");
-        clearError();
-      }
-    } catch (error) {
-      setLoading(false);
-      if (error instanceof Error) {
-        setError(error.message);
-        setToastMessage(true);
-      } else {
-        setError("An error occurred.");
-        setToastMessage(true);
-      }
-      clearError();
-    }
+    console.log("register api will call here");
   };
 
+  // const handleSignUp = async () => {
+  //   const clearError = () => {
+  //     setTimeout(() => {
+  //       setError("");
+  //     }, 3000);
+  //   };
+
+  //   try {
+  //     setLoading(true);
+  //     const response = await registerUser({
+  //       first_name: userDetails.firstName,
+  //       last_name: userDetails.lastName,
+  //       phone_number: userDetails.mobile,
+  //     });
+
+  //     if (response && response?.statusCode === 200) {
+  //       setLoading(false);
+  //       setSuccess(
+  //         response.message || t("SIGNUP_REGISTRATION_SUCCESS_MESSAGE")
+  //       );
+  //       setToastMessage(true);
+  //       setTimeout(() => {
+  //         navigate("/signin");
+  //       }, 3000);
+  //     } else {
+  //       setLoading(false);
+  //       setToastMessage(true);
+  //       setError(response.message || "An error occurred.");
+  //       clearError();
+  //     }
+  //   } catch (error) {
+  //     setLoading(false);
+  //     if (error instanceof Error) {
+  //       setError(error.message);
+  //       setToastMessage(true);
+  //     } else {
+  //       setError("An error occurred.");
+  //       setToastMessage(true);
+  //     }
+  //     clearError();
+  //   }
+  // };
   return (
     <Layout
       isMenu={false}
       _heading={{
-        heading: t("SIGNUP_WITH_E_WALLET"),
+        heading: t("LOGIN_REGISTER_BUTTON"),
         handleBack,
       }}
       isBottombar={false}
@@ -174,6 +160,7 @@ const Signup: React.FC = () => {
               isInvalid={!userDetails.lastName.trim()}
               errorMessage={t("SIGNUP_LAST_NAME_REQUIRED")}
             />
+
             <FloatingInput
               name="mobile"
               label={t("SIGNUP_MOBILE_NUMBER")}
@@ -183,27 +170,57 @@ const Signup: React.FC = () => {
               isInvalid={!!mobileError}
               errorMessage={mobileError}
             />
-            <FloatingPasswordInput
-              name="password"
-              label={t("SIGNUP_CREATE_PASSWORD")}
-              value={userDetails.password}
-              onChange={handleChange}
-              isInvalid={!!passwordMatchError}
-              errorMessage={passwordMatchError}
-            />
-            <FloatingPasswordInput
-              name="confirmPassword"
-              label={t("SIGNUP_CONFIRM_PASSWORD")}
-              value={userDetails.confirmPassword}
-              onChange={handleChange}
-              isInvalid={!!passwordMatchError}
-              errorMessage={passwordMatchError}
-            />
           </FormControl>
+          {!mobileError && (
+            <FormControl isInvalid={userDetails.otp.length !== 6}>
+              <Text fontSize={"16px"}>{t("SIGNUP_OTP_ENTER_OTP_LABEL")}</Text>
+              <HStack mt={4}>
+                <PinInput
+                  value={userDetails.otp}
+                  onChange={(value) =>
+                    setUserDetails({ ...userDetails, otp: value })
+                  }
+                  size="lg"
+                  otp
+                >
+                  {otpArray?.map((feild) => {
+                    return (
+                      <PinInputField
+                        key={feild}
+                        type="text"
+                        w={"60px"}
+                        h={"65px"}
+                        margin={"10px"}
+                        placeholder=""
+                        borderRadius={"0px"}
+                        border={"1px solid #767680"}
+                      />
+                    );
+                  })}
+                </PinInput>
+              </HStack>
+              <Text mt={6} fontSize={"16px"}>
+                {t("SIGNUP_OTP_REQUEST_MESSAGE")}{" "}
+                <RouterLink
+                  to="/signin"
+                  style={{
+                    color: "blue",
+                    textDecoration: "underline",
+                    marginRight: "10px",
+                  }}
+                >
+                  {t("SIGNUP_RESENT_OTP")}
+                </RouterLink>
+                {t("SIGNUP_IN")} 4.59
+              </Text>
+            </FormControl>
+          )}
           <CommonButton
-            label={t("SIGNUP_SIGN_UP")}
+            mt={4}
+            label={t("GENERAL_PROCEED")}
             onClick={handleSignUp}
-            isDisabled={!isFormValid || loading}
+            // onClick={openModal}
+            isDisabled={!isFormValid}
           />
         </VStack>
         <Center>
@@ -214,14 +231,21 @@ const Signup: React.FC = () => {
                 to="/signin"
                 style={{ color: "blue", textDecoration: "underline" }}
               >
-                {t("SIGNUP_SIGN_IN")}
+                {t("LOGIN_LOGIN_BUTTON")}
               </RouterLink>
             </Box>
           </Text>
         </Center>
       </Box>
-      {toastMessage && success && <Toaster message={success} type="success" />}
-      {toastMessage && error && <Toaster message={error} type="error" />}
+
+      <CommonDialogue
+        isOpen={modalOpen}
+        onClose={closeModal}
+        termsAndConditions={termsAndConditions}
+      />
+
+      {/* {toastMessage && success && <Toaster message={success} type="success" />}
+      {toastMessage && error && <Toaster message={error} type="error" />} */}
     </Layout>
   );
 };

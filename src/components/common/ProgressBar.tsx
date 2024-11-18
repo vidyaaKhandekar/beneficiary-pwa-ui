@@ -20,17 +20,14 @@ const ProgressWithLabel: React.FC<ProgressWithLabelProps> = ({ value }) => {
     >
       <Text>Profile Completion</Text>
       <Progress
-        value={Math.min(Math.max(0, value), 100)}
+        value={value}
+        max={100}
         size="sm"
         borderRadius={5}
         colorScheme="teal"
         mt={5}
         m={3}
         aria-label="Profile completion progress"
-        role="progressbar"
-        aria-valuenow={value}
-        aria-valuemin={0}
-        aria-valuemax={100}
       />
     </Box>
   );

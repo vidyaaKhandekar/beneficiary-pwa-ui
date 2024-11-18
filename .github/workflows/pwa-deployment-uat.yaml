@@ -1,8 +1,8 @@
-name: S3 - PWA  - UAT Deployment
+name: UAT- S3 - PWA  - UAT Deployment
 
 on: [push]
 jobs:
-  build_and_test:
+  UAT-Deployment:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

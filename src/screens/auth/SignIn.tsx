@@ -80,7 +80,7 @@ const SignIn: React.FC = () => {
     try {
       await sendConsent(userData?.user_id);
       checkToken();
-      navigate("/userprofile");
+      navigate("/home");
     } catch (error) {
       console.error(error.message);
     }

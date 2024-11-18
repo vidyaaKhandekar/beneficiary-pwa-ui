@@ -77,6 +77,9 @@ const Navbar: React.FC<{ isMenu?: boolean }> = ({ isMenu = true }) => {
                   bg="var(--menu-background)"
                   className="border-bottom"
                   p={4}
+                  onClick={() => {
+                    navigate("/userprofile");
+                  }}
                 >
                   <Image src="../src/assets/images/profile.png" />
                   <Text ml={4}>{t("NAVBAR_PROFILE")}</Text>

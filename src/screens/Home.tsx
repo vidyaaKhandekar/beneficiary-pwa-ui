@@ -9,7 +9,7 @@ import { AuthContext } from "../utils/context/checkToken";
 import { useTranslation } from "react-i18next";
 import DocumentList from "../components/DocumentList";
 
-const UserProfile: React.FC = () => {
+const Home: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -42,7 +42,6 @@ const UserProfile: React.FC = () => {
       _heading={{
         beneficiary: true,
         heading: `${userData?.first_name || ""} ${userData?.last_name || ""}`,
-        subHeading: t("PROFILE_LOGGED_IN_WITH_E_Wallet"),
         label:
           userData?.last_name?.length && userData?.last_name.length > 1
             ? `${userData.first_name?.[0]}${userData.last_name[0]}`
@@ -68,4 +67,4 @@ const UserProfile: React.FC = () => {
   );
 };
 
-export default UserProfile;
+export default Home;

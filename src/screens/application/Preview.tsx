@@ -8,6 +8,7 @@ import {
   InputGroup,
   InputRightElement,
   Icon,
+  Textarea,
 } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getApplicationDetails } from "../../services/auth/auth";
@@ -39,7 +40,7 @@ const myApplicationData: ApplicationField[] = [
 
 const Preview: React.FC = () => {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: number }>();
+  const { id } = useParams<{ id: string }>();
   const [userData, setUserData] = useState<UserData | null>(null);
   const [benefitName, setBenefitName] = useState<string | undefined>("");
   const toast = useToast();
@@ -50,7 +51,6 @@ const Preview: React.FC = () => {
 
   const init = async () => {
     try {
-      console.log("iddd", id);
       const result = await getApplicationDetails(id);
       setUserData(result?.data?.application_data);
       setBenefitName(result?.data?.external_application_id);
@@ -101,26 +101,35 @@ const Preview: React.FC = () => {
               {field.label}
             </Text>
             <InputGroup>
-              <Input
+              <Textarea
                 value={
                   userData?.[field.value] !== undefined &&
                   typeof userData?.[field.value] === "number"
                     ? userData?.[field.value].toString()
-                    : (userData?.[field.value] as string | undefined)
+                    : userData?.[field.value]
+                    ? (userData?.[field.value] as string)
+                    : "__"
                 }
                 isReadOnly
                 bg="gray.50"
                 focusBorderColor="#1D1B201F"
                 borderColor="#1D1B201F"
                 variant="filled"
-                h="48px"
-                color={"#1A1B21"}
+                h="auto"
+                minH="48px"
+                resize="none"
+                color="#1A1B21"
                 borderWidth={1}
                 fontSize={12}
+                overflow="hidden"
+                mr={1}
               />
-              <InputRightElement pointerEvents="none" height="100%">
-                <Icon as={FaCheck} color="#0B7B69" />
-              </InputRightElement>
+
+              {userData?.[field.value] ? (
+                <InputRightElement pointerEvents="none" height="100%">
+                  <Icon as={FaCheck} color="#0B7B69" />
+                </InputRightElement>
+              ) : null}
             </InputGroup>
           </Box>
         ))}

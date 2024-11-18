@@ -57,6 +57,8 @@ interface AuthUser {
   current_class?: string;
   previous_year_marks?: string;
   phone_number?: string;
+  username: string;
+  email: string;
 }
 
 interface WebFormProps {
@@ -86,14 +88,23 @@ const BenefitsDetails: React.FC = () => {
 
   const handleConfirmation = async () => {
     setLoading(true);
+
     try {
       const result = await applyApplication({ id, context });
+      const url = (result as { data: { responses: Array<any> } }).data
+        ?.responses?.[0]?.message?.order?.items?.[0]?.xinput?.form?.url;
 
-      setWebFormProp({
-        url: result?.data?.responses?.[0]?.message?.order?.items?.[0]?.xinput
-          ?.form?.url,
-        formData: authUser ?? undefined,
-      });
+      const formData = authUser ?? undefined; // Ensure authUser is used or fallback to undefined
+
+      // Only set WebFormProps if the url exists
+      if (url) {
+        setWebFormProp({
+          url,
+          formData,
+        });
+      } else {
+        setError("URL not found in response");
+      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         setError(`Failed to apply application: ${error.message}`);
@@ -113,7 +124,13 @@ const BenefitsDetails: React.FC = () => {
         item_id: id,
         context: context ?? {},
       });
-      const orderId = result?.data?.responses?.[0]?.message?.order?.id;
+      const orderId = (
+        result as {
+          data: { responses: { message: { order: { id: string } } }[] };
+        }
+      )?.data?.responses?.[0]?.message?.order?.id;
+
+      //  const orderId = result?.data?.responses?.[0]?.message?.order?.id;
       if (orderId) {
         const payload = {
           user_id: authUser?.user_id,
@@ -150,10 +167,13 @@ const BenefitsDetails: React.FC = () => {
         const user = await getUser();
 
         const result = await getOne({ id });
-
         const resultItem =
-          result?.data?.responses?.[0]?.message?.order?.items?.[0] || {};
-        setContext(result?.data?.responses?.[0]?.context as Context);
+          (result as { data: { responses: Array<any> } }).data?.responses?.[0]
+            ?.message?.order?.items?.[0] || {};
+        setContext(
+          (result as { data: { responses: Array<any> } }).data?.responses?.[0]
+            ?.context as Context
+        );
 
         const docs =
           resultItem?.tags

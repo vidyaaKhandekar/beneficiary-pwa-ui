@@ -126,16 +126,16 @@ const ApplicationList: React.FC<ApplicationListProps> = ({
       }}
     >
       <VStack spacing={4} align="stretch">
-        {statusOrder.map((status) =>
+        {statusOrder.map((status, index) =>
           groupedApplications[status]?.length > 0 ? (
             <Box
-              key={status}
               borderRadius={10}
               bg="#FFFFFF"
               shadow="md"
               borderWidth="0.5px"
               borderColor="#DDDDDD"
               width="100%"
+              key={`${status}${index}`}
             >
               <HStack
                 alignItems="center"
@@ -159,6 +159,7 @@ const ApplicationList: React.FC<ApplicationListProps> = ({
                       )
                     } // Add your function here
                     width="100%"
+                    key={app.internal_application_id}
                   >
                     <HStack
                       key={app.benefit_id}

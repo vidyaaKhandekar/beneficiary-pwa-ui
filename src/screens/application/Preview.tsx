@@ -3,17 +3,17 @@ import {
   Box,
   HStack,
   Text,
-  Input,
   useToast,
   InputGroup,
   InputRightElement,
   Icon,
-  Textarea,
+  Input,
 } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getApplicationDetails } from "../../services/auth/auth";
 import Layout from "../../components/common/layout/Layout";
 import { FaCheck } from "react-icons/fa";
+
 // Define types for props and data
 interface ApplicationField {
   id: number;
@@ -48,7 +48,17 @@ const Preview: React.FC = () => {
   const handleBack = () => {
     navigate("/applicationstatus");
   };
-
+  if (!id) {
+    toast({
+      title: "Error",
+      description: "Invalid application ID",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+    });
+    navigate("/applicationstatus");
+    return;
+  }
   const init = async () => {
     try {
       const result = await getApplicationDetails(id);
@@ -70,6 +80,14 @@ const Preview: React.FC = () => {
     init();
   }, [id]);
 
+  const getFieldDisplayValue = (fieldValue: string) => {
+    const value = userData?.[fieldValue];
+    if (value !== undefined && typeof value === "number") {
+      return value.toString();
+    }
+    return value ? (value as string) : "__";
+  };
+
   return (
     <Layout
       _heading={{
@@ -83,7 +101,7 @@ const Preview: React.FC = () => {
         alignItems="center"
         bg="#DEE4F9"
         p={3}
-        height="70px"
+        height="52px"
       >
         <Text fontWeight={400} fontSize={14}>
           Status
@@ -95,44 +113,43 @@ const Preview: React.FC = () => {
 
       {/* Application Fields */}
       <Box className="card-scroll" p={4}>
-        {myApplicationData.map((field) => (
-          <Box key={field.id} my={2}>
-            <Text fontWeight="400" mb={1} fontSize={14}>
-              {field.label}
-            </Text>
-            <InputGroup>
-              <Textarea
-                value={
-                  userData?.[field.value] !== undefined &&
-                  typeof userData?.[field.value] === "number"
-                    ? userData?.[field.value].toString()
-                    : userData?.[field.value]
-                    ? (userData?.[field.value] as string)
-                    : "__"
-                }
-                isReadOnly
-                bg="gray.50"
-                focusBorderColor="#1D1B201F"
-                borderColor="#1D1B201F"
-                variant="filled"
-                h="auto"
-                minH="48px"
-                resize="none"
-                color="#1A1B21"
-                borderWidth={1}
-                fontSize={12}
-                overflow="hidden"
-                mr={1}
-              />
+        {myApplicationData.map((field) => {
+          const displayValue = getFieldDisplayValue(field.value);
+          return (
+            <Box key={field.id} my={2}>
+              <Text fontWeight="400" mb={1} fontSize={14}>
+                {field.label}
+              </Text>
+              <InputGroup alignItems={"center"}>
+                <Input
+                  value={displayValue}
+                  isReadOnly
+                  bg="gray.50"
+                  focusBorderColor="#1D1B201F"
+                  borderColor="#1D1B201F"
+                  variant="filled"
+                  h="48px"
+                  resize="none"
+                  color="#1A1B21"
+                  borderWidth={1}
+                  fontSize={12}
+                  overflow="auto"
+                  mr={1}
+                  display="flex"
+                  alignItems="center"
+                />
 
-              {userData?.[field.value] ? (
-                <InputRightElement pointerEvents="none" height="100%">
-                  <Icon as={FaCheck} color="#0B7B69" />
-                </InputRightElement>
-              ) : null}
-            </InputGroup>
-          </Box>
-        ))}
+                {/* Conditionally render the check icon */}
+                {userData?.[field.value] !== undefined &&
+                userData?.[field.value] !== null ? (
+                  <InputRightElement pointerEvents="none" height="100%">
+                    <Icon as={FaCheck} color="#0B7B69" />
+                  </InputRightElement>
+                ) : null}
+              </InputGroup>
+            </Box>
+          );
+        })}
       </Box>
     </Layout>
   );

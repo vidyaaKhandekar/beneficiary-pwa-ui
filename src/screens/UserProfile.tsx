@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { Avatar, Box, HStack, Text, VStack } from "@chakra-ui/react";
-
+import { useTranslation } from "react-i18next";
 import { getUser, getDocumentsList } from "../services/auth/auth";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/common/layout/Layout";
@@ -20,7 +20,7 @@ const UserProfile: React.FC = () => {
   };
 
   const { userData, documents, updateUserData } = useContext(AuthContext)!;
-
+  const { t } = useTranslation();
   // Function to fetch user data and documents
   const init = async () => {
     try {
@@ -31,7 +31,7 @@ const UserProfile: React.FC = () => {
       console.error("Error fetching user data or documents:", error);
     }
   };
-  console.log("user Data", userData);
+
   useEffect(() => {
     if (!userData || !documents || documents.length === 0) {
       init();
@@ -106,7 +106,7 @@ const UserProfile: React.FC = () => {
             <DocumentList documents={documents} />
             <OutlineButton
               onClick={handleRedirect}
-              label={"Upload Missing Documents"}
+              label={t("USER_PROFILE_UPLOAD_MISSING_DOCUMENTS")}
             />
           </VStack>
         </Box>

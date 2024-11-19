@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Text, HStack, VStack } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 
 // Define common styles for Text and Input components
 const labelStyles = {
@@ -71,6 +72,8 @@ const Field: React.FC<FieldProps> = ({ label, value, defaultValue = "__" }) => (
 );
 
 const UserDetails: React.FC<UserDetailsProps> = ({ userData }) => {
+  const { t } = useTranslation();
+
   return (
     <Box
       borderRadius="5px"
@@ -80,32 +83,47 @@ const UserDetails: React.FC<UserDetailsProps> = ({ userData }) => {
       borderWidth={1}
       p={6}
     >
-      {/* First group of fields: one field per line */}
       <VStack spacing={6} align="stretch" mb={6}>
-        <Field label="Father’s Name" value={userData?.father_name} />
-        <Field label="Mother’s Name" value={userData?.mother_name} />
-        <Field label="DoB (DD/MM/YYYY)" value={userData?.date_of_birth} />
+        <Field
+          label={t("USER_DETAILS_FATHER_NAME")}
+          value={userData?.father_name}
+        />
+        <Field
+          label={t("USER_DETAILS_MOTHER_NAME")}
+          value={userData?.mother_name}
+        />
+        <Field label={t("USER_DETAILS_DOB")} value={userData?.date_of_birth} />
       </VStack>
 
-      {/* Second group of fields: two fields per line */}
       <VStack spacing={6} align="stretch">
         <HStack spacing={4}>
-          <Field label="Gender" value={userData?.gender} />
-          <Field label="Caste" value={userData?.caste} />
+          <Field label={t("USER_DETAILS_GENDER")} value={userData?.gender} />
+          <Field label={t("USER_DETAILS_CASTE")} value={userData?.caste} />
         </HStack>
 
         <HStack spacing={4}>
-          <Field label="Disability" value={userData?.disability} />
-          <Field label="Class" value={userData?.current_class} />
+          <Field
+            label={t("USER_DETAILS_DISABILITY")}
+            value={userData?.disability}
+          />
+          <Field
+            label={t("USER_DETAILS_CLASS")}
+            value={userData?.current_class}
+          />
         </HStack>
 
         <HStack spacing={4}>
-          <Field label="Annual Income" value={userData?.income} />
-          <Field label="Day Scholar/Hostler" value={userData?.student_type} />
+          <Field
+            label={t("USER_DETAILS_ANNUAL_INCOME")}
+            value={userData?.income}
+          />
+          <Field
+            label={t("USER_DETAILS_DAY_SCHOLAR_HOSTLER")}
+            value={userData?.student_type}
+          />
         </HStack>
       </VStack>
     </Box>
   );
 };
-
 export default UserDetails;

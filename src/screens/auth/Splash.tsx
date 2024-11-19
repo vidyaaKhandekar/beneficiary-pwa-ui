@@ -16,7 +16,7 @@ import FloatingSelect from "../../components/common/input/FloatingSelect";
 import CommonButton from "../../components/common/button/Button";
 import { useKeycloak } from "@react-keycloak/web";
 import { jwtDecode } from "jwt-decode";
-
+import { saveToken } from "../../services/auth/asyncStorage";
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -59,7 +59,11 @@ const Login: React.FC = () => {
 
   const handleLogin = async () => {
     try {
+      console.log("keyclok===", keycloak.login());
       await keycloak.login();
+      saveToken(keycloak.token, keycloak.token);
+      localStorage.setItem("authToken", keycloak.token);
+      navigate("/home");
     } catch (error) {
       console.error(
         "Login failed:",

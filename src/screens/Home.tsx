@@ -11,7 +11,7 @@ import DocumentList from "../components/DocumentList";
 import { useKeycloak } from "@react-keycloak/web";
 import { jwtDecode } from "jwt-decode";
 
-const UserProfile: React.FC = () => {
+const Home: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -24,7 +24,9 @@ const UserProfile: React.FC = () => {
   // Function to fetch user data and documents
   const init = async () => {
     try {
+      console.log("calling init");
       const result = await getUser();
+      console.log("get user in ", result);
       const data = await getDocumentsList();
       updateUserData(result.data, data.data); // Update user data and document list in context
     } catch (error) {
@@ -88,4 +90,4 @@ const UserProfile: React.FC = () => {
   );
 };
 
-export default UserProfile;
+export default Home;

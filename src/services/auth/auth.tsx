@@ -97,7 +97,7 @@ export const logoutUser = async (accessToken: string, refreshToken: string) => {
 
 export const getUser = async () => {
   const token = localStorage.getItem("authToken");
-  console.log("token in getuser", token);
+
   try {
     // Destructure and retrieve the token from getToken()
 

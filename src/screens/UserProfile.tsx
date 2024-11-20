@@ -18,7 +18,6 @@ const UserProfile: React.FC = () => {
   const navigate = useNavigate();
 
   const { userData, documents, updateUserData } = useContext(AuthContext)!;
-  const { t } = useTranslation();
   // Function to fetch user data and documents
   const init = async () => {
     try {

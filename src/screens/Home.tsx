@@ -34,7 +34,6 @@ const Home: React.FC = () => {
     }
   };
 
-  // Call init if userData or documents is not available
   useEffect(() => {
     if (!userData || !documents || documents.length === 0) {
       init();

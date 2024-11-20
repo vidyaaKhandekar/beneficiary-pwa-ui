@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import OutlineButton from "./button/OutlineButton";
 import { processDocuments } from "../../utils/jsHelper/helper";
 import { uploadUserDocuments } from "../../services/user/User";
-
+const VITE_EWALLET_ORIGIN = import.meta.env.VITE_EWALLET_ORIGIN;
+const VITE_EWALLET_IFRAME_SRC = import.meta.env.VITE_EWALLET_IFRAME_SRC;
 const UploadDocumentEwallet = ({ userId }) => {
   console.log("userId", userId);
 
@@ -19,7 +20,7 @@ const UploadDocumentEwallet = ({ userId }) => {
   // Listen for messages from the iframe
   useEffect(() => {
     const handleMessage = async (event) => {
-      if (event.origin === "http://localhost:5173") {
+      if (event.origin === VITE_EWALLET_ORIGIN) {
         if (event.data.type === "selected-docs") {
           setSelectedDocuments(event.data.data); // Store selected documents
           const payload = processDocuments(event.data.data, userId);
@@ -55,7 +56,7 @@ const UploadDocumentEwallet = ({ userId }) => {
       {/* Iframe to select documents */}
       <iframe
         ref={iframeRef}
-        src="http://localhost:5173/select-docs"
+        src={VITE_EWALLET_IFRAME_SRC}
         title="Document Selector"
         style={{
           width: "100%", // Ensure iframe takes up full width of its container

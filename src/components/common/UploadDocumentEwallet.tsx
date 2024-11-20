@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import OutlineButton from "./button/OutlineButton";
 import { processDocuments } from "../../utils/jsHelper/helper";
 import { uploadUserDocuments } from "../../services/user/User";
@@ -7,7 +7,6 @@ const VITE_EWALLET_IFRAME_SRC = import.meta.env.VITE_EWALLET_IFRAME_SRC;
 const UploadDocumentEwallet = ({ userId }) => {
   console.log("userId", userId);
 
-  const [selectedDocuments, setSelectedDocuments] = useState([]);
   const iframeRef = useRef(null);
 
   // Function to open the iframe and load the document selector
@@ -22,7 +21,6 @@ const UploadDocumentEwallet = ({ userId }) => {
     const handleMessage = async (event) => {
       if (event.origin === VITE_EWALLET_ORIGIN) {
         if (event.data.type === "selected-docs") {
-          setSelectedDocuments(event.data.data); // Store selected documents
           const payload = processDocuments(event.data.data, userId);
           console.log("updated data", payload);
           const result = uploadUserDocuments(payload);

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Avatar, Box, HStack, Text, VStack } from "@chakra-ui/react";
-import { useTranslation } from "react-i18next";
+
 import { getUser, getDocumentsList } from "../services/auth/auth";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/common/layout/Layout";

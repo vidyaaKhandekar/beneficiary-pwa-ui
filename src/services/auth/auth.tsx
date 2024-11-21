@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { getToken, removeToken } from "./asyncStorage";
+import { removeToken } from "./asyncStorage";
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 interface UserData {
@@ -97,7 +97,7 @@ export const logoutUser = async (accessToken: string, refreshToken: string) => {
 
 export const getUser = async () => {
   const token = localStorage.getItem("authToken");
-  console.log("token in getuser", token);
+
   try {
     // Destructure and retrieve the token from getToken()
 

@@ -31,7 +31,7 @@ const Login: React.FC = () => {
     if (keycloak?.token) {
       const decodedToken = jwtDecode<DecodedToken>(keycloak.token);
       if (decodedToken.exp * 1000 > Date.now()) {
-        navigate("/userprofile", { replace: true });
+        navigate("/home", { replace: true });
       }
     }
   } catch (error) {

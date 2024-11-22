@@ -14,7 +14,7 @@ import BenefitCard from "../../components/common/Card";
 import Layout from "../../components/common/layout/Layout";
 import { getUser } from "../../services/auth/auth";
 import { getAll } from "../../services/benefit/benefits";
-import { Castes, Gender, IncomeRange } from "../../assets/mockdata/FilterData";
+import { Castes, IncomeRange } from "../../assets/mockdata/FilterData";
 
 // Define types for benefit data and filter structure
 interface Benefit {
@@ -36,9 +36,8 @@ interface Benefit {
   };
 }
 interface Filter {
-  "social-eligibility"?: string;
-  "ann-hh-inc"?: string;
-  "gender-eligibility"?: string;
+  "caste-eligibility"?: string;
+  annualIncome?: string;
   [key: string]: string | undefined; // This allows any string key to be used
 }
 const ExploreBenefits: React.FC = () => {
@@ -57,9 +56,8 @@ const ExploreBenefits: React.FC = () => {
         const user = await getUser();
 
         const filters: Filter = {
-          "social-eligibility": user?.data?.caste,
-          "ann-hh-inc": user?.data?.income,
-          "gender-eligibility": user?.data?.gender,
+          "caste-eligibility": user?.data?.caste,
+          annualIncome: user?.data?.income,
         };
 
         const newFilter: Filter = {};
@@ -87,8 +85,8 @@ const ExploreBenefits: React.FC = () => {
           const result = await getAll({
             filters: {
               ...filter,
-              "ann-hh-inc": filter?.["ann-hh-inc"]
-                ? `0-${filter?.["ann-hh-inc"]}`
+              annualIncome: filter?.["annualIncome"]
+                ? `0-${filter?.["annualIncome"]}`
                 : "",
             },
             search,
@@ -118,20 +116,14 @@ const ExploreBenefits: React.FC = () => {
           {
             label: "Caste",
             data: Castes,
-            value: filter?.["social-eligibility"] || "",
-            key: "social-eligibility",
+            value: filter?.["caste-eligibility"]?.toLowerCase() || "",
+            key: "caste-eligibility",
           },
           {
             label: "Income Range",
             data: IncomeRange,
-            value: filter?.["ann-hh-inc"] || "",
-            key: "ann-hh-inc",
-          },
-          {
-            label: "Gender",
-            data: Gender,
-            value: filter?.["gender-eligibility"] || "",
-            key: "gender-eligibility",
+            value: filter?.["annualIncome"] || "",
+            key: "annualIncome",
           },
         ],
       }}
@@ -175,12 +167,6 @@ const ExploreBenefits: React.FC = () => {
           ))}
         </Box>
       )}
-
-      <Box m={4}>
-        <Button className="custom-btn" type="submit" mt={4} width="100%">
-          Load More
-        </Button>
-      </Box>
     </Layout>
   );
 };

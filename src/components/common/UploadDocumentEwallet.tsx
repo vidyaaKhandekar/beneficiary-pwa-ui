@@ -10,9 +10,16 @@ const UploadDocumentEwallet = ({ userId }) => {
   const iframeRef = useRef(null);
 
   // Function to open the iframe and load the document selector
-  const openDocumentSelector = () => {
+
+  const sendMessageToIframe = () => {
+    const jwtToken = localStorage.getItem("authToken");
     if (iframeRef.current) {
       iframeRef.current.style.display = "block"; // Show iframe when button is clicked
+
+      iframeRef.current.contentWindow.postMessage(
+        { type: "JWT_TOKEN", payload: jwtToken }, // Message data
+        VITE_EWALLET_IFRAME_SRC // Replace with the iframe app's domain
+      );
     }
   };
 
@@ -23,11 +30,12 @@ const UploadDocumentEwallet = ({ userId }) => {
         if (event.data.type === "selected-docs") {
           const payload = processDocuments(event.data.data, userId);
           console.log("updated data", payload);
-          const result = uploadUserDocuments(payload);
-          console.log("result", result);
+
           if (iframeRef.current) {
-            iframeRef.current.style.display = "none"; // Hide iframe after selection
+            iframeRef.current.style.display = "none";
           }
+          const result = await uploadUserDocuments(payload);
+          console.log("result", result);
         }
       } else {
         console.warn("Untrusted message origin:", event.origin);
@@ -43,16 +51,27 @@ const UploadDocumentEwallet = ({ userId }) => {
 
   return (
     <div>
-      {/* Close button to hide iframe */}
-
-      {/* Upload Missing Document Button */}
       <OutlineButton
         label="Upload Missing Document"
-        onClick={openDocumentSelector}
+        onClick={sendMessageToIframe}
       />
 
-      {/* Iframe to select documents */}
       <iframe
+        ref={iframeRef}
+        src={VITE_EWALLET_IFRAME_SRC}
+        title="Iframe App"
+        style={{
+          width: "100%",
+          height: "100%",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          border: "none",
+          zIndex: 999,
+          display: "none",
+        }}
+      />
+      {/* <iframe
         ref={iframeRef}
         src={VITE_EWALLET_IFRAME_SRC}
         title="Document Selector"
@@ -66,7 +85,7 @@ const UploadDocumentEwallet = ({ userId }) => {
           zIndex: 999, // Ensure iframe is on top
           display: "none", // Initially hidden, will be shown on button click
         }}
-      />
+      /> */}
     </div>
   );
 };

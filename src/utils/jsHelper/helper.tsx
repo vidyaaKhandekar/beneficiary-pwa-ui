@@ -98,9 +98,9 @@ export const hasFiltersInURL = () => {
 export const getFiltersFromURL = () => {
   const searchParams = new URLSearchParams(window.location.search);
   return {
-    "social-eligibility": searchParams.get("social-eligibility") || "",
-    "ann-hh-inc": searchParams.get("ann-hh-inc") || "",
-    "gender-eligibility": searchParams.get("gender-eligibility") || "",
+    "caste-eligibility": searchParams.get("caste-eligibility") || "",
+    "annualIncome-eligibility":
+      searchParams.get("annualIncome-eligibility") || "",
   };
 };
 

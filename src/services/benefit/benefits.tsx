@@ -7,21 +7,18 @@ function handleError(error: any) {
 }
 export const getAll = async (userData: {
   filters: {
-    "ann-hh-inc": string;
-    "social-eligibility"?: string;
-    "gender-eligibility"?: string;
+    annualIncome: string;
+    "caste-eligibility"?: string;
   };
   search: string;
 }) => {
   try {
-    const token = localStorage.getItem("authToken");
     const response = await axios.post(
       `${apiBaseUrl}/content/search`,
       userData,
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -66,11 +63,9 @@ export const getOne = async ({ id }: getOneParams) => {
     },
   };
   try {
-    const token = localStorage.getItem("authToken");
     const response = await axios.post(`${apiBaseUrl}/select`, loginData, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
     });
     return response || {};

@@ -1,16 +1,27 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import OutlineButton from "./button/OutlineButton";
 import { processDocuments } from "../../utils/jsHelper/helper";
 import { uploadUserDocuments } from "../../services/user/User";
+import { getDocumentsList, getUser } from "../../services/auth/auth";
+import { AuthContext } from "../../utils/context/checkToken";
 const VITE_EWALLET_ORIGIN = import.meta.env.VITE_EWALLET_ORIGIN;
 const VITE_EWALLET_IFRAME_SRC = import.meta.env.VITE_EWALLET_IFRAME_SRC;
 const UploadDocumentEwallet = ({ userId }) => {
   console.log("userId", userId);
-
+  const { updateUserData } = useContext(AuthContext)!;
   const iframeRef = useRef(null);
 
   // Function to open the iframe and load the document selector
+  const init = async () => {
+    try {
+      const result = await getUser();
 
+      const data = await getDocumentsList();
+      updateUserData(result.data, data.data);
+    } catch (error) {
+      console.error("Error fetching user data or documents:", error);
+    }
+  };
   const sendMessageToIframe = () => {
     const jwtToken = localStorage.getItem("authToken");
     if (iframeRef.current) {
@@ -35,6 +46,7 @@ const UploadDocumentEwallet = ({ userId }) => {
             iframeRef.current.style.display = "none";
           }
           const result = await uploadUserDocuments(payload);
+          init();
           console.log("result", result);
         }
       } else {

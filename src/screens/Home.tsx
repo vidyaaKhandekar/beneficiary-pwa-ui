@@ -61,7 +61,7 @@ const Home: React.FC = () => {
     <Layout
       _heading={{
         beneficiary: true,
-        heading: keycloak.tokenParsed?.preferred_username,
+        heading: `${userData?.first_name || ""} ${userData?.last_name || ""}`,
         subHeading: t("PROFILE_LOGGED_IN_WITH_E_Wallet"),
         label: keycloak.tokenParsed?.preferred_username,
       }}

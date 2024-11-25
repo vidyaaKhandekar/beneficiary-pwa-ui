@@ -144,7 +144,6 @@ export const setQueryParameters = (filters) => {
  */
 export function processDocuments(documents, userId) {
   return documents.map((doc) => {
-    // Parse the doc_data if it's a string
     const parsedDocData =
       typeof doc.doc_data === "string"
         ? JSON.parse(doc.doc_data)
@@ -159,8 +158,7 @@ export function processDocuments(documents, userId) {
     );
 
     // Remove unwanted fields (doc_id, sso_id, issuer) from top-level of the document
-    const { doc_subtype, doc_id, sso_id, issuer, ...docWithoutUnwantedFields } =
-      doc;
+    const { doc_id, sso_id, issuer, ...docWithoutUnwantedFields } = doc;
 
     // Return updated document with added user_id, doc_name, and imported_from
     return {
@@ -168,9 +166,7 @@ export function processDocuments(documents, userId) {
       doc_data: {
         ...updatedDocData, // Include updated doc_data
       },
-      doc_name: "abc", // Add the new doc_name field
       imported_from: "e-wallet", // Add the new imported_from field
-      doc_subtype: "disabilityCertificate",
       user_id: userId, // Add user_id to the document
       doc_datatype: "Application/JSON",
     };

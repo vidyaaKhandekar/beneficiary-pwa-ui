@@ -44,8 +44,6 @@ const Home: React.FC = () => {
 
   if (keycloak?.token) {
     try {
-      console.log("Keycloak Token:", keycloak.token);
-
       // Save the token in localStorage
       localStorage.setItem("authToken", keycloak.token);
 

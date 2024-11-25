@@ -1,6 +1,6 @@
 import * as React from "react";
 import { VStack, Text, Icon, HStack, useTheme } from "@chakra-ui/react";
-import { CheckCircleIcon } from "@chakra-ui/icons";
+import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
 import Loader from "./common/Loader";
 import { findDocumentStatus } from "../utils/jsHelper/helper";
 
@@ -20,7 +20,7 @@ const StatusIcon: React.FC<StatusIconProps> = ({
   const result = findDocumentStatus(userData, status);
   return (
     <Icon
-      as={CheckCircleIcon}
+      as={result?.matchFound ? CheckCircleIcon : WarningIcon}
       color={result?.matchFound ? "#0B7B69" : "#EDA145"}
       boxSize={size}
       aria-label={

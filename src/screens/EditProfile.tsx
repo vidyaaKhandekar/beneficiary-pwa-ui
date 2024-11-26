@@ -14,6 +14,7 @@ import { updateUserDetails } from "../services/user/User";
 import { useNavigate } from "react-router-dom";
 import CommonButton from "../components/common/button/Button";
 import { getDocumentsList, getUser } from "../services/auth/auth";
+import Toaster from "../components/common/ToasterMessage";
 
 // Define the JSON Schema
 const schema: RJSFSchema = {
@@ -138,6 +139,13 @@ const StudentForm = () => {
   const navigate = useNavigate();
   const { userData, updateUserData } = useContext(AuthContext); // Access userData from context
   const [formData, setFormData] = useState<any>(null); // Manage form state
+  const [toastMessage, setToastMessage] = useState<{
+    message: string;
+    type: "success" | "error";
+  }>({
+    message: "",
+    type: "success",
+  });
 
   useEffect(() => {
     // Prefill form with user data when available
@@ -165,9 +173,17 @@ const StudentForm = () => {
       const payload = convertToEditPayload(formData);
       await updateUserDetails(userData.user_id, payload);
       console.log("User details updated successfully.");
-      init();
+      setToastMessage({
+        message: "User details updated successfully!",
+        type: "success",
+      });
+      init(); // Re-fetch data or perform necessary updates
     } catch (error) {
       console.error("Error updating user details:", error);
+      setToastMessage({
+        message: "Failed to update user details. Please try again.",
+        type: "error",
+      });
     }
   };
 
@@ -189,6 +205,7 @@ const StudentForm = () => {
           </Form>
         )}
       </Box>
+      <Toaster message={toastMessage.message} type={toastMessage.type} />
     </Layout>
   );
 };

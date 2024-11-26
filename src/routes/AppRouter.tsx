@@ -11,9 +11,10 @@ import PrivateRoute from "./ProtectedRoute";
 import UploadDocuments from "../components/common/layout/UploadDocuments";
 import Home from "../screens/Home";
 import UserProfile from "../screens/UserProfile";
+import EditProfile from "../screens/EditProfile";
 
 const AppRouter = () => (
-  <Router>
+  <Router future={{ v7_startTransition: true }}>
     <Routes>
       <Route path="*" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
@@ -65,6 +66,14 @@ const AppRouter = () => (
         element={
           <PrivateRoute>
             <MyApplications />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/editProfile"
+        element={
+          <PrivateRoute>
+            <EditProfile />
           </PrivateRoute>
         }
       />

@@ -24,3 +24,37 @@ export const uploadUserDocuments = async (documents) => {
     throw error; // Rethrow error to handle it in the calling code
   }
 };
+
+/**
+ * Updates user details via API call.
+ * @param {string} userId - The ID of the user to update.
+ * @param {Object} data - The payload containing user details.
+ * @param {string} token - The authorization token.
+ * @returns {Promise} - Promise representing the API response.
+ */
+export const updateUserDetails = async (userId, data) => {
+  const token = localStorage.getItem("authToken");
+  console.log("UserID", userId, data);
+  try {
+    const response = await axios.put(
+      `${apiBaseUrl}/users/update/${userId}`,
+      data,
+      {
+        headers: {
+          Accept: "*/*",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    console.log("User updated successfully:", response.data);
+    return response.data; // Return response for further handling
+  } catch (error) {
+    console.error(
+      "Error updating user:",
+      error.response?.data || error.message
+    );
+    throw error; // Re-throw the error for the caller to handle
+  }
+};

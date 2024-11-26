@@ -184,3 +184,64 @@ export function findDocumentStatus(documents, status) {
   // If no match is found
   return { matchFound: false, doc_verified: null };
 }
+export const convertToEditPayload = (formData) => {
+  const { personalInfo, academicInfo, bankDetails } = formData;
+
+  return {
+    firstName: personalInfo.firstName,
+    lastName: personalInfo.lastName,
+    dob: personalInfo.dob,
+    gender: personalInfo.gender,
+    caste: personalInfo.caste,
+    annualIncome: personalInfo.annualIncome,
+    userInfo: {
+      fatherName: personalInfo.fatherName,
+      motherName: personalInfo.motherName,
+      disabilityStatus: personalInfo.disabilityStatus,
+      currentSchoolName: academicInfo.currentSchoolName,
+      currentSchoolAddress: academicInfo.currentSchoolAddress,
+      class: academicInfo.class,
+      studentType: academicInfo.studentType,
+      bankAccountHolderName: bankDetails.bankAccountHolderName,
+      bankName: bankDetails.bankName,
+      bankAccountNumber: bankDetails.bankAccountNumber,
+      bankIfscCode: bankDetails.bankIfscCode,
+    },
+  };
+};
+
+export const transformUserDataToFormData = (userData) => {
+  const getDefault = (key, defaultValue = "") =>
+    userData?.[key] || defaultValue;
+
+  const lowerCaseOrDefault = (key, defaultValue = "") =>
+    userData?.[key]?.toLowerCase() || defaultValue;
+
+  return {
+    personalInfo: {
+      firstName: getDefault("firstName"),
+      lastName: getDefault("lastName"),
+      fatherName: getDefault("fatherName"),
+      motherName: getDefault("motherName"),
+      dob: getDefault("dob"),
+      gender: getDefault("gender"),
+      caste: lowerCaseOrDefault("caste"),
+      disabilityStatus: getDefault("disabilityStatus", "no"),
+      annualIncome: getDefault("annualIncome"),
+    },
+    academicInfo: {
+      class: getDefault("class"),
+      studentType: getDefault("studentType"),
+      currentSchoolName: getDefault("currentSchoolName"),
+      currentSchoolAddress: getDefault("currentSchoolAddress"),
+      previousYearMarks: getDefault("previousYearMarks"),
+      samagraId: getDefault("samagraId"),
+    },
+    bankDetails: {
+      bankAccountHolderName: getDefault("bankAccountHolderName"),
+      bankName: getDefault("bankName"),
+      bankAccountNumber: getDefault("bankAccountNumber"),
+      bankIfscCode: getDefault("bankIfscCode"),
+    },
+  };
+};

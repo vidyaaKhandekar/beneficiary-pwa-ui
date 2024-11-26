@@ -26,7 +26,6 @@ const Home: React.FC = () => {
   const init = async () => {
     try {
       const result = await getUser();
-
       const data = await getDocumentsList();
       updateUserData(result.data, data.data);
     } catch (error) {
@@ -59,18 +58,12 @@ const Home: React.FC = () => {
     <Layout
       _heading={{
         beneficiary: true,
-        heading: `${userData?.first_name || ""} ${userData?.last_name || ""}`,
+        heading: `${userData?.firstName || ""} ${userData?.lastName || ""}`,
         subHeading: t("PROFILE_LOGGED_IN_WITH_E_Wallet"),
         label: keycloak.tokenParsed?.preferred_username,
       }}
     >
-      <Box
-        p={5}
-        shadow="md"
-        borderWidth="1px"
-        borderRadius="md"
-        className="card-scroll invisible_scroll"
-      >
+      <Box shadow="md" borderWidth="1px" borderRadius="md" p={3}>
         <VStack spacing={4} align="stretch">
           <DocumentList documents={documents} userData={userData?.docs} />
           <CommonButton

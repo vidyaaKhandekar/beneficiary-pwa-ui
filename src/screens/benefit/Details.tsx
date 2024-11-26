@@ -54,8 +54,8 @@ interface BenefitItem {
 interface AuthUser {
   user_id?: string;
   name?: string;
-  current_class?: string;
-  previous_year_marks?: string;
+  class?: string;
+  previousYearMarks?: string;
   phone_number?: string;
   username: string;
   email: string;
@@ -188,8 +188,8 @@ const BenefitsDetails: React.FC = () => {
 
           const formData: AuthUser = {
             ...(user?.data || {}),
-            class: user?.data?.current_class || "",
-            marks_previous_class: user?.data?.previous_year_marks || "",
+            class: user?.data?.class || "",
+            marks_previous_class: user?.data?.previousYearMarks || "",
             phone_number: user?.data?.phone_number || "",
           };
           setAuthUser(formData);

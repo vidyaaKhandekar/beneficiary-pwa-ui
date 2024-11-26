@@ -26,16 +26,16 @@ interface UserData {
 }
 
 const myApplicationData: ApplicationField[] = [
-  { id: 1, label: "Full Name", value: "first_name" },
-  { id: 2, label: "Last Name", value: "last_name" },
+  { id: 1, label: "Full Name", value: "firstName" },
+  { id: 2, label: "Last Name", value: "lastName" },
   { id: 3, label: "Gender", value: "gender" },
   { id: 4, label: "Age", value: "age" },
-  { id: 5, label: "Samagra Id", value: "samagra_id" },
-  { id: 6, label: "Class", value: "current_class" },
+  { id: 5, label: "Samagra Id", value: "samagraId" },
+  { id: 6, label: "Class", value: "class" },
   { id: 7, label: "Adhaar Card", value: "aadhaar" },
-  { id: 8, label: "Marks", value: "previous_year_marks" },
+  { id: 8, label: "Marks", value: "previousYearMarks" },
   { id: 9, label: "Caste", value: "caste" },
-  { id: 10, label: "School Name", value: "current_school_name" },
+  { id: 10, label: "School Name", value: "currentSchoolName" },
 ];
 
 const Preview: React.FC = () => {

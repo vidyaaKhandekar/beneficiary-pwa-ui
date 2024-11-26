@@ -33,12 +33,12 @@ interface UserData {
   docs: UserDocument;
   user_id?: string;
   name?: string;
-  current_class?: string;
-  previous_year_marks?: string;
+  class?: string;
+  previousYearMarks?: string;
   phone_number?: string;
 
-  first_name?: string;
-  last_name?: string;
+  firstName?: string;
+  lastName?: string;
   email?: string;
   phone?: string;
   // Add any other fields that your user data object might have

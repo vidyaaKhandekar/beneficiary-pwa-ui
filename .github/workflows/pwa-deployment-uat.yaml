@@ -1,4 +1,4 @@
-name: UAT- S3 - PWA  - UAT Deployment
+name: UAT - PWA Build and Deploy to S3
 
 on: [push]
 jobs:

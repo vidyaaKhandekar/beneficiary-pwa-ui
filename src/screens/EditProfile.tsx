@@ -13,6 +13,7 @@ import { AuthContext } from "../utils/context/checkToken";
 import { updateUserDetails } from "../services/user/User";
 import { useNavigate } from "react-router-dom";
 import CommonButton from "../components/common/button/Button";
+import { getDocumentsList, getUser } from "../services/auth/auth";
 
 // Define the JSON Schema
 const schema: RJSFSchema = {
@@ -135,7 +136,7 @@ const uiSchema = {
 // Main Component
 const StudentForm = () => {
   const navigate = useNavigate();
-  const { userData } = useContext(AuthContext); // Access userData from context
+  const { userData, updateUserData } = useContext(AuthContext); // Access userData from context
   const [formData, setFormData] = useState<any>(null); // Manage form state
 
   useEffect(() => {
@@ -147,6 +148,16 @@ const StudentForm = () => {
 
   // Define RJSF Form with Chakra UI theme
   const Form = withTheme(ChakraTheme);
+  const init = async () => {
+    try {
+      const result = await getUser();
+      const data = await getDocumentsList();
+      updateUserData(result.data, data.data);
+      handleBack();
+    } catch (error) {
+      console.error("Error fetching user data or documents:", error);
+    }
+  };
 
   // Handle form submission
   const onSubmit = async ({ formData }: IChangeEvent) => {
@@ -154,6 +165,7 @@ const StudentForm = () => {
       const payload = convertToEditPayload(formData);
       await updateUserDetails(userData.user_id, payload);
       console.log("User details updated successfully.");
+      init();
     } catch (error) {
       console.error("Error updating user details:", error);
     }

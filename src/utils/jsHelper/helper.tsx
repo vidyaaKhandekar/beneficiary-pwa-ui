@@ -211,31 +211,37 @@ export const convertToEditPayload = (formData) => {
 };
 
 export const transformUserDataToFormData = (userData) => {
+  const getDefault = (key, defaultValue = "") =>
+    userData?.[key] || defaultValue;
+
+  const lowerCaseOrDefault = (key, defaultValue = "") =>
+    userData?.[key]?.toLowerCase() || defaultValue;
+
   return {
     personalInfo: {
-      firstName: userData.firstName || "",
-      lastName: userData.lastName || "",
-      fatherName: userData.fatherName || "",
-      motherName: userData.motherName || "",
-      dob: userData.dob || "",
-      gender: userData.gender || "",
-      caste: userData.caste.toLowerCase() || "",
-      disabilityStatus: userData.disabilityStatus || "no",
-      annualIncome: userData.annualIncome || "",
+      firstName: getDefault("firstName"),
+      lastName: getDefault("lastName"),
+      fatherName: getDefault("fatherName"),
+      motherName: getDefault("motherName"),
+      dob: getDefault("dob"),
+      gender: getDefault("gender"),
+      caste: lowerCaseOrDefault("caste"),
+      disabilityStatus: getDefault("disabilityStatus", "no"),
+      annualIncome: getDefault("annualIncome"),
     },
     academicInfo: {
-      class: userData?.class || "",
-      studentType: userData?.studentType || "",
-      currentSchoolName: userData?.currentSchoolName || "",
-      currentSchoolAddress: userData?.currentSchoolAddress || "",
-      previousYearMarks: userData?.previousYearMarks || "",
-      samagraId: userData?.samagraId || "",
+      class: getDefault("class"),
+      studentType: getDefault("studentType"),
+      currentSchoolName: getDefault("currentSchoolName"),
+      currentSchoolAddress: getDefault("currentSchoolAddress"),
+      previousYearMarks: getDefault("previousYearMarks"),
+      samagraId: getDefault("samagraId"),
     },
     bankDetails: {
-      bankAccountHolderName: userData?.bankAccountHolderName || "",
-      bankName: userData?.bankName || "",
-      bankAccountNumber: userData?.bankAccountNumber || "",
-      bankIfscCode: userData?.bankIfscCode || "",
+      bankAccountHolderName: getDefault("bankAccountHolderName"),
+      bankName: getDefault("bankName"),
+      bankAccountNumber: getDefault("bankAccountNumber"),
+      bankIfscCode: getDefault("bankIfscCode"),
     },
   };
 };

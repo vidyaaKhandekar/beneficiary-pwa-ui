@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import validator from "@rjsf/validator-ajv6";
 import { Box } from "@chakra-ui/react";
 import { Theme as ChakraTheme } from "@rjsf/chakra-ui";
-import { withTheme } from "@rjsf/core";
+import { withTheme, IChangeEvent } from "@rjsf/core";
+import { RJSFSchema } from "@rjsf/utils";
 import Layout from "../components/common/layout/Layout";
 import {
   convertToEditPayload,
@@ -10,69 +11,37 @@ import {
 } from "../utils/jsHelper/helper";
 import { AuthContext } from "../utils/context/checkToken";
 import { updateUserDetails } from "../services/user/User";
-import CommonButton from "../components/common/button/Button";
 import { useNavigate } from "react-router-dom";
+import CommonButton from "../components/common/button/Button";
 
-const schema = {
+// Define the JSON Schema
+const schema: RJSFSchema = {
   type: "object",
   properties: {
     personalInfo: {
       type: "object",
       title: "",
       properties: {
-        firstName: {
-          type: "string",
-          title: "First Name",
-          minLength: 2,
-        },
-        fatherName: {
-          type: "string",
-          title: "Father's Name",
-          minLength: 2,
-        },
-        motherName: {
-          type: "string",
-          title: "Mother's Name",
-          minLength: 2,
-        },
-        lastName: {
-          type: "string",
-          title: "Last Name",
-          minLength: 2,
-        },
-        dob: {
-          type: "string",
-          title: "Date of Birth",
-          format: "date",
-        },
-        gender: {
-          type: "string",
-          title: "Gender",
-          enum: ["Male", "female"],
-          enumNames: ["Male", "Female"],
-        },
+        firstName: { type: "string", title: "First Name", minLength: 2 },
+        fatherName: { type: "string", title: "Father's Name", minLength: 2 },
+        motherName: { type: "string", title: "Mother's Name", minLength: 2 },
+        lastName: { type: "string", title: "Last Name", minLength: 2 },
+        dob: { type: "string", title: "Date of Birth", format: "date" },
+        gender: { type: "string", title: "Gender", enum: ["Male", "Female"] },
         caste: {
           type: "string",
           title: "Caste",
-          enum: ["sc", "st", "obc", "general"],
-          enumNames: ["SC", "ST", "OBC", "General"],
+          enum: ["sc", "st", "OBC", "General"],
         },
         disabilityStatus: {
           type: "string",
           title: "Disability Status",
           enum: ["yes", "no"],
-          enumNames: ["Yes", "No"],
         },
         annualIncome: {
           type: "string",
           title: "Annual Income",
           enum: ["0-50000", "50001-100000", "100001-250000", "250001+"],
-          enumNames: [
-            "0-50,000",
-            "50,001-1,00,000",
-            "1,00,001-2,50,000",
-            "2,50,001 and above",
-          ],
         },
       },
       required: ["firstName", "lastName", "gender", "caste"],
@@ -82,29 +51,14 @@ const schema = {
       title: "",
       properties: {
         class: {
-          type: "number",
+          type: "integer",
           title: "Class",
           enum: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-          enumNames: [
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10",
-            "11",
-            "12",
-          ],
         },
         studentType: {
           type: "string",
           title: "Student Type",
-          enum: ["Day", "hosteller"],
-          enumNames: ["Day Scholar", "Hosteller"],
+          enum: ["Day", "Hosteller"],
         },
         currentSchoolName: {
           type: "string",
@@ -126,11 +80,7 @@ const schema = {
           title: "Previous Year Marks",
           pattern: "^[0-9]+(\\.[0-9]{1,2})?%$",
         },
-        samagraId: {
-          type: "string",
-          title: "Samagra ID",
-          minLength: 5,
-        },
+        samagraId: { type: "string", title: "Samagra ID", minLength: 5 },
       },
       required: ["class", "studentType", "currentSchoolName"],
     },
@@ -143,11 +93,7 @@ const schema = {
           title: "Bank Account Holder Name",
           minLength: 2,
         },
-        bankName: {
-          type: "string",
-          title: "Bank Name",
-          minLength: 2,
-        },
+        bankName: { type: "string", title: "Bank Name", minLength: 2 },
         bankAccountNumber: {
           type: "string",
           title: "Bank Account Number",
@@ -169,14 +115,11 @@ const schema = {
   },
 };
 
-// UI Schema for customizing form layout and widgets
+// UI Schema for form layout customization
 const uiSchema = {
   personalInfo: {
     dob: {
       "ui:widget": "date",
-      "ui:options": {
-        label: true,
-      },
     },
   },
   bankDetails: {
@@ -184,59 +127,53 @@ const uiSchema = {
       "ui:help": "Enter valid 9-18 digit account number",
     },
     bankIfscCode: {
-      "ui:help": "Enter valid IFSC code (e.g. SBIN0000123)",
+      "ui:help": "Enter valid IFSC code (e.g., SBIN0000123)",
     },
   },
 };
 
+// Main Component
 const StudentForm = () => {
   const navigate = useNavigate();
-  const { userData } = useContext(AuthContext); // Accessing userData from context
-  const [formData, setFormData] = useState(null);
+  const { userData } = useContext(AuthContext); // Access userData from context
+  const [formData, setFormData] = useState<any>(null); // Manage form state
 
   useEffect(() => {
-    console.log("Prefill data");
-
+    // Prefill form with user data when available
     if (userData) {
-      const prefilledData = transformUserDataToFormData(userData);
-      setFormData(prefilledData);
+      setFormData(transformUserDataToFormData(userData));
     }
   }, [userData]);
 
+  // Define RJSF Form with Chakra UI theme
   const Form = withTheme(ChakraTheme);
 
-  const onSubmit = async ({ formData }) => {
-    const payload = convertToEditPayload(formData);
+  // Handle form submission
+  const onSubmit = async ({ formData }: IChangeEvent) => {
     try {
-      const response = await updateUserDetails(userData.user_id, payload);
-      console.log("API Response:", response);
+      const payload = convertToEditPayload(formData);
+      await updateUserDetails(userData.user_id, payload);
+      console.log("User details updated successfully.");
     } catch (error) {
-      console.error("Failed to update user:", error);
+      console.error("Error updating user details:", error);
     }
   };
-  const handleBack = () => {
-    navigate(-1);
-  };
+
+  // Navigate back on cancel
+  const handleBack = () => navigate(-1);
+
   return (
-    <Layout
-      _heading={{
-        heading: "Edit Profile",
-        handleBack,
-      }}
-    >
-      <Box className="card-scroll invisible_scroll" p={5}>
+    <Layout _heading={{ heading: "Edit Profile", handleBack }}>
+      <Box p={5} className="card-scroll invisible_scroll">
         {formData && (
           <Form
             schema={schema}
             uiSchema={uiSchema}
-            formData={formData} // Prefilled values
+            formData={formData}
             validator={validator}
             onSubmit={onSubmit}
-            className="space-y-4"
           >
-            <div className="flex justify-end">
-              <CommonButton label="Edit Profile" onClick={() => onSubmit} />
-            </div>
+            <CommonButton label="Edit Profile" />
           </Form>
         )}
       </Box>

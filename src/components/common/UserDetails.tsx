@@ -18,11 +18,11 @@ const valueStyles = {
 
 interface UserData {
   firstName?: string;
-  middle_name?: string | null;
+  middleName?: string | null;
   lastName?: string;
   fatherName?: string;
-  mother_name?: string;
-  date_of_birth?: string | null;
+  motherName?: string;
+  dob?: string | null;
   gender?: string;
 
   // Contact Information
@@ -90,9 +90,9 @@ const UserDetails: React.FC<UserDetailsProps> = ({ userData }) => {
         />
         <Field
           label={t("USER_DETAILS_MOTHER_NAME")}
-          value={userData?.mother_name}
+          value={userData?.motherName}
         />
-        <Field label={t("USER_DETAILS_DOB")} value={userData?.date_of_birth} />
+        <Field label={t("USER_DETAILS_DOB")} value={userData?.dob} />
       </VStack>
 
       <VStack spacing={6} align="stretch">

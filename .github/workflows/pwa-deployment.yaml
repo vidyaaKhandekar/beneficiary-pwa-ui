@@ -1,4 +1,4 @@
-name: S3 - PWA Deployment
+name: DEV - PWA Build and Deploy to S3
 
 on: [push]
 jobs:
@@ -20,8 +20,10 @@ jobs:
           fi
           echo '${{ secrets.ENV }}' > .env
           ls -ltra
-          yarn install
+          # yarn install
+          # npm install
           yarn build
+          npm run build
           ls -ltra
       - name: Show PWD
         run: |

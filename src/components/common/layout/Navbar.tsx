@@ -77,7 +77,7 @@ const Navbar: React.FC<{ isMenu?: boolean }> = ({ isMenu = true }) => {
                     navigate("/userprofile");
                   }}
                 >
-                  <Image src="../src/assets/images/profile.png" />
+                  <Image src="../assets/images/profile.png" />
                   <Text ml={4}>{t("NAVBAR_PROFILE")}</Text>
                 </MenuItem>
                 <MenuItem
@@ -85,7 +85,7 @@ const Navbar: React.FC<{ isMenu?: boolean }> = ({ isMenu = true }) => {
                   onClick={handleLogout}
                   p={4}
                 >
-                  <Image ml={1} src="../src/assets/images/logout.png" />
+                  <Image ml={1} src="../assets/images/logout.png" />
 
                   <Text ml={4}>{t("NAVBAR_LOGOUT")}</Text>
                 </MenuItem>

@@ -81,7 +81,7 @@ const Login: React.FC = () => {
     <Layout isNavbar={false} isBottombar={false}>
       <Flex height="50%" justifyContent="flex-end" className="purple-bg">
         <Image
-          src="../src/assets/images/frame.png"
+          src="../assets/images/frame.png"
           alt="Login Image"
           objectFit="contain"
           transform="translateX(-50%)"

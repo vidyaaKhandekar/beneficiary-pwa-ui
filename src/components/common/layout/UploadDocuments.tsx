@@ -62,7 +62,7 @@ function UploadDocuments() {
           mt="6"
         >
           <Image
-            src="../../src/assets/images/file_upload.png"
+            src="../../assets/images/file_upload.png"
             alt="Upload Documents"
             mr="2"
           />
@@ -82,7 +82,7 @@ function UploadDocuments() {
           mt="6"
         >
           <Image
-            src="../../src/assets/images/file_upload.png"
+            src="../../assets/images/file_upload.png"
             alt="Upload Documents"
             mr="2"
           />

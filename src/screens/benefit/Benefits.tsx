@@ -57,7 +57,7 @@ const ExploreBenefits: React.FC = () => {
 
         const filters: Filter = {
           "caste-eligibility": user?.data?.caste,
-          annualIncome: user?.data?.income,
+          annualIncome: user?.data?.annualIncome,
         };
 
         const newFilter: Filter = {};

@@ -130,8 +130,8 @@ const Signup: React.FC = () => {
         setLoading(false);
 
         const response = await registerUser({
-          first_name: userDetails.firstName,
-          last_name: userDetails.lastName,
+          firstName: userDetails.firstName,
+          lastName: userDetails.lastName,
           phone_number: userDetails.mobile,
         });
         if (response && response?.statusCode === 200) {

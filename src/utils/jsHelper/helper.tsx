@@ -184,3 +184,58 @@ export function findDocumentStatus(documents, status) {
   // If no match is found
   return { matchFound: false, doc_verified: null };
 }
+export const convertToEditPayload = (formData) => {
+  const { personalInfo, academicInfo, bankDetails } = formData;
+
+  return {
+    firstName: personalInfo.firstName,
+    lastName: personalInfo.lastName,
+    dob: personalInfo.dob,
+    gender: personalInfo.gender,
+    caste: personalInfo.caste,
+    annualIncome: personalInfo.annualIncome,
+    userInfo: {
+      fatherName: personalInfo.fatherName,
+      motherName: personalInfo.motherName,
+      disabilityStatus: personalInfo.disabilityStatus,
+      currentSchoolName: academicInfo.currentSchoolName,
+      currentSchoolAddress: academicInfo.currentSchoolAddress,
+      class: academicInfo.class,
+      studentType: academicInfo.studentType,
+      bankAccountHolderName: bankDetails.bankAccountHolderName,
+      bankName: bankDetails.bankName,
+      bankAccountNumber: bankDetails.bankAccountNumber,
+      bankIfscCode: bankDetails.bankIfscCode,
+    },
+  };
+};
+
+export const transformUserDataToFormData = (userData) => {
+  return {
+    personalInfo: {
+      firstName: userData.firstName || "",
+      lastName: userData.lastName || "",
+      fatherName: userData.fatherName || "",
+      motherName: userData.motherName || "",
+      dob: userData.dob || "",
+      gender: userData.gender || "",
+      caste: userData.caste.toLowerCase() || "",
+      disabilityStatus: userData.disabilityStatus || "no",
+      annualIncome: userData.annualIncome || "",
+    },
+    academicInfo: {
+      class: userData?.class || "",
+      studentType: userData?.studentType || "",
+      currentSchoolName: userData?.currentSchoolName || "",
+      currentSchoolAddress: userData?.currentSchoolAddress || "",
+      previousYearMarks: userData?.previousYearMarks || "",
+      samagraId: userData?.samagraId || "",
+    },
+    bankDetails: {
+      bankAccountHolderName: userData?.bankAccountHolderName || "",
+      bankName: userData?.bankName || "",
+      bankAccountNumber: userData?.bankAccountNumber || "",
+      bankIfscCode: userData?.bankIfscCode || "",
+    },
+  };
+};

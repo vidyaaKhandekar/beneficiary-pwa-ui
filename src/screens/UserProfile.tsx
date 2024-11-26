@@ -1,5 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Avatar, Box, HStack, Text, VStack } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Flex,
+  HStack,
+  IconButton,
+  Text,
+  Tooltip,
+  VStack,
+} from "@chakra-ui/react";
 
 import { getUser, getDocumentsList } from "../services/auth/auth";
 import { useNavigate } from "react-router-dom";
@@ -12,11 +21,12 @@ import UserDetails from "../components/common/UserDetails";
 
 import UploadDocumentEwallet from "../components/common/UploadDocumentEwallet";
 import CommonButton from "../components/common/button/Button";
+import { EditIcon } from "@chakra-ui/icons";
 
 const UserProfile: React.FC = () => {
   const [showIframe, setShowIframe] = useState(true);
-
   const { userData, documents, updateUserData } = useContext(AuthContext)!;
+  const navigate = useNavigate();
   // Function to fetch user data and documents
   const init = async () => {
     try {
@@ -34,13 +44,21 @@ const UserProfile: React.FC = () => {
       init();
     }
   }, [userData, documents]);
-
+  console.log("UserData", userData);
+  const handleBack = () => {
+    navigate(-1);
+  };
   return (
-    <Layout>
+    <Layout
+      _heading={{
+        heading: "My Profile",
+        handleBack,
+      }}
+    >
       <HStack m={5} mt={0} p={0} h={82}>
         <Avatar
           variant="solid"
-          name={`${userData?.first_name || ""} ${userData?.last_name || ""}`}
+          name={`${userData?.firstName || ""} ${userData?.lastName || ""}`}
           mr={2}
         />
         <VStack mt={8} ml={1}>
@@ -51,7 +69,7 @@ const UserProfile: React.FC = () => {
             color="#433E3F"
             textAlign={"start"}
           >
-            {userData?.first_name || ""} {userData?.last_name || ""}
+            {userData?.firstName || ""} {userData?.lastName || ""}
           </Text>
           <Text
             fontSize="11px"
@@ -71,17 +89,28 @@ const UserProfile: React.FC = () => {
         className="card-scroll invisible_scroll"
         p={3}
       >
-        <ProgressBar value={60} />
-        <Text
-          fontSize="16px"
-          fontWeight="500"
-          lineHeight="24px"
-          color="#433E3F"
-          mt={3}
-          ml={4}
-        >
-          Basic Details
-        </Text>
+        <ProgressBar totalDocuments={9} presentDocuments={8} />
+        <Flex alignItems="center" justifyContent="space-between" mt={3} ml={4}>
+          <Text
+            fontSize="16px"
+            fontWeight="500"
+            lineHeight="24px"
+            color="#433E3F"
+            mr={2} // Adds spacing between Text and IconButton
+          >
+            Basic Details
+          </Text>
+          <Tooltip label="Edit" aria-label="Edit tooltip">
+            <IconButton
+              icon={<EditIcon />}
+              variant="ghost"
+              aria-label="Edit"
+              _hover={{ bg: "transparent" }}
+              onClick={() => navigate("/editProfile")}
+            />
+          </Tooltip>
+        </Flex>
+
         <UserDetails userData={{ ...userData }} />
         <Box
           p={5}

@@ -17,10 +17,10 @@ const valueStyles = {
 };
 
 interface UserData {
-  first_name?: string;
+  firstName?: string;
   middle_name?: string | null;
-  last_name?: string;
-  father_name?: string;
+  lastName?: string;
+  fatherName?: string;
   mother_name?: string;
   date_of_birth?: string | null;
   gender?: string;
@@ -30,23 +30,23 @@ interface UserData {
   phone_number?: string;
 
   // Educational Information
-  current_class?: string;
-  current_school_name?: string | null;
-  current_school_address?: string | null;
-  current_school_district?: string | null;
-  previous_year_marks?: string;
+  class?: string;
+  currentSchoolName?: string | null;
+  currentSchoolAddress?: string | null;
+  currentSchoolDistrict?: string | null;
+  previousYearMarks?: string;
 
   // Demographic Information
   caste?: string;
-  disability?: string | null;
-  income?: string;
-  student_type?: string;
+  disabilityStatus?: string | null;
+  annualIncome?: string;
+  studentType?: string;
 
   // System Information
   user_id?: string;
   sso_id?: string;
   sso_provider?: string;
-  samagra_id?: string;
+  samagraId?: string;
   aadhaar?: string;
   status?: string;
   created_at?: string;
@@ -86,7 +86,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ userData }) => {
       <VStack spacing={6} align="stretch" mb={6}>
         <Field
           label={t("USER_DETAILS_FATHER_NAME")}
-          value={userData?.father_name}
+          value={userData?.fatherName}
         />
         <Field
           label={t("USER_DETAILS_MOTHER_NAME")}
@@ -104,22 +104,19 @@ const UserDetails: React.FC<UserDetailsProps> = ({ userData }) => {
         <HStack spacing={4}>
           <Field
             label={t("USER_DETAILS_DISABILITY")}
-            value={userData?.disability}
+            value={userData?.disabilityStatus}
           />
-          <Field
-            label={t("USER_DETAILS_CLASS")}
-            value={userData?.current_class}
-          />
+          <Field label={t("USER_DETAILS_CLASS")} value={userData?.class} />
         </HStack>
 
         <HStack spacing={4}>
           <Field
             label={t("USER_DETAILS_ANNUAL_INCOME")}
-            value={userData?.income}
+            value={userData?.annualIncome}
           />
           <Field
             label={t("USER_DETAILS_DAY_SCHOLAR_HOSTLER")}
-            value={userData?.student_type}
+            value={userData?.studentType}
           />
         </HStack>
       </VStack>

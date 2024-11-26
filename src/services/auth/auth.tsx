@@ -3,8 +3,8 @@ import { removeToken } from "./asyncStorage";
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 interface UserData {
-  first_name?: string;
-  last_name?: string;
+  firstName?: string;
+  lastName?: string;
   phone_number?: string;
 }
 interface RegisterResponse {

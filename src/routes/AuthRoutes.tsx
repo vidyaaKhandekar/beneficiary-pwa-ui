@@ -1,4 +1,5 @@
 import { lazy } from "react";
+import EditProfile from "../screens/EditProfile";
 
 const ExploreBenefits = lazy(() => import("../screens/benefit/Benefits"));
 const BenefitsDetails = lazy(() => import("../screens/benefit/Details"));
@@ -38,6 +39,10 @@ const routes = [
     path: "/applicationStatus",
     component: MyApplications,
   },
+  // {
+  //   path: "/editProfile",
+  //   component: EditProfile,
+  // },
   {
     path: "*",
     component: Home,

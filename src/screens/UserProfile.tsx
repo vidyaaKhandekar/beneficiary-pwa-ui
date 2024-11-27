@@ -32,7 +32,6 @@ const UserProfile: React.FC = () => {
     try {
       const result = await getUser();
       const data = await getDocumentsList();
-      console.log("result---", result);
       updateUserData(result?.data, data?.data); // Update user data and document list in context
     } catch (error) {
       console.error("Error fetching user data or documents:", error);
@@ -44,7 +43,7 @@ const UserProfile: React.FC = () => {
       init();
     }
   }, [userData, documents]);
-  console.log("UserData", userData);
+
   const handleBack = () => {
     navigate(-1);
   };
@@ -82,14 +81,11 @@ const UserProfile: React.FC = () => {
         </VStack>
       </HStack>
 
-      <Box
-        shadow="md"
-        borderWidth="1px"
-        borderRadius="md"
-        className="card-scroll invisible_scroll"
-        p={3}
-      >
-        <ProgressBar totalDocuments={9} presentDocuments={8} />
+      <Box shadow="md" borderWidth="1px" borderRadius="md" p={3}>
+        <ProgressBar
+          totalDocuments={10}
+          presentDocuments={userData?.docs?.length}
+        />
         <Flex alignItems="center" justifyContent="space-between" mt={3} ml={4}>
           <Text
             fontSize="16px"
@@ -100,7 +96,7 @@ const UserProfile: React.FC = () => {
           >
             Basic Details
           </Text>
-          <Tooltip label="Edit" aria-label="Edit tooltip">
+          {/* <Tooltip label="Edit" aria-label="Edit tooltip">
             <IconButton
               icon={<EditIcon />}
               variant="ghost"
@@ -108,7 +104,7 @@ const UserProfile: React.FC = () => {
               _hover={{ bg: "transparent" }}
               onClick={() => navigate("/editProfile")}
             />
-          </Tooltip>
+          </Tooltip> */}
         </Flex>
 
         <UserDetails userData={{ ...userData }} />
@@ -120,7 +116,7 @@ const UserProfile: React.FC = () => {
           className="card-scroll invisible_scroll"
         >
           <VStack spacing={4} align="stretch">
-            <DocumentList documents={documents} userData={userData.docs} />
+            <DocumentList documents={documents} userData={userData?.docs} />
             {showIframe ? (
               <UploadDocumentEwallet userId={userData?.user_id} />
             ) : (

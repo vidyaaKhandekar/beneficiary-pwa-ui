@@ -15,7 +15,6 @@ import {
   AccordionPanel,
   AccordionIcon,
 } from "@chakra-ui/react";
-import OutlineButton from "../button/OutlineButton";
 import CommonButton from "../button/Button";
 import { useState } from "react";
 
@@ -49,17 +48,7 @@ const CommonDialogue: React.FC<CommonDialogueProps> = ({
           )}
         </ModalHeader>
         <ModalCloseButton />
-        {/* modal body for upload document component */}
-        {/* <ModalBody className="border-bottom">
-          <Text mt={4} mb={6} fontWeight="500" fontSize="20px">
-            Please upload the required documents to proceed with completing your
-            profile.
-          </Text>
-          <Text mt={2} mb={2} fontWeight="normal" fontSize="17px">
-            Upload the relevant document in .json or XML format.
-          </Text>
-          <UploadDocuments />
-        </ModalBody> */}
+
         <ModalBody className="border-bottom">
           {termsAndConditions ? (
             <>
@@ -97,10 +86,11 @@ const CommonDialogue: React.FC<CommonDialogueProps> = ({
         <ModalFooter>
           {termsAndConditions ? (
             <>
-              <OutlineButton
+              <CommonButton
+                variant="outline"
                 onClick={onClose}
                 label="Deny"
-                disabled={!isAccordionOpen}
+                isDisabled={!isAccordionOpen}
               />
               <Box ml={2}>
                 <CommonButton label="Accept" isDisabled={!isAccordionOpen} />

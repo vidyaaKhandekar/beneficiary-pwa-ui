@@ -1,20 +1,3 @@
-// import { ChakraProvider } from "@chakra-ui/react";
-// import theme from "./theme";
-// import { AuthProvider } from "./utils/context/checkToken";
-// import AppRouter from "./routes/AppRouter";
-
-// function App() {
-//   return (
-//     <ChakraProvider theme={theme}>
-//       <AuthProvider>
-//         <AppRouter />
-//       </AuthProvider>
-//     </ChakraProvider>
-//   );
-// }
-
-// export default App;
-
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "./theme";
 import authRoutes from "./routes/AuthRoutes";
@@ -25,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useKeycloak } from "@react-keycloak/web";
 import { AuthProvider } from "./utils/context/checkToken";
 import "./assets/styles/App.css";
+import Layout from "./components/common/layout/Layout";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -52,7 +36,10 @@ function App() {
   if (loading) {
     return (
       <ChakraProvider theme={theme}>
-        <Loader />
+        <Layout>
+          {" "}
+          <Loader />
+        </Layout>
       </ChakraProvider>
     );
   }

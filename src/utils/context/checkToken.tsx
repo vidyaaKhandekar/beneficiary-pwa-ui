@@ -28,6 +28,7 @@ interface UserDocument {
   doc_verified: boolean;
   uploaded_at: string;
   is_uploaded: boolean;
+  length?: number;
 }
 interface UserData {
   docs: UserDocument;

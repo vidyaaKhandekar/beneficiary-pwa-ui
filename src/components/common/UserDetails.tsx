@@ -92,21 +92,27 @@ const UserDetails: React.FC<UserDetailsProps> = ({ userData }) => {
           label={t("USER_DETAILS_MOTHER_NAME")}
           value={userData?.motherName}
         />
-        <Field label={t("USER_DETAILS_DOB")} value={userData?.dob} />
+        <Field label={t("USER_DETAILS_LAST_NAME")} value={userData?.lastName} />
       </VStack>
 
       <VStack spacing={6} align="stretch">
         <HStack spacing={4}>
-          <Field label={t("USER_DETAILS_GENDER")} value={userData?.gender} />
-          <Field label={t("USER_DETAILS_CASTE")} value={userData?.caste} />
-        </HStack>
-
-        <HStack spacing={4}>
+          <Field label={t("USER_DETAILS_DOB")} value={userData?.dob} />{" "}
           <Field
             label={t("USER_DETAILS_DISABILITY")}
             value={userData?.disabilityStatus}
           />
+        </HStack>
+        <HStack spacing={4}>
+          <Field label={t("USER_DETAILS_GENDER")} value={userData?.gender} />
+          <Field label={t("USER_DETAILS_CASTE")} value={userData?.caste} />
+        </HStack>
+        <HStack spacing={4}>
           <Field label={t("USER_DETAILS_CLASS")} value={userData?.class} />
+          <Field
+            label={t("USER_DETAILS_PREVIOUS_YEAR_MARKS")}
+            value={userData?.previousYearMarks}
+          />
         </HStack>
 
         <HStack spacing={4}>

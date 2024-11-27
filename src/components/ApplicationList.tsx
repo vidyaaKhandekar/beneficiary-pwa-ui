@@ -118,8 +118,6 @@ const ApplicationList: React.FC<ApplicationListProps> = ({
       as="section"
       aria-label="Applications list"
       style={{
-        height: "500px",
-        overflowY: "scroll",
         paddingBottom: "100px",
         padding: "16px",
         width: "100%",

@@ -1,10 +1,16 @@
 import React from "react";
-import { Box, Flex, IconButton, Text } from "@chakra-ui/react";
+import { Box, HStack, IconButton, Text } from "@chakra-ui/react";
 import { FaFileAlt } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
 import { MdHome } from "react-icons/md";
 import { HiDocumentSearch } from "react-icons/hi";
-const BottomBar: React.FC = () => {
+import useDeviceSize from "./useDeviceSize";
+
+interface FooterProps {
+  setRef?: (ref: HTMLDivElement | null) => void;
+}
+const BottomBar: React.FC<FooterProps> = ({ setRef, ...props }) => {
+  const { width } = useDeviceSize();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -18,26 +24,23 @@ const BottomBar: React.FC = () => {
 
   return (
     <Box
-      bg="#EDEFFF"
-      borderRadius="lg"
-      shadow="lg"
-      borderWidth="1px"
-      background="#fff"
-      position="absolute"
-      bottom={0}
-      left="50%"
-      transform="translateX(-50%)"
-      width="100%"
-      maxW="550px"
-      height="85px"
-      paddingBottom="8"
+      width={width}
+      bg={"white"}
+      position="fixed"
+      bottom="0"
+      ref={(e) => typeof setRef === "function" && setRef(e)}
+      {...props}
+      zIndex={10}
     >
-      <Flex justify="space-around" align="center" py={2}>
-        <Flex
-          direction="column"
-          align="center"
-          onClick={() => handleNavigation("/home")}
-        >
+      <HStack
+        bg="primary.50"
+        alignItems="center"
+        borderTopWidth={"1px"}
+        borderTopColor={"back"}
+        shadow={"FooterShadow"}
+        justifyContent={"space-around"}
+      >
+        <Box alignItems="center" onClick={() => handleNavigation("/home")}>
           <IconButton
             aria-label="Home"
             icon={<MdHome />}
@@ -48,11 +51,10 @@ const BottomBar: React.FC = () => {
           <Text fontSize="xs" color={getTabColor("/home")}>
             Home
           </Text>
-        </Flex>
+        </Box>
 
-        <Flex
-          direction="column"
-          align="center"
+        <Box
+          alignItems="center"
           onClick={() => handleNavigation("/explorebenefits")}
         >
           <IconButton
@@ -65,11 +67,10 @@ const BottomBar: React.FC = () => {
           <Text fontSize="xs" color={getTabColor("/explorebenefits")}>
             Search
           </Text>
-        </Flex>
+        </Box>
 
-        <Flex
-          direction="column"
-          align="center"
+        <Box
+          alignItems="center"
           onClick={() => handleNavigation("/applicationstatus")}
         >
           <IconButton
@@ -82,8 +83,8 @@ const BottomBar: React.FC = () => {
           <Text fontSize="xs" color={getTabColor("/applicationstatus")}>
             My Applications
           </Text>
-        </Flex>
-      </Flex>
+        </Box>
+      </HStack>
     </Box>
   );
 };

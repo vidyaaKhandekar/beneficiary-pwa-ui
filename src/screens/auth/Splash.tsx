@@ -14,7 +14,6 @@ import "../../assets/styles/App.css";
 import CommonButton from "../../components/common/button/Button";
 import FloatingSelect from "../../components/common/input/FloatingSelect";
 import Layout from "../../components/common/layout/Layout";
-
 import frameImage from "../../assets/images/frame.png";
 import { changeLanguage } from "i18next";
 

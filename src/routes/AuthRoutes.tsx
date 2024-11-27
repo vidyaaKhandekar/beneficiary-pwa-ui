@@ -1,6 +1,5 @@
 import { lazy } from "react";
-import EditProfile from "../screens/EditProfile";
-
+// import EditProfile from "../screens/EditProfile";
 const ExploreBenefits = lazy(() => import("../screens/benefit/Benefits"));
 const BenefitsDetails = lazy(() => import("../screens/benefit/Details"));
 const Preview = lazy(() => import("../screens/application/Preview"));

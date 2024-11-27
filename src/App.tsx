@@ -1,3 +1,20 @@
+// import { ChakraProvider } from "@chakra-ui/react";
+// import theme from "./theme";
+// import { AuthProvider } from "./utils/context/checkToken";
+// import AppRouter from "./routes/AppRouter";
+
+// function App() {
+//   return (
+//     <ChakraProvider theme={theme}>
+//       <AuthProvider>
+//         <AppRouter />
+//       </AuthProvider>
+//     </ChakraProvider>
+//   );
+// }
+
+// export default App;
+
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "./theme";
 import authRoutes from "./routes/AuthRoutes";
@@ -36,10 +53,7 @@ function App() {
   if (loading) {
     return (
       <ChakraProvider theme={theme}>
-        <Layout>
-          {" "}
-          <Loader />
-        </Layout>
+        <Layout loading />
       </ChakraProvider>
     );
   }

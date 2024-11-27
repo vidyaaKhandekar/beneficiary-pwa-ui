@@ -35,7 +35,7 @@ interface UserData {
   name?: string;
   class?: string;
   previousYearMarks?: string;
-  phone_number?: string;
+  phoneNumber?: string;
 
   firstName?: string;
   lastName?: string;

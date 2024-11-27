@@ -27,7 +27,7 @@ interface UserData {
 
   // Contact Information
   email?: string;
-  phone_number?: string;
+  phoneNumber?: string;
 
   // Educational Information
   class?: string;

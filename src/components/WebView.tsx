@@ -9,7 +9,7 @@ interface FormData {
   name?: string;
   current_class?: string;
   previous_year_marks?: string;
-  phone_number?: string;
+  phoneNumber?: string;
   username?: string;
   email?: string;
 }

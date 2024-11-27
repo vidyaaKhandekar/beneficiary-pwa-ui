@@ -29,7 +29,7 @@ export const getAll = async (userData: {
 };
 /**
  * Login a user
- * @param {Object} loginData - Contains phone_number, password
+ * @param {Object} loginData - Contains phoneNumber, password
  */
 interface getOneParams {
   id: string | undefined;

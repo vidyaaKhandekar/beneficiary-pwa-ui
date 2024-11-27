@@ -8,7 +8,6 @@ import {
   useDisclosure,
   HStack,
   Icon,
-  Spinner,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -56,7 +55,7 @@ interface AuthUser {
   name?: string;
   class?: string;
   previousYearMarks?: string;
-  phone_number?: string;
+  phoneNumber?: string;
   username: string;
   email: string;
 }
@@ -190,7 +189,7 @@ const BenefitsDetails: React.FC = () => {
             ...(user?.data || {}),
             class: user?.data?.class || "",
             marks_previous_class: user?.data?.previousYearMarks || "",
-            phone_number: user?.data?.phone_number || "",
+            phoneNumber: user?.data?.phoneNumber || "",
           };
           setAuthUser(formData);
 
@@ -221,16 +220,7 @@ const BenefitsDetails: React.FC = () => {
   }, [id]);
 
   if (loading) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-      >
-        <Spinner size="xl" />
-      </Box>
-    );
+    return <Layout loading={true} />;
   }
 
   if (error) {

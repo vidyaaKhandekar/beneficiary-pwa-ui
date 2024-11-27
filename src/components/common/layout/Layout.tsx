@@ -8,7 +8,7 @@ import SearchBar from "./SearchBar";
 interface LayoutProps {
   isScrollable?: boolean;
   loading?: boolean;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   isMenu?: boolean;
   isNavbar?: boolean;
   afterHeader?: React.ReactNode;
@@ -46,13 +46,13 @@ const Layout: React.FC<LayoutProps> = ({
 }) => {
   const { onSearch } = _heading;
 
-  // if (loading) {
-  //   return (
-  //     <Box display="flex" justifyContent="center" alignItems="center">
-  //       <Spinner size="lg" />
-  //     </Box>
-  //   );
-  // }
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <Spinner size="lg" />
+      </Box>
+    );
+  }
 
   return (
     <Box>

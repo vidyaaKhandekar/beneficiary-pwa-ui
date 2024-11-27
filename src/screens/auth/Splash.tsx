@@ -1,6 +1,4 @@
-import React, { useState, ChangeEvent } from "react";
 import {
-  Button,
   Flex,
   FormControl,
   FormHelperText,
@@ -8,40 +6,24 @@ import {
   Image,
   Stack,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
-import i18n from "../../components/common/i18n";
-import Layout from "../../components/common/layout/Layout";
-import { useTranslation } from "react-i18next";
-import FloatingSelect from "../../components/common/input/FloatingSelect";
-import CommonButton from "../../components/common/button/Button";
 import { useKeycloak } from "@react-keycloak/web";
-import { jwtDecode } from "jwt-decode";
-import { saveToken } from "../../services/auth/asyncStorage";
-const Login: React.FC = () => {
+import React, { ChangeEvent, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import "../../assets/styles/App.css";
+import CommonButton from "../../components/common/button/Button";
+import i18n from "../../components/common/i18n";
+import FloatingSelect from "../../components/common/input/FloatingSelect";
+import Layout from "../../components/common/layout/Layout";
+
+import frameImage from "../../assets/images/frame.png";
+
+const Splash: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { keycloak } = useKeycloak();
-
-  interface DecodedToken {
-    exp: number;
-    // add other expected token fields
-  }
-
-  try {
-    if (keycloak?.token) {
-      const decodedToken = jwtDecode<DecodedToken>(keycloak.token);
-      if (decodedToken.exp * 1000 > Date.now()) {
-        navigate("/home", { replace: true });
-      }
-    }
-  } catch (error) {
-    console.error(
-      "Error decoding token:",
-      error instanceof Error ? error.message : "Unknown error"
-    );
-  }
-
-  const [formData, setFormData] = useState({ name: "" });
+  const [formData, setFormData] = useState({ name: "en" });
+  const options = [{ label: t("LOGIN_ENGLISH"), value: "en" }];
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -49,10 +31,9 @@ const Login: React.FC = () => {
       ...prevData,
       [name]: value,
     }));
-    i18n.changeLanguage(value); // Change language based on selection
+    i18n.changeLanguage(value);
   };
 
-  const options = [{ label: t("LOGIN_ENGLISH"), value: "en" }];
   const handleRedirect = () => {
     navigate("/SignUp");
   };
@@ -60,16 +41,6 @@ const Login: React.FC = () => {
   const handleLogin = async () => {
     try {
       await keycloak.login();
-      if (keycloak.token) {
-        const decodedToken = jwtDecode<DecodedToken>(keycloak.token);
-        if (decodedToken.exp * 1000 > Date.now()) {
-          saveToken(keycloak.token, keycloak.token);
-          localStorage.setItem("authToken", keycloak.token);
-          navigate("/home");
-        } else {
-          console.warn("Token expired. Consider refreshing the token.");
-        }
-      }
     } catch (error) {
       console.error(
         "Login failed:",
@@ -77,11 +48,12 @@ const Login: React.FC = () => {
       );
     }
   };
+  // useEffect(() => {});
   return (
     <Layout isNavbar={false} isBottombar={false}>
       <Flex height="50%" justifyContent="flex-end" className="purple-bg">
         <Image
-          src="../assets/images/frame.png"
+          src={frameImage}
           alt="Login Image"
           objectFit="contain"
           transform="translateX(-50%)"
@@ -112,17 +84,15 @@ const Login: React.FC = () => {
           label={t("LOGIN_REGISTER_BUTTON")}
           mt={8}
         />
-        <Button
-          className="outline-custom-btn"
-          variant="outline"
-          mt={2}
+        <CommonButton
           onClick={handleLogin}
-        >
-          {t("LOGIN_LOGIN_BUTTON")}
-        </Button>
+          label={t("LOGIN_LOGIN_BUTTON")}
+          mt={8}
+          variant="outline"
+        />
       </Stack>
     </Layout>
   );
 };
 
-export default Login;
+export default Splash;

@@ -5,7 +5,7 @@ const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 interface UserData {
   firstName?: string;
   lastName?: string;
-  phone_number?: string;
+  phoneNumber?: string;
 }
 interface RegisterResponse {
   // Define the expected response structure from the API
@@ -15,7 +15,7 @@ interface RegisterResponse {
   // Add other properties if necessary
 }
 interface MobileData {
-  phone_number: string;
+  phoneNumber: string;
   otp: number;
   token: string;
 }
@@ -212,7 +212,7 @@ export const getApplicationDetails = async (applicationId: string | number) => {
 export const sendOTP = async (mobileNumber: string) => {
   try {
     const payload = {
-      phone_number: mobileNumber,
+      phoneNumber: mobileNumber,
     };
     const response = await axios.post(`${apiBaseUrl}/otp/send_otp`, payload);
     return response?.data?.data;

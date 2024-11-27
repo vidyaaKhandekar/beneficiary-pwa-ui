@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Box, VStack } from "@chakra-ui/react";
-
 import { getUser, getDocumentsList } from "../services/auth/auth";
 import { useNavigate } from "react-router-dom";
 import CommonButton from "../components/common/button/Button";
@@ -9,7 +8,7 @@ import { AuthContext } from "../utils/context/checkToken";
 import { useTranslation } from "react-i18next";
 import DocumentList from "../components/DocumentList";
 import { useKeycloak } from "@react-keycloak/web";
-
+import "../assets/styles/App.css";
 import UploadDocumentEwallet from "../components/common/UploadDocumentEwallet";
 
 const Home: React.FC = () => {
@@ -59,7 +58,6 @@ const Home: React.FC = () => {
       _heading={{
         beneficiary: true,
         heading: `${userData?.firstName || ""} ${userData?.lastName || ""}`,
-        subHeading: t("PROFILE_LOGGED_IN_WITH_E_Wallet"),
         label: keycloak.tokenParsed?.preferred_username,
       }}
     >

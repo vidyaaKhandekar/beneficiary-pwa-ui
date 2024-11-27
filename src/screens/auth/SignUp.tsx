@@ -122,7 +122,7 @@ const Signup: React.FC = () => {
     if (otpToken) {
       setLoading(false);
       const verifyOTPResponse = await verifyOTP({
-        phone_number: formattedMobile,
+        phoneNumber: formattedMobile,
         otp: Number(userDetails.otp),
         token: otpToken,
       });
@@ -132,7 +132,7 @@ const Signup: React.FC = () => {
         const response = await registerUser({
           firstName: userDetails.firstName,
           lastName: userDetails.lastName,
-          phone_number: userDetails.mobile,
+          phoneNumber: userDetails.mobile,
         });
         if (response && response?.statusCode === 200) {
           setLoading(false);

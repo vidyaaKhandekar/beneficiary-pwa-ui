@@ -7,6 +7,7 @@ interface CustomButton {
   width?: string;
   label?: string;
   isDisabled?: boolean;
+  variant?: string;
 }
 
 const CommonButton: React.FC<CustomButton> = ({
@@ -15,10 +16,11 @@ const CommonButton: React.FC<CustomButton> = ({
   width = "100%",
   label = "Submit",
   isDisabled = false,
+  variant = "solid",
 }) => {
   return (
     <Button
-      className="custom-btn"
+      className={variant === "solid" ? "custom-btn" : "outline-custom-btn"}
       type="submit"
       mt={mt}
       width={width}

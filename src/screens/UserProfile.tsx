@@ -4,9 +4,9 @@ import {
   Box,
   Flex,
   HStack,
-  IconButton,
+  // IconButton,
   Text,
-  Tooltip,
+  // Tooltip,
   VStack,
 } from "@chakra-ui/react";
 
@@ -21,12 +21,16 @@ import UserDetails from "../components/common/UserDetails";
 
 import UploadDocumentEwallet from "../components/common/UploadDocumentEwallet";
 import CommonButton from "../components/common/button/Button";
-import { EditIcon } from "@chakra-ui/icons";
+// import { EditIcon } from "@chakra-ui/icons";
 
 const UserProfile: React.FC = () => {
   const [showIframe, setShowIframe] = useState(true);
   const { userData, documents, updateUserData } = useContext(AuthContext)!;
   const navigate = useNavigate();
+  const handleBack = () => {
+    console.log("Calling");
+    navigate(-1);
+  };
   // Function to fetch user data and documents
   const init = async () => {
     try {
@@ -44,9 +48,6 @@ const UserProfile: React.FC = () => {
     }
   }, [userData, documents]);
 
-  const handleBack = () => {
-    navigate(-1);
-  };
   return (
     <Layout
       _heading={{

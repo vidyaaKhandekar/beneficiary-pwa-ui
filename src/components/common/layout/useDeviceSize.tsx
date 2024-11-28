@@ -14,38 +14,22 @@ function useDeviceSize({
   maxWidth = 550,
   maxHeight,
 }: UseDeviceSizeProps = {}): DeviceSize {
+  const getDeviceWidth = (): number => {
+    if (typeof window === "undefined") return 0;
+    return maxWidth ? Math.min(window.innerWidth, maxWidth) : window.innerWidth;
+  };
+
+  const getDeviceHeight = (): number => {
+    if (typeof window === "undefined") return 0;
+    return maxHeight
+      ? Math.min(window.innerHeight, maxHeight)
+      : window.innerHeight;
+  };
+
   const [size, setSize] = useState<DeviceSize>(() => ({
-    width:
-      typeof window !== "undefined"
-        ? maxWidth
-          ? Math.min(window.innerWidth, maxWidth)
-          : window.innerWidth
-        : 0,
-    height:
-      typeof window !== "undefined"
-        ? maxHeight
-          ? Math.min(window.innerHeight, maxHeight)
-          : window.innerHeight
-        : 0,
+    width: getDeviceWidth(),
+    height: getDeviceHeight(),
   }));
-
-  useEffect(() => {
-    const handleResize = () => {
-      setSize({
-        width: maxWidth
-          ? Math.min(window.innerWidth, maxWidth)
-          : window.innerWidth,
-        height: maxHeight
-          ? Math.min(window.innerHeight, maxHeight)
-          : window.innerHeight,
-      });
-    };
-
-    window.addEventListener("resize", handleResize);
-    handleResize(); // initial call to set size
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, [maxWidth, maxHeight]);
 
   return size;
 }

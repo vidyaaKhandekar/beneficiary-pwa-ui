@@ -26,9 +26,8 @@ const Navbar: React.FC<{ isMenu?: boolean }> = ({ isMenu = true }) => {
   const { t } = useTranslation();
   const { keycloak } = useKeycloak();
   const handleLogout = async () => {
-    navigate("/");
     localStorage.removeItem("authToken");
-    keycloak.logout();
+    keycloak.logout({ redirectUri: window.location.origin });
   };
 
   return (

@@ -1,4 +1,3 @@
-// CommonDialogue.js
 import {
   Modal,
   ModalOverlay,
@@ -15,24 +14,34 @@ import {
   AccordionPanel,
   AccordionIcon,
 } from "@chakra-ui/react";
-import CommonButton from "../button/Button";
+import CommonButton from "./button/Button";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
-interface CommonDialogueProps {
-  isOpen: boolean;
-  onClose: () => void;
-  termsAndConditions: boolean;
+interface Term {
+  title?: string;
+  description?: string;
+  list?: {
+    value: string;
+  }[];
 }
-
+interface CommonDialogueProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+  termsAndConditions?: Term[];
+  handleDialog?: () => void;
+}
 const CommonDialogue: React.FC<CommonDialogueProps> = ({
   isOpen,
   onClose,
   termsAndConditions,
+  handleDialog,
 }) => {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   const handleAccordionChange = (expandedIndex) => {
     setIsAccordionOpen(expandedIndex.length > 0);
   };
+  const { t } = useTranslation();
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -47,34 +56,43 @@ const CommonDialogue: React.FC<CommonDialogueProps> = ({
             </>
           )}
         </ModalHeader>
-        <ModalCloseButton />
+        {!termsAndConditions && <ModalCloseButton />}
 
-        <ModalBody className="border-bottom">
+        <ModalBody
+          className="border-bottom"
+          maxHeight="400px" // Fixed height for Modal Body
+          overflowY="auto" // Enables scrolling for Modal Body
+        >
           {termsAndConditions ? (
             <>
               <Text mt={4} mb={10} fontWeight="500" fontSize="20px">
-                Share my documents with the provider for processing my
-                application
+                {t("CONFIRMATION_DIALOGUE_CONSENT_TEXT")}
               </Text>
               <Text mt={4} mb={4} fontWeight="normal" fontSize="17px">
-                Read and accept before you proceed
+                {t("DIALOGUE_CLICK_TO_READ_AND_PROCEED")}
               </Text>
               <Accordion allowMultiple onChange={handleAccordionChange}>
                 <AccordionItem>
                   <h2>
                     <AccordionButton>
                       <Box flex="1" textAlign="left">
-                        Terms and Conditions
+                        {t("DIALOGUE_T&C")}
                       </Box>
                       <AccordionIcon />
                     </AccordionButton>
                   </h2>
-                  <AccordionPanel pb={4}>
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book.
+                  <AccordionPanel
+                    pb={4}
+                    maxHeight="200px" // Fixed height for Accordion Panel
+                    overflowY="auto" // Enables scrolling for Accordion Panel
+                  >
+                    <div>
+                      {termsAndConditions?.map((item, index) => (
+                        <Text color={"#4D4639"} size="16px" key={index + 100}>
+                          {index + 1}. {item.description}
+                        </Text>
+                      ))}
+                    </div>
                   </AccordionPanel>
                 </AccordionItem>
               </Accordion>
@@ -89,19 +107,20 @@ const CommonDialogue: React.FC<CommonDialogueProps> = ({
               <CommonButton
                 variant="outline"
                 onClick={onClose}
-                label="Deny"
+                label={t("CONFIRMATION_DIALOGUE_DENY")}
                 isDisabled={!isAccordionOpen}
               />
               <Box ml={2}>
-                <CommonButton label="Accept" isDisabled={!isAccordionOpen} />
+                <CommonButton
+                  label={t("CONFIRMATION_DIALOGUE_ACCEPT")}
+                  isDisabled={!isAccordionOpen}
+                  onClick={handleDialog}
+                />
               </Box>
             </>
           ) : (
             ""
           )}
-          {/* <Button colorScheme="blue" mr={3} onClick={onClose}>
-            Close
-          </Button> */}
         </ModalFooter>
       </ModalContent>
     </Modal>

@@ -16,7 +16,6 @@ import ConfirmationDialog from "../../components/ConfirmationDialog";
 import { useTranslation } from "react-i18next";
 import Toaster from "../../components/common/ToasterMessage";
 import { saveToken } from "../../services/auth/asyncStorage";
-import { useKeycloak } from "@react-keycloak/web";
 
 const SignIn: React.FC = () => {
   const navigate = useNavigate();
@@ -29,7 +28,6 @@ const SignIn: React.FC = () => {
   const [dialogVisible, setDialogVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState(false);
   const [success, setSuccess] = useState<string>("");
-  const { keycloak } = useKeycloak();
 
   const { checkToken, documents, updateUserData, userData } =
     useContext(AuthContext)!;
@@ -122,7 +120,7 @@ const SignIn: React.FC = () => {
           </FormControl>
           <CommonButton
             isDisabled={!isFormValid || loading}
-            onClick={() => keycloak.login()}
+            onClick={() => handleLogin}
             label="Sign In"
           />
         </VStack>

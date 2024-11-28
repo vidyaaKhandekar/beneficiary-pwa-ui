@@ -7,13 +7,7 @@ interface UserData {
   lastName?: string;
   phoneNumber?: string;
 }
-interface RegisterResponse {
-  // Define the expected response structure from the API
-  success: boolean;
-  message: string;
-  statusCode: string | number;
-  // Add other properties if necessary
-}
+
 interface MobileData {
   phoneNumber: string;
   otp: number;
@@ -91,13 +85,32 @@ export const getUser = async () => {
     }
   }
 };
-
-export const sendConsent = async (user_id: string | number) => {
+export const getUserConsents = async () => {
+  try {
+    const token = localStorage.getItem("authToken");
+    const response = await axios.get(`${apiBaseUrl}/users/get_my_consents`, {
+      headers: {
+        Accept: "*/*",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching consents:", error);
+    throw new Error("Error fetching consents");
+  }
+};
+export const sendConsent = async (
+  user_id: string | number,
+  purpose?: string,
+  purpose_text?: string
+) => {
   const token = localStorage.getItem("authToken");
   const data = {
     user_id: user_id,
-    purpose: "Confirmation to access documents",
-    purpose_text: "Confirmation to access documents",
+    purpose: purpose,
+    purpose_text: purpose_text,
     accepted: true,
   };
   const headers = {

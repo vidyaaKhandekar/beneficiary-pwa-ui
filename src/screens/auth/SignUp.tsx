@@ -15,7 +15,6 @@ import Layout from "../../components/common/layout/Layout";
 import FloatingInput from "../../components/common/input/Input";
 import { useTranslation } from "react-i18next";
 import Toaster from "../../components/common/ToasterMessage";
-import CommonDialogue from "../../components/common/layout/Dialogue";
 import { registerUser, sendOTP, verifyOTP } from "../../services/auth/auth";
 import Loader from "../../components/common/Loader";
 
@@ -44,12 +43,8 @@ const Signup: React.FC = () => {
   const [mobileError, setMobileError] = useState<string>("");
   const [toastMessage, setToastMessage] = useState(false);
   const [otpToken, setOtpToken] = useState<string>("");
-
   const otpArray = Array(6).fill("");
-  const [modalOpen, setModalOpen] = useState(false);
   const [timer, setTimer] = React.useState(300);
-  const termsAndConditions = true;
-  const closeModal = () => setModalOpen(false);
 
   const handleBack = () => {
     navigate(-1);
@@ -277,12 +272,6 @@ const Signup: React.FC = () => {
           </Text>
         </Center>
       </Box>
-
-      <CommonDialogue
-        isOpen={modalOpen}
-        onClose={closeModal}
-        termsAndConditions={termsAndConditions}
-      />
 
       {toastMessage && success && <Toaster message={success} type="success" />}
       {toastMessage && errorMsg && <Toaster message={errorMsg} type="error" />}

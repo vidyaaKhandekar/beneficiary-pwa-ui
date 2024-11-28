@@ -32,7 +32,6 @@ interface BenefitCardProps {
 }
 
 const BenefitCard: React.FC<BenefitCardProps> = ({ item }) => {
-  console.log("benefit", item);
   const extractValuesByDescriptors = (data, descriptorCodes) => {
     const values = [];
 
@@ -57,16 +56,6 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ item }) => {
     "Gender-eligibility",
     "state-eligibility",
   ]);
-  const eligibilityStr = eligibility.join(", ");
-  console.log("eligibilityStr", eligibilityStr);
-
-  // const eligibility = () => {
-  //   const indices = [0, 2];
-  //   return indices.map((index) => {
-  //     return null; // Return null if the index or list is invalid
-  //   });
-  // };
-  //
 
   return (
     <Card
@@ -106,9 +95,9 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ item }) => {
         )}
         <Flex alignItems="center" mt={4}>
           {eligibility?.length > 0 ? (
-            eligibility.map((category, index) => (
+            eligibility.map((category) => (
               <Box
-                key={index}
+                key={category}
                 mr={2}
                 color={"#0037B9"}
                 border={"1px"}

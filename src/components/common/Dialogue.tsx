@@ -88,11 +88,9 @@ const CommonDialogue: React.FC<CommonDialogueProps> = ({
                   >
                     <div>
                       {termsAndConditions?.map((item, index) => (
-                        <div key={index}>
-                          <Text color={"#4D4639"} size="16px">
-                            {index + 1}. {item.description}
-                          </Text>
-                        </div>
+                        <Text color={"#4D4639"} size="16px">
+                          {index + 1}. {item.description}
+                        </Text>
                       ))}
                     </div>
                   </AccordionPanel>

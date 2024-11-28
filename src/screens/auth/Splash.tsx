@@ -17,7 +17,6 @@ import FloatingSelect from "../../components/common/input/FloatingSelect";
 
 import frameImage from "../../assets/images/frame.png";
 import { changeLanguage } from "i18next";
-import { changeLanguage } from "i18next";
 
 const Splash: React.FC = () => {
   const navigate = useNavigate();

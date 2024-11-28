@@ -108,8 +108,6 @@ const CommonDialogue: React.FC<CommonDialogueProps> = ({
             <>
               <CommonButton
                 variant="outline"
-              <CommonButton
-                variant="outline"
                 onClick={onClose}
                 label={t("CONFIRMATION_DIALOGUE_DENY")}
                 isDisabled={!isAccordionOpen}

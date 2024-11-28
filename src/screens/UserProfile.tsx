@@ -82,7 +82,7 @@ const UserProfile: React.FC = () => {
         </VStack>
       </HStack>
 
-      <Box shadow="md" borderWidth="1px" borderRadius="md" p={3}>
+      <Box shadow="md" borderWidth="1px" borderRadius="md" p={2}>
         <ProgressBar
           totalDocuments={10}
           presentDocuments={userData?.docs?.length}

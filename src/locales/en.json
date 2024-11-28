@@ -75,5 +75,6 @@
   "USER_PROFILE_HEADING": "My Profile",
   "USER_PROFILE_BASIC_DETAILS": "Basic Details",
   "USER_PROFILE_UPLOAD_MISSING_DOCUMENTS": "Upload Missing Documents",
-  "USER_PROFILE_ERROR_FETCHING_DATA": "Error fetching user data or documents"
+  "USER_PROFILE_ERROR_FETCHING_DATA": "Error fetching user data or documents",
+  "UPLOAD_DOCUMENT_EWALLET": "Upload Missing Document"
 }

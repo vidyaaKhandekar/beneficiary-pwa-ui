@@ -30,17 +30,24 @@ const BottomBar: React.FC<FooterProps> = ({ setRef, ...props }) => {
       bottom="0"
       ref={(e) => typeof setRef === "function" && setRef(e)}
       {...props}
-      zIndex={10}
+      zIndex={999}
+      pb={2}
     >
       <HStack
         bg="primary.50"
         alignItems="center"
         borderTopWidth={"1px"}
-        borderTopColor={"back"}
+        borderTopColor={"#DDDDDD"}
         shadow={"FooterShadow"}
         justifyContent={"space-around"}
       >
-        <Box alignItems="center" onClick={() => handleNavigation("/home")}>
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          onClick={() => handleNavigation("/home")}
+        >
           <IconButton
             aria-label="Home"
             icon={<MdHome />}
@@ -54,7 +61,10 @@ const BottomBar: React.FC<FooterProps> = ({ setRef, ...props }) => {
         </Box>
 
         <Box
+          display="flex"
+          flexDirection="column"
           alignItems="center"
+          justifyContent="center"
           onClick={() => handleNavigation("/explorebenefits")}
         >
           <IconButton
@@ -70,7 +80,10 @@ const BottomBar: React.FC<FooterProps> = ({ setRef, ...props }) => {
         </Box>
 
         <Box
+          display="flex"
+          flexDirection="column"
           alignItems="center"
+          justifyContent="center"
           onClick={() => handleNavigation("/applicationstatus")}
         >
           <IconButton

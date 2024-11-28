@@ -50,9 +50,12 @@ const Layout: React.FC<LayoutProps> = ({
   const { onSearch } = _heading;
   const navHeader = useRef<HTMLDivElement>(null);
   const [bodyHeight, setBodyHeight] = useState<number | undefined>(undefined);
-
+  const BOTTOM_BAR_HEIGHT = 96;
   useEffect(() => {
-    setBodyHeight(height - (96 + (navHeader?.current?.clientHeight || 0)));
+    const navHeight = navHeader?.current?.clientHeight ?? 0;
+    if (height && navHeight >= 0) {
+      setBodyHeight(height - (BOTTOM_BAR_HEIGHT + navHeight));
+    }
   }, [height, navHeader?.current?.clientHeight]);
 
   return (

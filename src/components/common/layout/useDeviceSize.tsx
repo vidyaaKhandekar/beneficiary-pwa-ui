@@ -14,10 +14,20 @@ function useDeviceSize({
   maxWidth = 550,
   maxHeight,
 }: UseDeviceSizeProps = {}): DeviceSize {
-  const [size, setSize] = useState<DeviceSize>({
-    width: 0,
-    height: 0,
-  });
+  const [size, setSize] = useState<DeviceSize>(() => ({
+    width:
+      typeof window !== "undefined"
+        ? maxWidth
+          ? Math.min(window.innerWidth, maxWidth)
+          : window.innerWidth
+        : 0,
+    height:
+      typeof window !== "undefined"
+        ? maxHeight
+          ? Math.min(window.innerHeight, maxHeight)
+          : window.innerHeight
+        : 0,
+  }));
 
   useEffect(() => {
     const handleResize = () => {

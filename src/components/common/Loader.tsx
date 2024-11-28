@@ -4,7 +4,7 @@ const Loader = () => {
   return (
     <VStack>
       <Spinner color="var(--theme-color)" />
-      <Text color="var(--theme-color)"> Loding...</Text>
+      <Text color="var(--theme-color)"> Loading...</Text>
     </VStack>
   );
 };

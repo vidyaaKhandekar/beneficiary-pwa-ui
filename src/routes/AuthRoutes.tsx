@@ -38,6 +38,10 @@ const routes = [
     path: "/applicationStatus",
     component: MyApplications,
   },
+  // {
+  //   path: "/editProfile",
+  //   component: EditProfile,
+  // },
   {
     path: "*",
     component: Home,

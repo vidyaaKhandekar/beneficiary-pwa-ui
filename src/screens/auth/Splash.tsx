@@ -12,11 +12,10 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import "../../assets/styles/App.css";
 import CommonButton from "../../components/common/button/Button";
-import i18n from "../../components/common/i18n";
 import FloatingSelect from "../../components/common/input/FloatingSelect";
 import Layout from "../../components/common/layout/Layout";
-
 import frameImage from "../../assets/images/frame.png";
+import { changeLanguage } from "i18next";
 
 const Splash: React.FC = () => {
   const navigate = useNavigate();
@@ -31,7 +30,7 @@ const Splash: React.FC = () => {
       ...prevData,
       [name]: value,
     }));
-    i18n.changeLanguage(value);
+    changeLanguage(value);
   };
 
   const handleRedirect = () => {

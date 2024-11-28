@@ -25,6 +25,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useKeycloak } from "@react-keycloak/web";
 import { AuthProvider } from "./utils/context/checkToken";
 import "./assets/styles/App.css";
+import Layout from "./components/common/layout/Layout";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -52,7 +53,7 @@ function App() {
   if (loading) {
     return (
       <ChakraProvider theme={theme}>
-        <Loader />
+        <Layout loading />
       </ChakraProvider>
     );
   }

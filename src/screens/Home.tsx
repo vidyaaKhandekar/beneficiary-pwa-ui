@@ -61,7 +61,7 @@ const Home: React.FC = () => {
         label: keycloak.tokenParsed?.preferred_username,
       }}
     >
-      <Box shadow="md" borderWidth="1px" borderRadius="md" p={3}>
+      <Box shadow="md" borderWidth="1px" borderRadius="md" p={2}>
         <VStack spacing={4} align="stretch">
           <DocumentList documents={documents} userData={userData?.docs} />
           <CommonButton

@@ -1,9 +1,12 @@
-import React from "react";
-import { Box, Flex, Spinner } from "@chakra-ui/react";
+import React, { useEffect, useRef, useState } from "react";
+import { Box, Center } from "@chakra-ui/react";
+import useDeviceSize from "./useDeviceSize";
+
 import Navbar from "./Navbar"; // Import your Navbar component
 import HeadingText from "./HeadingText"; // Import your HeadingText component
 import BottomBar from "./BottomBar";
 import SearchBar from "./SearchBar";
+import Loader from "../Loader";
 
 interface LayoutProps {
   isScrollable?: boolean;
@@ -34,7 +37,6 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({
-  isScrollable = true,
   loading,
   children,
   isMenu = true,
@@ -44,57 +46,60 @@ const Layout: React.FC<LayoutProps> = ({
   isBottombar = true,
   isSearchbar = false,
 }) => {
+  const { width, height } = useDeviceSize();
   const { onSearch } = _heading;
-
-  if (loading) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center">
-        <Spinner size="lg" />
-      </Box>
-    );
-  }
+  const navHeader = useRef<HTMLDivElement>(null);
+  const [bodyHeight, setBodyHeight] = useState<number | undefined>(undefined);
+  const BOTTOM_BAR_HEIGHT = 96;
+  useEffect(() => {
+    const navHeight = navHeader?.current?.clientHeight ?? 0;
+    if (height && navHeight >= 0) {
+      setBodyHeight(height - (BOTTOM_BAR_HEIGHT + navHeight));
+    }
+  }, [height, navHeader?.current?.clientHeight]);
 
   return (
-    <Box>
-      <Box className="main-bg">
-        <Flex
-          height="100vh"
-          alignItems="center"
-          justifyContent="center"
-          position="relative"
+    <Center
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+      className="main-bg"
+    >
+      {loading || width === 0 ? (
+        <Loader />
+      ) : (
+        <Box
+          overflowY={"scroll"}
+          sx={{ "&::-webkit-scrollbar": { display: "none" } }}
+          height={height}
+          width={width}
+          bg="white"
+          boxShadow="0px 0px 15px 0px #e1e1e1"
         >
+          {isNavbar && (
+            <Box ref={navHeader} width={width} bg={"white"}>
+              <Navbar isMenu={isMenu} />
+              <HeadingText {..._heading} />
+              {isSearchbar && onSearch && <SearchBar onSearch={onSearch} />}
+              {afterHeader}
+            </Box>
+          )}
           <Box
-            width="550px"
-            height="100vh"
-            shadow="lg"
-            background="#fff"
-            className="layout"
-            position="relative"
-            overflow="hidden"
+            overflowY={"scroll"}
+            sx={{ "&::-webkit-scrollbar": { display: "none" } }}
+            height={bodyHeight}
           >
-            {isNavbar && (
-              <>
-                <Navbar isMenu={isMenu} />
-                <HeadingText {..._heading} />
-                {isSearchbar && onSearch && <SearchBar onSearch={onSearch} />}
-                {afterHeader}
-              </>
-            )}
-            {loading ? (
-              <Flex align="center" justify="center" height="100vh" bg="#F7F7F7">
-                <Spinner size="xl" color="teal.500" />
-              </Flex>
-            ) : (
-              <Box overflow={isScrollable ? "auto" : "hidden"} flex="1">
-                {children}
-              </Box>
-            )}
-
-            {isBottombar && <BottomBar />}
+            {children}
           </Box>
-        </Flex>
-      </Box>
-    </Box>
+          {isBottombar && (
+            <>
+              <Box minH={"96px"} />
+              <BottomBar />
+            </>
+          )}
+        </Box>
+      )}
+    </Center>
   );
 };
 

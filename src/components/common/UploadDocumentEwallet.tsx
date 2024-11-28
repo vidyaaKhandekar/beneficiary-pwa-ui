@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useRef } from "react";
-import OutlineButton from "./button/OutlineButton";
 import { processDocuments } from "../../utils/jsHelper/helper";
 import { uploadUserDocuments } from "../../services/user/User";
 import { getDocumentsList, getUser } from "../../services/auth/auth";
 import { AuthContext } from "../../utils/context/checkToken";
+import CommonButton from "./button/Button";
+import { useTranslation } from "react-i18next";
+
 const VITE_EWALLET_ORIGIN = import.meta.env.VITE_EWALLET_ORIGIN;
 const VITE_EWALLET_IFRAME_SRC = import.meta.env.VITE_EWALLET_IFRAME_SRC;
 const UploadDocumentEwallet = ({ userId }) => {
-  console.log("userId", userId);
+  const { t } = useTranslation();
   const { updateUserData } = useContext(AuthContext)!;
   const iframeRef = useRef(null);
 
@@ -63,9 +65,11 @@ const UploadDocumentEwallet = ({ userId }) => {
 
   return (
     <div>
-      <OutlineButton
-        label="Upload Missing Document"
+      <CommonButton
         onClick={sendMessageToIframe}
+        label={t("UPLOAD_DOCUMENT_EWALLET")}
+        mt={2}
+        variant="outline"
       />
 
       <iframe

@@ -135,7 +135,7 @@ const uiSchema = {
 };
 
 // Main Component
-const StudentForm = () => {
+const EditProfile = () => {
   const navigate = useNavigate();
   const { userData, updateUserData } = useContext(AuthContext); // Access userData from context
   const [formData, setFormData] = useState<any>(null); // Manage form state
@@ -210,4 +210,4 @@ const StudentForm = () => {
   );
 };
 
-export default StudentForm;
+export default EditProfile;

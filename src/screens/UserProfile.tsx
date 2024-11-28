@@ -52,7 +52,9 @@ const UserProfile: React.FC = () => {
     <Layout
       _heading={{
         heading: "My Profile",
-        handleBack,
+        handleBack: () => {
+          handleBack();
+        },
       }}
     >
       <HStack m={5} mt={0} p={0} h={82}>
@@ -61,7 +63,7 @@ const UserProfile: React.FC = () => {
           name={`${userData?.firstName || ""} ${userData?.lastName || ""}`}
           mr={2}
         />
-        <VStack mt={8} ml={1}>
+        <VStack mt={8}>
           <Text
             fontSize="16px"
             fontWeight="500"
@@ -76,8 +78,9 @@ const UserProfile: React.FC = () => {
             fontWeight="500"
             lineHeight="24px"
             color="#433E3F"
+            alignSelf={"flex-start"}
           >
-            {userData?.phoneNumber || "Phone No"}
+            +91 {userData?.phoneNumber || "Phone No"}
           </Text>
         </VStack>
       </HStack>

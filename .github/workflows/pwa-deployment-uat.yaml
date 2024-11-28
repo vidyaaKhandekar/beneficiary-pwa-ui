@@ -56,5 +56,5 @@ jobs:
               aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_UAT }} --paths "/*"
       - name: Post job cleanup
         run: |
-    # Cleanup commands
+    # Cleanup commands test
         continue-on-error: true

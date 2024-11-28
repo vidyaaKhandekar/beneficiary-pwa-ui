@@ -1,6 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Box, VStack } from "@chakra-ui/react";
-import { getUser, getDocumentsList } from "../services/auth/auth";
+import {
+  getUser,
+  getDocumentsList,
+  sendConsent,
+  getUserConsents,
+} from "../services/auth/auth";
 import { useNavigate } from "react-router-dom";
 import CommonButton from "../components/common/button/Button";
 import Layout from "../components/common/layout/Layout";
@@ -10,18 +15,20 @@ import DocumentList from "../components/DocumentList";
 import { useKeycloak } from "@react-keycloak/web";
 import "../assets/styles/App.css";
 import UploadDocumentEwallet from "../components/common/UploadDocumentEwallet";
-
+import CommonDialogue from "../components/common/Dialogue";
+import { termsAndConditions } from "../assets/termsAndCondition";
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [showIframe, setShowIframe] = useState(true);
+  const [consentSaved, setConsentSaved] = useState(false);
+  const { keycloak } = useKeycloak();
+  const { userData, documents, updateUserData } = useContext(AuthContext)!;
+  const purpose = "sign_up_tnc";
+  const purpose_text = "sign_up_tnc";
   const handleRedirect = () => {
     navigate("/explorebenefits");
   };
-
-  const { userData, documents, updateUserData } = useContext(AuthContext)!;
-
-  // Function to fetch user data and documents
   const init = async () => {
     try {
       const result = await getUser();
@@ -32,27 +39,47 @@ const Home: React.FC = () => {
     }
   };
 
+  const handleConsent = () => {
+    setConsentSaved(!consentSaved);
+    keycloak.logout();
+    localStorage.removeItem("authToken");
+  };
+
+  const checkConsent = (consent) => {
+    const isPurposeMatched = consent.some((item) => item.purpose === purpose);
+
+    if (!isPurposeMatched) {
+      setConsentSaved(true);
+    }
+  };
+  const getConset = async () => {
+    try {
+      const response = await getUserConsents();
+      console.log("response1", response.data.data);
+
+      checkConsent(response?.data.data);
+    } catch (error) {
+      console.log("Failed to load consents", error);
+    }
+  };
+  const saveConsent = async () => {
+    try {
+      await sendConsent(userData?.user_id, purpose, purpose_text);
+
+      setConsentSaved(false);
+    } catch {
+      console.log("Error sending consent");
+    }
+  };
+
   useEffect(() => {
     if (!userData || !documents || documents.length === 0) {
       init();
     }
   }, [userData, documents]);
-
-  const { keycloak } = useKeycloak();
-
-  if (keycloak?.token) {
-    try {
-      // Save the token in localStorage
-      localStorage.setItem("authToken", keycloak.token);
-
-      // Decode the token
-    } catch (error) {
-      console.error("Failed to decode or save token:", error);
-    }
-  } else {
-    console.warn("No token available on Keycloak instance.");
-  }
-
+  useEffect(() => {
+    getConset();
+  }, []);
   return (
     <Layout
       _heading={{
@@ -71,13 +98,18 @@ const Home: React.FC = () => {
           {showIframe ? (
             <UploadDocumentEwallet userId={userData?.user_id} />
           ) : (
-            <CommonButton
-              onClick={() => setShowIframe(true)}
-              label="Upload  Document"
-            />
+            <CommonButton onClick={() => setShowIframe(true)} />
           )}
         </VStack>
       </Box>
+      {consentSaved && (
+        <CommonDialogue
+          isOpen={consentSaved}
+          onClose={handleConsent}
+          termsAndConditions={termsAndConditions}
+          handleDialog={saveConsent}
+        />
+      )}
     </Layout>
   );
 };

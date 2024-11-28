@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 interface UseDeviceSizeProps {
   maxWidth?: number;
@@ -26,7 +26,7 @@ function useDeviceSize({
       : window.innerHeight;
   };
 
-  const [size, setSize] = useState<DeviceSize>(() => ({
+  const [size] = useState<DeviceSize>(() => ({
     width: getDeviceWidth(),
     height: getDeviceHeight(),
   }));

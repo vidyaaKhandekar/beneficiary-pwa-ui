@@ -28,7 +28,7 @@ const BackIcon: React.FC<{ onClick: () => void; iconSize?: number }> = ({
     onClick={onClick}
     variant="ghost"
     size="sm"
-    bg="red"
+    bg="white"
     _hover={{ bg: "white" }}
     _active={{ bg: "white" }}
   />

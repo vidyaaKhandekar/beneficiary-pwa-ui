@@ -88,7 +88,7 @@ const CommonDialogue: React.FC<CommonDialogueProps> = ({
                   >
                     <div>
                       {termsAndConditions?.map((item, index) => (
-                        <Text color={"#4D4639"} size="16px">
+                        <Text color={"#4D4639"} size="16px" key={index + 100}>
                           {index + 1}. {item.description}
                         </Text>
                       ))}

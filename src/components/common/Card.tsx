@@ -95,9 +95,9 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ item }) => {
         )}
         <Flex alignItems="center" mt={2}>
           {eligibility?.length > 0 ? (
-            eligibility.map((category) => (
+            eligibility.map((category, index) => (
               <Box
-                key={category}
+                key={category + index}
                 mr={2}
                 color={"#0037B9"}
                 border={"1px"}

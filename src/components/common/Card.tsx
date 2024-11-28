@@ -97,7 +97,7 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ item }) => {
           {eligibility?.length > 0 ? (
             eligibility.map((category, index) => (
               <Box
-                key={category + index}
+                key={"Benefit" + index}
                 mr={2}
                 color={"#0037B9"}
                 border={"1px"}

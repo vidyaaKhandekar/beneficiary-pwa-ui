@@ -28,15 +28,14 @@ const UserProfile: React.FC = () => {
   const { userData, documents, updateUserData } = useContext(AuthContext)!;
   const navigate = useNavigate();
   const handleBack = () => {
-    console.log("Calling");
-    navigate(-1);
+    navigate(-2);
   };
   // Function to fetch user data and documents
   const init = async () => {
     try {
       const result = await getUser();
       const data = await getDocumentsList();
-      updateUserData(result?.data, data?.data); // Update user data and document list in context
+      updateUserData(result?.data, data?.data);
     } catch (error) {
       console.error("Error fetching user data or documents:", error);
     }

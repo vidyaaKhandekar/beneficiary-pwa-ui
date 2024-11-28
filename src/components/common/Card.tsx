@@ -79,7 +79,7 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ item }) => {
             align="center"
             flexDirection={"row"}
             alignItems={"center"}
-            mt={4}
+            mt={2}
           >
             {" "}
             <Icon as={MdCurrencyRupee} boxSize={4} color="#484848" />{" "}
@@ -93,7 +93,7 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ item }) => {
             </Text>{" "}
           </HStack>
         )}
-        <Flex alignItems="center" mt={4}>
+        <Flex alignItems="center" mt={2}>
           {eligibility?.length > 0 ? (
             eligibility.map((category) => (
               <Box

@@ -103,8 +103,8 @@ export const getUserConsents = async () => {
 };
 export const sendConsent = async (
   user_id: string | number,
-  purpose: string,
-  purpose_text: string
+  purpose?: string,
+  purpose_text?: string
 ) => {
   const token = localStorage.getItem("authToken");
   const data = {

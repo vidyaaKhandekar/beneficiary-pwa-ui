@@ -32,7 +32,6 @@ const Splash: React.FC = () => {
       [name]: value,
     }));
     changeLanguage(value);
-    changeLanguage(value);
   };
 
   const handleRedirect = () => {

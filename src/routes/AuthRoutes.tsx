@@ -17,11 +17,6 @@ const routes = [
     path: "/uploaddocuments",
     component: UploadDocuments,
   },
-
-  {
-    path: "/userprofile",
-    component: UserProfile,
-  },
   {
     path: "/explorebenefits",
     component: ExploreBenefits,
@@ -42,6 +37,10 @@ const routes = [
   //   path: "/editProfile",
   //   component: EditProfile,
   // },
+  {
+    path: "/userprofile",
+    component: UserProfile,
+  },
   {
     path: "*",
     component: Home,

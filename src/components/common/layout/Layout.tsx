@@ -56,7 +56,7 @@ const Layout: React.FC<LayoutProps> = ({
     if (height && navHeight >= 0) {
       setBodyHeight(height - (BOTTOM_BAR_HEIGHT + navHeight));
     }
-  }, [height, navHeader?.current?.clientHeight]);
+  }, [height, navHeader?.current?.clientHeight, _heading]);
 
   return (
     <Center
@@ -79,6 +79,7 @@ const Layout: React.FC<LayoutProps> = ({
           {isNavbar && (
             <Box ref={navHeader} width={width} bg={"white"}>
               <Navbar isMenu={isMenu} />
+
               <HeadingText {..._heading} />
               {isSearchbar && onSearch && <SearchBar onSearch={onSearch} />}
               {afterHeader}

@@ -95,7 +95,8 @@ const WebViewFormSubmitWithRedirect: React.FC<
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (event.origin !== import.meta.env.VITE_PROVIDER_URL) {
+      const childUrl = import.meta.env.VITE_PROVIDER_URL;
+      if (event.origin !== childUrl) {
         return;
       }
 
@@ -130,7 +131,6 @@ const WebViewFormSubmitWithRedirect: React.FC<
 
   const sendDataToIframe = async () => {
     const prefillData = transformData(formData);
-
     iframeRef.current.contentWindow.postMessage({ id, prefillData }, "*");
   };
 
@@ -142,12 +142,14 @@ const WebViewFormSubmitWithRedirect: React.FC<
       context: context,
     };
     const result = await confirmApplication(confirmPayload);
+
     setIsLoading(true);
     const orderId = (
       result as {
         data: { responses: { message: { order: { id: string } } }[] };
       }
     )?.data?.responses?.[0]?.message?.order?.id;
+
     if (orderId) {
       const payloadCreateApp = {
         user_id: formData?.user_id,
@@ -183,7 +185,9 @@ const WebViewFormSubmitWithRedirect: React.FC<
         ) : (
           <iframe
             ref={iframeRef}
-            src={url}
+            src={
+              "http://localhost:5174/uba-ui/benefit/PB-BTR-2024-11-26-000564/apply"
+            }
             style={{ width: "100%", height: "90vh" }}
             title="Form UI"
           ></iframe>

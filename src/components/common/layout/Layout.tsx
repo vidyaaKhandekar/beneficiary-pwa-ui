@@ -34,6 +34,7 @@ interface LayoutProps {
   };
   isBottombar?: boolean;
   isSearchbar?: boolean;
+  getBodyHeight?: (height: number) => void;
 }
 
 const Layout: React.FC<LayoutProps> = ({
@@ -45,16 +46,21 @@ const Layout: React.FC<LayoutProps> = ({
   _heading = {},
   isBottombar = true,
   isSearchbar = false,
+  getBodyHeight,
 }) => {
   const { width, height } = useDeviceSize();
   const { onSearch } = _heading;
   const navHeader = useRef<HTMLDivElement>(null);
   const [bodyHeight, setBodyHeight] = useState<number | undefined>(undefined);
-  const BOTTOM_BAR_HEIGHT = 96;
+  const BOTTOM_BAR_HEIGHT = 67;
   useEffect(() => {
     const navHeight = navHeader?.current?.clientHeight ?? 0;
     if (height && navHeight >= 0) {
-      setBodyHeight(height - (BOTTOM_BAR_HEIGHT + navHeight));
+      const resultHeight = height - (BOTTOM_BAR_HEIGHT + navHeight);
+      setBodyHeight(resultHeight);
+      if (getBodyHeight) {
+        getBodyHeight(resultHeight);
+      }
     }
   }, [height, navHeader?.current?.clientHeight, _heading]);
 
@@ -94,7 +100,7 @@ const Layout: React.FC<LayoutProps> = ({
           </Box>
           {isBottombar && (
             <>
-              <Box minH={"96px"} />
+              <Box minH={"67px"} />
               <BottomBar />
             </>
           )}

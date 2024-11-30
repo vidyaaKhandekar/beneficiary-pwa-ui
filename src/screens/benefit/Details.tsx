@@ -23,6 +23,8 @@ import Layout from "../../components/common/layout/Layout";
 import { getUser } from "../../services/auth/auth";
 import {
   applyApplication,
+  confirmApplication,
+  createApplication,
   getApplication,
   getOne,
 } from "../../services/benefit/benefits";
@@ -86,7 +88,7 @@ const BenefitsDetails: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [isApplied, setIsApplied] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const [authUser, setAuthUser] = useState<Object | null>(null);
+  const [authUser, setAuthUser] = useState<AuthUser | null>(null);
   const [webFormProp, setWebFormProp] = useState<WebFormProps>({});
   const [confirmationConsent, setConfirmationConsent] =
     useState<unknown>(false);
@@ -182,6 +184,48 @@ const BenefitsDetails: React.FC = () => {
     };
   }, [id]);
 
+  const submitConfirm = async (payload) => {
+    const confirmPayload = {
+      submission_id: payload?.submit.submission_id,
+      item_id: payload?.submit.application_id,
+      benefit_id: id,
+      context: context,
+    };
+    setLoading(true);
+    try {
+      const result = await confirmApplication(confirmPayload);
+      const orderId = (
+        result as {
+          data: { responses: { message: { order: { id: string } } }[] };
+        }
+      )?.data?.responses?.[0]?.message?.order?.id;
+      if (orderId) {
+        const payloadCreateApp = {
+          user_id: authUser?.user_id,
+          benefit_id: id,
+          benefit_provider_id: context?.bpp_id,
+          benefit_provider_uri: context?.bap_uri,
+          external_application_id: orderId,
+          application_name: item?.descriptor?.name,
+          status: "submitted",
+          application_data: payload?.userData,
+        };
+
+        await createApplication(payloadCreateApp);
+        setConfirmationConsent({ orderId, name: item?.descriptor?.name });
+      } else {
+        setError("Error while creating application. Please try again later");
+      }
+    } catch (e) {
+      if (e instanceof Error) {
+        setError(`Error: ${e.message}`);
+      } else {
+        setError("An unexpected error occurred");
+      }
+    }
+    setLoading(false);
+  };
+
   if (loading) {
     return (
       <Box
@@ -217,7 +261,7 @@ const BenefitsDetails: React.FC = () => {
         {...webFormProp}
         context={context}
         item={item}
-        // setPageContent={submitConfirm}
+        submitConfirm={submitConfirm}
       />
     );
   }

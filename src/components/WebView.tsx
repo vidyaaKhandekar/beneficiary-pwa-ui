@@ -1,16 +1,8 @@
 import { Box } from "@chakra-ui/react";
 // import axios from "axios";
-import { useEffect, useRef, useState } from "react";
-import Loader from "./common/Loader";
-import Layout from "./common/layout/Layout";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useRef } from "react";
 import { transformData } from "../utils/jsHelper/helper";
-import {
-  confirmApplication,
-  createApplication,
-} from "../services/benefit/benefits";
-import SubmitDialog from "./SubmitDialog";
-// import { getUser } from "../services/auth/auth";
+import Layout from "./common/layout/Layout";
 interface FormData {
   user_id?: string;
   name?: string;
@@ -40,23 +32,9 @@ interface WebViewFormSubmitWithRedirectProps {
   formData?: FormData;
   context?: FinancialSupportRequest;
   item?: BenefitItem;
-  setPageContent?: (content: string) => void;
+  submitConfirm?: (content: string) => void;
 }
 
-interface PrefillData {
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  gender: string;
-  class: string; // You can specify an enum or union type if you have predefined classes
-  annualIncome: string; // You can specify types for certificates, if needed
-  caste: string; // Same as annualIncome
-  disabled: string; // Assuming it is "yes" or "no"
-  state: string; // Assuming this refers to domicile certificate data
-  student: string; // You can define a union type if the values are specific
-  identityProof: string | null; // Can be nullable if not provided
-  benefit_id: string;
-}
 interface FinancialSupportRequest {
   domain: string;
   action: string;
@@ -72,37 +50,21 @@ interface FinancialSupportRequest {
   ttl: string;
   timestamp: string;
 }
-interface AuthUser {
-  user_id?: string;
-  name?: string;
-  class?: string;
-  previousYearMarks?: string;
-  phone_number?: string;
-  username: string;
-  email: string;
-}
 
 const WebViewFormSubmitWithRedirect: React.FC<
   WebViewFormSubmitWithRedirectProps
-> = ({ url, formData, context, item }) => {
+> = ({ url, formData, submitConfirm }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  // const [authUser, setAuthUser] = useState<AuthUser | null>(null);
-  const [confirmationConsent, setConfirmationConsent] =
-    useState<unknown>(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const { id } = useParams();
-  const navigate = useNavigate();
+  // const [confirmationConsent, setConfirmationConsent] =
+  //   useState<unknown>(false);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      window.postMessage({ type: "FORM_SUBMIT", data: formData }, "*");
-      if (event.origin !== import.meta.env.VITE_PROVIDER_URL) {
-        return;
-      }
-
-      const receivedData = event.data.data;
-      if (receivedData) {
-        submitConfirm(receivedData);
+      if (event.data?.type === "FORM_SUBMIT") {
+        const receivedData = event.data.data;
+        if (receivedData) {
+          submitConfirm(receivedData);
+        }
       }
     };
 
@@ -117,7 +79,6 @@ const WebViewFormSubmitWithRedirect: React.FC<
     if (url) {
       // Event listener for iframe load
       const iframeLoadHandler = async () => {
-        console.log("Iframe loaded, triggering prefill");
         await sendDataToIframe();
       };
 
@@ -131,76 +92,27 @@ const WebViewFormSubmitWithRedirect: React.FC<
 
   const sendDataToIframe = async () => {
     const prefillData = transformData(formData);
-
+    console.log("prefillData", prefillData);
     iframeRef.current.contentWindow.postMessage(prefillData, "*");
   };
-  const submitConfirm = async (payload) => {
-    const confirmPayload = {
-      submission_id: payload?.submit.submission_id,
-      item_id: payload?.submit.application_id,
-      benefit_id: id,
-      context: context,
-    };
 
-    const result = await confirmApplication(confirmPayload);
-
-    setIsLoading(true);
-    const orderId = (
-      result as {
-        data: { responses: { message: { order: { id: string } } }[] };
-      }
-    )?.data?.responses?.[0]?.message?.order?.id;
-
-    if (orderId) {
-      const payloadCreateApp = {
-        user_id: formData?.user_id,
-        benefit_id: id,
-        benefit_provider_id: context?.bpp_id,
-        benefit_provider_uri: context?.bap_uri,
-        external_application_id: orderId,
-        application_name: item?.descriptor?.name,
-        status: "submitted",
-        application_data: payload?.userData,
-      };
-
-      await createApplication(payloadCreateApp);
-      setIsLoading(false);
-      setConfirmationConsent({ orderId, name: item?.descriptor?.name });
-    } else {
-      console.log("Error while creating application. Please try again later");
-    }
-  };
-  const handleBack = () => {
-    navigate(-1);
-  };
   return (
     <Layout
       _heading={{
         heading: "Complete Application",
-        handleBack,
       }}
+      getBodyHeight={(height) =>
+        (iframeRef.current!.style.height = `${height}px`)
+      }
     >
       <Box className="card-scroll invisible_scroll">
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <iframe
-            ref={iframeRef}
-            src={
-              "http://localhost:5174/uba-ui/benefit/PB-BTR-2024-11-26-000564/apply"
-            }
-            style={{ width: "100%", height: "90vh" }}
-            title="Form UI"
-          ></iframe>
-        )}
+        <iframe
+          ref={iframeRef}
+          src={url}
+          style={{ width: "100%" }}
+          title="Form UI"
+        ></iframe>
       </Box>
-
-      <SubmitDialog
-        dialogVisible={
-          confirmationConsent as { name?: string; orderId?: string }
-        }
-        closeSubmit={setConfirmationConsent}
-      />
     </Layout>
   );
 };

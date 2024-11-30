@@ -213,6 +213,7 @@ const BenefitsDetails: React.FC = () => {
 
         await createApplication(payloadCreateApp);
         setConfirmationConsent({ orderId, name: item?.descriptor?.name });
+        setWebFormProp({});
       } else {
         setError("Error while creating application. Please try again later");
       }

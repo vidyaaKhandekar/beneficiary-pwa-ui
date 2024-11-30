@@ -22,7 +22,7 @@ const routes = [
     component: ExploreBenefits,
   },
   {
-    path: "/benefitsdetails/:id",
+    path: "/benefits/:id",
     component: BenefitsDetails,
   },
   {

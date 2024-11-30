@@ -126,7 +126,7 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ item }) => {
         <Link
           className="text-blue"
           as={RouterLink}
-          to={`/benefitsdetails/${id}`}
+          to={`/benefits/${id}`}
           color={"#0037b9"}
         >
           View Details <ArrowForwardIcon />

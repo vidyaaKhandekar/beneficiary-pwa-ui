@@ -1,16 +1,8 @@
 import { Box } from "@chakra-ui/react";
 // import axios from "axios";
-import { useEffect, useRef, useState } from "react";
-import Loader from "./common/Loader";
-import Layout from "./common/layout/Layout";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useRef } from "react";
 import { transformData } from "../utils/jsHelper/helper";
-import {
-  confirmApplication,
-  createApplication,
-} from "../services/benefit/benefits";
-import SubmitDialog from "./SubmitDialog";
-// import { getUser } from "../services/auth/auth";
+import Layout from "./common/layout/Layout";
 interface FormData {
   user_id?: string;
   name?: string;
@@ -43,20 +35,6 @@ interface WebViewFormSubmitWithRedirectProps {
   submitConfirm?: (content: string) => void;
 }
 
-// interface PrefillData {
-//   firstName: string;
-//   middleName: string;
-//   lastName: string;
-//   gender: string;
-//   class: string; // You can specify an enum or union type if you have predefined classes
-//   annualIncome: string; // You can specify types for certificates, if needed
-//   caste: string; // Same as annualIncome
-//   disabled: string; // Assuming it is "yes" or "no"
-//   state: string; // Assuming this refers to domicile certificate data
-//   student: string; // You can define a union type if the values are specific
-//   identityProof: string | null; // Can be nullable if not provided
-//   benefit_id: string;
-// }
 interface FinancialSupportRequest {
   domain: string;
   action: string;
@@ -72,15 +50,6 @@ interface FinancialSupportRequest {
   ttl: string;
   timestamp: string;
 }
-// interface AuthUser {
-//   user_id?: string;
-//   name?: string;
-//   class?: string;
-//   previousYearMarks?: string;
-//   phone_number?: string;
-//   username: string;
-//   email: string;
-// }
 
 const WebViewFormSubmitWithRedirect: React.FC<
   WebViewFormSubmitWithRedirectProps
@@ -139,21 +108,11 @@ const WebViewFormSubmitWithRedirect: React.FC<
       <Box className="card-scroll invisible_scroll">
         <iframe
           ref={iframeRef}
-          // src={url}
-          src={
-            "http://localhost:5174/uba-ui/benefit/PB-BTR-2024-11-27-000626/apply"
-          }
+          src={url}
           style={{ width: "100%" }}
           title="Form UI"
         ></iframe>
       </Box>
-
-      {/* <SubmitDialog
-        dialogVisible={
-          confirmationConsent as { name?: string; orderId?: string }
-        }
-        closeSubmit={setConfirmationConsent}
-      /> */}
     </Layout>
   );
 };

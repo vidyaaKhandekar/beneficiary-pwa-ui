@@ -31,7 +31,7 @@ interface UserData {
   // Contact Information
   email?: string;
   phoneNumber?: string;
-
+  state?: string;
   // Educational Information
   class?: string;
   currentSchoolName?: string | null;
@@ -126,10 +126,13 @@ const UserDetails: React.FC<UserDetailsProps> = ({ userData }) => {
             value={userData?.studentType}
           />
         </HStack>
-        <Field
-          label={t("USER_DETAILS_PREVIOUS_YEAR_MARKS")}
-          value={userData?.previousYearMarks}
-        />
+        <HStack spacing={4}>
+          <Field
+            label={t("USER_DETAILS_PREVIOUS_YEAR_MARKS")}
+            value={userData?.previousYearMarks}
+          />
+          <Field label={t("USER_DETAILS_STATE")} value={userData?.state} />
+        </HStack>
       </VStack>
     </Box>
   );

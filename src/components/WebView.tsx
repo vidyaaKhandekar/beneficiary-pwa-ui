@@ -1,4 +1,3 @@
-import { Box } from "@chakra-ui/react";
 // import axios from "axios";
 import { useEffect, useRef } from "react";
 import { transformData } from "../utils/jsHelper/helper";
@@ -55,8 +54,6 @@ const WebViewFormSubmitWithRedirect: React.FC<
   WebViewFormSubmitWithRedirectProps
 > = ({ url, formData, submitConfirm }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  // const [confirmationConsent, setConfirmationConsent] =
-  //   useState<unknown>(false);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
@@ -75,27 +72,6 @@ const WebViewFormSubmitWithRedirect: React.FC<
     };
   }, []);
 
-  useEffect(() => {
-    if (url) {
-      // Event listener for iframe load
-      const iframeLoadHandler = async () => {
-        await sendDataToIframe();
-      };
-
-      const iframeElement = iframeRef.current;
-      iframeElement?.addEventListener("load", iframeLoadHandler);
-      return () => {
-        iframeElement?.removeEventListener("load", iframeLoadHandler);
-      };
-    }
-  }, [url, formData]);
-
-  const sendDataToIframe = async () => {
-    const prefillData = transformData(formData);
-    console.log("prefillData", prefillData);
-    iframeRef.current.contentWindow.postMessage(prefillData, "*");
-  };
-
   return (
     <Layout
       _heading={{
@@ -105,14 +81,13 @@ const WebViewFormSubmitWithRedirect: React.FC<
         (iframeRef.current!.style.height = `${height}px`)
       }
     >
-      <Box className="card-scroll invisible_scroll">
-        <iframe
-          ref={iframeRef}
-          src={url}
-          style={{ width: "100%" }}
-          title="Form UI"
-        ></iframe>
-      </Box>
+      <iframe
+        ref={iframeRef}
+        src={url}
+        style={{ width: "100%" }}
+        title="Form UI"
+        name={JSON.stringify(transformData(formData) ?? {})}
+      ></iframe>
     </Layout>
   );
 };

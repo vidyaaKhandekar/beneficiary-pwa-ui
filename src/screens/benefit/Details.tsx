@@ -33,6 +33,7 @@ import ConfirmationDialog from "../../components/ConfirmationDialog";
 import WebViewFormSubmitWithRedirect from "../../components/WebView";
 import SubmitDialog from "../../components/SubmitDialog";
 import { useTranslation } from "react-i18next";
+import Loader from "../../components/common/Loader";
 
 // Define types for benefit item and user
 interface BenefitItem {
@@ -213,6 +214,7 @@ const BenefitsDetails: React.FC = () => {
 
         await createApplication(payloadCreateApp);
         setConfirmationConsent({ orderId, name: item?.descriptor?.name });
+        setWebFormProp({});
       } else {
         setError("Error while creating application. Please try again later");
       }
@@ -227,16 +229,7 @@ const BenefitsDetails: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-      >
-        <Spinner size="xl" />
-      </Box>
-    );
+    return <Loader />;
   }
 
   if (error) {

@@ -26,11 +26,11 @@ interface UserData {
 }
 
 const myApplicationData: ApplicationField[] = [
-  { id: 1, label: "Full Name", value: "first_name" },
-  { id: 2, label: "Last Name", value: "last_name" },
+  { id: 1, label: "Full Name", value: "firstName" },
+  { id: 2, label: "Last Name", value: "lastName" },
   { id: 3, label: "Gender", value: "gender" },
   { id: 4, label: "Age", value: "age" },
-  { id: 5, label: "Samagra Id", value: "samagra_id" },
+  // { id: 5, label: "Samagra Id", value: "samagra_id" },
   { id: 6, label: "Class", value: "class" },
   { id: 7, label: "Adhaar Card", value: "aadhaar" },
   { id: 8, label: "Marks", value: "previous_year_marks" },
@@ -85,7 +85,16 @@ const Preview: React.FC = () => {
 
   const getFieldDisplayValue = (fieldValue: string) => {
     const value = userData?.[fieldValue];
-    if (value !== undefined && typeof value === "number") {
+    if (fieldValue === "age" && userData?.["aadhaar"]) {
+      const data = JSON.parse(decodeFromBase64(userData?.["aadhaar"]) ?? "");
+      const dob = data?.["KycRes"]?.["UidData"]?.["Poi"]?.["@dob"];
+      const [day, month, year] = dob.split("-"); // Split the string
+      const formattedDate = `${year}-${month}-${day}`;
+      const age = dob
+        ? new Date().getFullYear() - new Date(formattedDate).getFullYear()
+        : "--";
+      return age ? age.toString() : "--";
+    } else if (value !== undefined && typeof value === "number") {
       return value.toString();
     }
     return value ? (value as string) : "__";
@@ -159,3 +168,7 @@ const Preview: React.FC = () => {
 };
 
 export default Preview;
+
+function decodeFromBase64(base64: any): any {
+  return decodeURIComponent(escape(atob(base64)));
+}

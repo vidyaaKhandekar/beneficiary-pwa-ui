@@ -38,16 +38,16 @@ const Splash: React.FC = () => {
     navigate("/SignUp");
   };
 
-  const handleLogin = async () => {
-    try {
-      await keycloak.login();
-    } catch (error) {
-      console.error(
-        "Login failed:",
-        error instanceof Error ? error.message : "Unknown error"
-      );
-    }
-  };
+  // const handleLogin = async () => {
+  //   try {
+  //     await keycloak.login();
+  //   } catch (error) {
+  //     console.error(
+  //       "Login failed:",
+  //       error instanceof Error ? error.message : "Unknown error"
+  //     );
+  //   }
+  // };
 
   return (
     <Box

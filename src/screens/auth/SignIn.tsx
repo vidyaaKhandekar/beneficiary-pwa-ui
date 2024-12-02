@@ -19,8 +19,7 @@ const SignIn: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const toast = useToast();
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
+
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState(false);
@@ -50,7 +49,6 @@ const SignIn: React.FC = () => {
         navigate(0);
       }
     } catch (error) {
-      setError(t("SIGNIN_INVALID_USERNAME_PASSWORD_MESSAGE"));
       toast({
         title: t("SIGNIN_INVALID_USERNAME_PASSWORD_MESSAGE"),
         status: "error",

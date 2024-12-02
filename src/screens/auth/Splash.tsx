@@ -48,7 +48,7 @@ const Splash: React.FC = () => {
       );
     }
   };
-  // useEffect(() => {});
+
   return (
     <Box
       display="flex"
@@ -99,7 +99,9 @@ const Splash: React.FC = () => {
             mt={8}
           />
           <CommonButton
-            onClick={handleLogin}
+            onClick={() => {
+              navigate("/Signin");
+            }}
             label={t("LOGIN_LOGIN_BUTTON")}
             mt={8}
             variant="outline"

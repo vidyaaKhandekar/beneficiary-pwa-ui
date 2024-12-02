@@ -276,7 +276,7 @@ export const formatDate = (dateString) => {
 
   return `${day}/${month}/${year}`;
 };
-interface data {
+interface UserData {
   id: number;
   label: string;
   value: string;
@@ -284,7 +284,7 @@ interface data {
 }
 export function getPreviewDetails(applicationData, documents) {
   let idCounter = 1; // To generate unique IDs
-  const result: data[] = [];
+  const result: UserData[] = [];
   documents.push("docs", "domicileCertificate");
 
   function formatKey(key) {

@@ -66,7 +66,7 @@ const Preview: React.FC = () => {
       }
       const documents = await getDocumentsList();
       const result = await getApplicationDetails(id);
-      console.log("in preview", result?.data);
+
       setStatus(result?.data?.status);
       const doc = getSubmmitedDoc(
         result?.data?.application_data,
@@ -75,11 +75,10 @@ const Preview: React.FC = () => {
       setBenefitName(result?.data?.external_application_id);
       const data = getPreviewDetails(result?.data?.application_data, doc);
       setUserData(data);
-      console.log(data, "data");
+
       setDocument(doc);
     } catch (error) {
       console.error("Error fetching application details:", error);
-      console.log("error", error);
 
       toast({
         title: "Error",
@@ -95,8 +94,6 @@ const Preview: React.FC = () => {
   useEffect(() => {
     init();
   }, [id]);
-
-  console.log("docuyments", document);
 
   return (
     <Layout

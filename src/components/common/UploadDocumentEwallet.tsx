@@ -83,7 +83,7 @@ const UploadDocumentEwallet = ({ userId }) => {
           top: 0,
           left: 0,
           border: "none",
-          zIndex: 1000,
+          zIndex: 999,
           display: "none",
         }}
       />

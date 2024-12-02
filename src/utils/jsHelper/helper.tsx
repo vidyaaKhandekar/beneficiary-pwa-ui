@@ -276,3 +276,50 @@ export const formatDate = (dateString) => {
 
   return `${day}/${month}/${year}`;
 };
+interface UserData {
+  id: number;
+  label: string;
+  value: string;
+  length?: number;
+}
+export function getPreviewDetails(applicationData, documents) {
+  let idCounter = 1; // To generate unique IDs
+  const result: UserData[] = [];
+  documents.push("docs", "domicileCertificate");
+
+  function formatKey(key) {
+    // Convert camelCase to space-separated
+    const spacedKey = key.replace(/([a-z])([A-Z])/g, "$1 $2");
+
+    // Convert snake_case to space-separated
+    const normalizedKey = spacedKey.replace(/_/g, " ");
+
+    // Capitalize each word
+    return normalizedKey.replace(/\b\w/g, (char) => char.toUpperCase());
+  }
+
+  for (const key in applicationData) {
+    if (applicationData.hasOwnProperty(key)) {
+      // Skip keys listed in the `arr`
+      if (!documents.includes(key)) {
+        result.push({
+          id: idCounter++,
+          label: formatKey(key),
+          value: applicationData[key],
+        });
+      }
+    }
+  }
+
+  return result;
+}
+export function getSubmmitedDoc(userData, document) {
+  const result = [];
+  const codes = document.map((item) => item.documentSubType);
+  for (const key in userData) {
+    if (codes.includes(key)) {
+      result.push(key);
+    }
+  }
+  return result;
+}

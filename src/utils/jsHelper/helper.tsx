@@ -1,3 +1,4 @@
+import { IncomeRange } from "../../assets/mockdata/FilterData";
 interface DocumentItem {
   descriptor?: {
     code?: string;
@@ -411,4 +412,19 @@ export function checkEligibilityCriteria({
       // Return false for unrecognized conditions
       return false;
   }
+}
+export function getIncomeRangeValue(annualIncome: string): string {
+  const income = parseFloat(annualIncome);
+  if (isNaN(income)) return undefined;
+
+  for (const range of IncomeRange) {
+    if (range.value === "") continue;
+
+    const [min, max] = range.value.split("-").map(Number);
+    if (income >= min && income <= max) {
+      return range.value;
+    }
+  }
+
+  return "";
 }

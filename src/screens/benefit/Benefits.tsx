@@ -15,6 +15,7 @@ import Layout from "../../components/common/layout/Layout";
 import { getUser } from "../../services/auth/auth";
 import { getAll } from "../../services/benefit/benefits";
 import { Castes, IncomeRange } from "../../assets/mockdata/FilterData";
+import { getIncomeRangeValue } from "../../utils/jsHelper/helper";
 
 // Define types for benefit data and filter structure
 interface Benefit {
@@ -56,10 +57,10 @@ const ExploreBenefits: React.FC = () => {
         const token = localStorage.getItem("authToken");
         if (token) {
           const user = await getUser();
-
+          const income = getIncomeRangeValue(user?.data?.annualIncome);
           const filters: Filter = {
             caste: user?.data?.caste,
-            annualIncome: user?.data?.annualIncome,
+            annualIncome: income,
           };
 
           const newFilter: Filter = {};

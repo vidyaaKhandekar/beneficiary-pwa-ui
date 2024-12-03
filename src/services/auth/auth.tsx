@@ -1,5 +1,4 @@
 import axios from "axios";
-import { removeToken } from "./asyncStorage";
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 interface UserData {
@@ -21,6 +20,7 @@ export const loginUser = async (loginData: object) => {
         "Content-Type": "application/json",
       },
     });
+
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
@@ -33,7 +33,9 @@ export const loginUser = async (loginData: object) => {
   }
 };
 
-export const logoutUser = async (accessToken: string, refreshToken: string) => {
+export const logoutUser = async () => {
+  const accessToken = localStorage.getItem("authToken");
+  const refreshToken = localStorage.getItem("refreshToken");
   try {
     const response = await axios.post(
       `${apiBaseUrl}/auth/logout`,
@@ -47,8 +49,9 @@ export const logoutUser = async (accessToken: string, refreshToken: string) => {
         },
       }
     );
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("refreshToken");
 
-    await removeToken();
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
@@ -79,8 +82,6 @@ export const getUser = async () => {
     if (axios.isAxiosError(error) && error.response) {
       return Promise.reject(error.response.data);
     } else {
-      console.log("get user failed");
-
       return Promise.reject(new Error("Network Error"));
     }
   }
@@ -244,11 +245,29 @@ export const verifyOTP = async (payload: MobileData) => {
 };
 export const registerUser = async (userData: UserData) => {
   try {
-    const response = await axios.post(`${apiBaseUrl}/auth/register`, userData);
-    console.log(response);
+    const response = await axios.post(
+      `${apiBaseUrl}/auth/register_with_password`,
+      userData
+    );
+
     return response?.data;
   } catch (error) {
-    console.log(error);
     return error;
+  }
+};
+export const registerWithPassword = async (userData) => {
+  try {
+    const response = await axios.post(
+      `${apiBaseUrl}/auth/register_with_password`,
+      userData
+    );
+
+    return response.data; // Handle the response data
+  } catch (error) {
+    console.error(
+      "Error during registration:",
+      error.response?.data?.message?.[0] || ""
+    );
+    throw error.response;
   }
 };

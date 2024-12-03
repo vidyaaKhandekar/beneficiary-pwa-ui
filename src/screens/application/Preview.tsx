@@ -2,49 +2,51 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   HStack,
+  ListItem,
   Text,
+  UnorderedList,
   useToast,
-  InputGroup,
-  InputRightElement,
-  Icon,
-  Input,
 } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getApplicationDetails } from "../../services/auth/auth";
+import {
+  getApplicationDetails,
+  getDocumentsList,
+} from "../../services/auth/auth";
 import Layout from "../../components/common/layout/Layout";
-import { FaCheck } from "react-icons/fa";
+import {
+  getPreviewDetails,
+  getSubmmitedDoc,
+} from "../../utils/jsHelper/helper";
 
-// Define types for props and data
-interface ApplicationField {
+interface UserData {
   id: number;
   label: string;
   value: string;
+  length?: number;
 }
 
-interface UserData {
-  [key: string]: string | number | undefined;
-}
+const labelStyles = {
+  fontSize: "16px",
+  fontWeight: "600",
+  mb: 1,
+  color: "#06164B",
+  lineHeight: "16px",
+};
 
-const myApplicationData: ApplicationField[] = [
-  { id: 1, label: "Full Name", value: "firstName" },
-  { id: 2, label: "Last Name", value: "lastName" },
-  { id: 3, label: "Gender", value: "gender" },
-  { id: 4, label: "Age", value: "age" },
-  // { id: 5, label: "Samagra Id", value: "samagra_id" },
-  { id: 6, label: "Class", value: "class" },
-  { id: 7, label: "Adhaar Card", value: "aadhaar" },
-  { id: 8, label: "Marks", value: "previous_year_marks" },
-  { id: 9, label: "Caste", value: "caste" },
-  { id: 10, label: "School Name", value: "current_school_name" },
-];
-
+const valueStyles = {
+  fontSize: "16px",
+  fontWeight: "400",
+  color: "#1F1B13",
+  lineHeight: "14px",
+};
 const Preview: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [userData, setUserData] = useState<UserData[]>();
   const [benefitName, setBenefitName] = useState<string | undefined>("");
+  const [status, setStatus] = useState("");
+  const [document, setDocument] = useState<string[]>([]);
   const toast = useToast();
-
   const handleBack = () => {
     navigate("/applicationstatus");
   };
@@ -62,13 +64,22 @@ const Preview: React.FC = () => {
         navigate("/applicationstatus");
         return;
       }
+      const documents = await getDocumentsList();
       const result = await getApplicationDetails(id);
-      console.log("in preview", result);
 
-      setUserData(result?.data?.application_data);
-      setBenefitName(result?.data?.external_application_id);
+      setStatus(result?.data?.status);
+      const doc = getSubmmitedDoc(
+        result?.data?.application_data,
+        documents.data
+      );
+      setBenefitName(result?.data?.internal_application_id);
+      const data = getPreviewDetails(result?.data?.application_data, doc);
+      setUserData(data);
+
+      setDocument(doc);
     } catch (error) {
       console.error("Error fetching application details:", error);
+
       toast({
         title: "Error",
         description: "Failed to fetch application details",
@@ -76,29 +87,13 @@ const Preview: React.FC = () => {
         duration: 3000,
         isClosable: true,
       });
+      navigate("/applicationstatus");
     }
   };
 
   useEffect(() => {
     init();
   }, [id]);
-
-  const getFieldDisplayValue = (fieldValue: string) => {
-    const value = userData?.[fieldValue];
-    if (fieldValue === "age" && userData?.["aadhaar"]) {
-      const data = JSON.parse(decodeFromBase64(userData?.["aadhaar"]) ?? "");
-      const dob = data?.["KycRes"]?.["UidData"]?.["Poi"]?.["@dob"];
-      const [day, month, year] = dob.split("-"); // Split the string
-      const formattedDate = `${year}-${month}-${day}`;
-      const age = dob
-        ? new Date().getFullYear() - new Date(formattedDate).getFullYear()
-        : "--";
-      return age ? age.toString() : "--";
-    } else if (value !== undefined && typeof value === "number") {
-      return value.toString();
-    }
-    return value ? (value as string) : "__";
-  };
 
   return (
     <Layout
@@ -119,56 +114,55 @@ const Preview: React.FC = () => {
           Status
         </Text>
         <Text color="#EDA145" fontWeight={700} fontSize={14}>
-          Submitted
+          {status}
         </Text>
       </HStack>
 
-      {/* Application Fields */}
-      <Box className="card-scroll" p={4}>
-        {myApplicationData.map((field) => {
-          const displayValue = getFieldDisplayValue(field.value);
-          return (
-            <Box key={field.id} my={2}>
-              <Text fontWeight="400" mb={1} fontSize={14}>
-                {field.label}
-              </Text>
-              <InputGroup alignItems={"center"}>
-                <Input
-                  value={displayValue}
-                  isReadOnly
-                  bg="gray.50"
-                  focusBorderColor="#1D1B201F"
-                  borderColor="#1D1B201F"
-                  variant="filled"
-                  h="48px"
-                  resize="none"
-                  color="#1A1B21"
-                  borderWidth={1}
-                  fontSize={12}
-                  overflow="auto"
-                  mr={1}
-                  display="flex"
-                  alignItems="center"
-                />
+      <Box
+        flex={1}
+        alignItems="center"
+        justifyContent="center"
+        ml={"10%"}
+        mt={"5%"}
+      >
+        {userData?.map((item, index) => {
+          if (index % 2 === 0 && index < userData.length) {
+            const firstItem = item;
+            const secondItem = userData[index + 1];
 
-                {/* Conditionally render the check icon */}
-                {userData?.[field.value] !== undefined &&
-                userData?.[field.value] !== null ? (
-                  <InputRightElement pointerEvents="none" height="100%">
-                    <Icon as={FaCheck} color="#0B7B69" />
-                  </InputRightElement>
-                ) : null}
-              </InputGroup>
-            </Box>
-          );
+            return (
+              <HStack
+                key={item.id}
+                mb={6}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Box flex={1} alignItems="center">
+                  <Text {...labelStyles}>{firstItem.label}</Text>
+                  <Text {...valueStyles}>{firstItem.value}</Text>
+                </Box>
+
+                {secondItem && (
+                  <Box flex={1} alignItems="center">
+                    <Text {...labelStyles}>{secondItem.label}</Text>
+                    <Text {...valueStyles}>{secondItem.value}</Text>
+                  </Box>
+                )}
+              </HStack>
+            );
+          }
+
+          return null;
         })}
+        <Text {...labelStyles}>Uploaded Documents</Text>
+        <UnorderedList mt={3}>
+          {document?.slice(0, -2).map((document) => (
+            <ListItem key={document}>{document}</ListItem>
+          ))}
+        </UnorderedList>
       </Box>
     </Layout>
   );
 };
 
 export default Preview;
-
-function decodeFromBase64(base64: any): any {
-  return decodeURIComponent(escape(atob(base64)));
-}

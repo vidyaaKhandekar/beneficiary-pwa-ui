@@ -8,7 +8,6 @@ import {
   useDisclosure,
   HStack,
   Icon,
-  Spinner,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -20,7 +19,7 @@ import "../../assets/styles/App.css";
 import { useNavigate, useParams } from "react-router-dom";
 import CommonButton from "../../components/common/button/Button";
 import Layout from "../../components/common/layout/Layout";
-import { getUser } from "../../services/auth/auth";
+import { getUser, sendConsent } from "../../services/auth/auth";
 import {
   applyApplication,
   confirmApplication,
@@ -29,11 +28,12 @@ import {
   getOne,
 } from "../../services/benefit/benefits";
 import { MdCurrencyRupee } from "react-icons/md";
-import ConfirmationDialog from "../../components/ConfirmationDialog";
 import WebViewFormSubmitWithRedirect from "../../components/WebView";
-import SubmitDialog from "../../components/SubmitDialog";
 import { useTranslation } from "react-i18next";
 import Loader from "../../components/common/Loader";
+import { checkEligibilityCriteria } from "../../utils/jsHelper/helper";
+import { termsAndConditions } from "../../assets/termsAndCondition";
+import CommonDialogue from "../../components/common/Dialogue";
 
 // Define types for benefit item and user
 interface BenefitItem {
@@ -91,39 +91,39 @@ const BenefitsDetails: React.FC = () => {
   const [error, setError] = useState<string>("");
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
   const [webFormProp, setWebFormProp] = useState<WebFormProps>({});
-  const [confirmationConsent, setConfirmationConsent] =
-    useState<unknown>(false);
+  const [confirmationConsent, setConfirmationConsent] = useState<
+    boolean | object
+  >(false);
+  const [submitDialouge, setSubmitDialouge] = useState<boolean | object>(false);
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
+  const [isEligible, setIsEligible] = useState<any[]>();
 
   const handleConfirmation = async () => {
-    setLoading(true);
-
-    // try {
-    const result = await applyApplication({ id, context });
-    const url = (result as { data: { responses: Array<any> } }).data
-      ?.responses?.[0]?.message?.order?.items?.[0]?.xinput?.form?.url;
-    const formData = authUser ?? undefined; // Ensure authUser is used or fallback to undefined
-    setLoading(false);
-    // Only set WebFormProps if the url exists
-    if (url) {
-      setWebFormProp({
-        url,
-        formData,
-      });
+    if (isEligible?.length > 0) {
+      setError(
+        `You cannot proceed further because the criteria are not matching, such as ${isEligible.join(
+          ", "
+        )}.`
+      );
     } else {
-      setError("URL not found in response");
+      setLoading(true);
+      const result = await applyApplication({ id, context });
+      const url = (result as { data: { responses: Array<any> } }).data
+        ?.responses?.[0]?.message?.order?.items?.[0]?.xinput?.form?.url;
+      const formData = authUser ?? undefined; // Ensure authUser is used or fallback to undefined
+      setLoading(false);
+      // Only set WebFormProps if the url exists
+      if (url) {
+        setWebFormProp({
+          url,
+          formData,
+        });
+      } else {
+        setError("URL not found in response");
+      }
     }
-    // } catch (error: unknown) {
-    //   if (error instanceof Error) {
-    //     setError(`Failed to apply application: ${error.message}`);
-    //   } else {
-    //     setError("An unknown error occurred");
-    //   }
-    // } finally {
-    //   setLoading(false);
-    // }
   };
 
   const handleBack = () => {
@@ -134,8 +134,6 @@ const BenefitsDetails: React.FC = () => {
     let mounted = true;
     const init = async () => {
       try {
-        const user = await getUser();
-
         const result = await getOne({ id });
         const resultItem =
           (result as { data: { responses: Array<any> } }).data?.responses?.[0]
@@ -153,19 +151,52 @@ const BenefitsDetails: React.FC = () => {
             )
             ?.list?.filter((e: { value: unknown }) => e.value)
             .map((e: { value: unknown }) => e.value) || [];
-
         if (mounted) {
           setItem({ ...resultItem, document: docs });
 
-          setAuthUser(user?.data || {});
+          const token = localStorage.getItem("authToken");
+          if (token) {
+            const user = await getUser();
+            const eligibilityArr = [];
+            if (Array.isArray(resultItem?.tags)) {
+              resultItem?.tags?.forEach((e: any) => {
+                if (e?.descriptor?.code === "@eligibility") {
+                  if (Array.isArray(e.list)) {
+                    e.list.forEach((item: any) => {
+                      const code = item?.descriptor?.code;
+                      try {
+                        const valueObj = JSON.parse(item.value || "{}");
+                        const payload = {
+                          ...valueObj,
+                          value: user?.data?.[code],
+                        };
+                        const result = checkEligibilityCriteria(payload);
+                        if (!result) {
+                          eligibilityArr.push(code);
+                        }
+                      } catch (error) {
+                        console.error(
+                          `Failed to parse eligibility criteria: ${error}`
+                        );
+                        eligibilityArr.push(code);
+                      }
+                    });
+                  }
+                }
+              });
+            }
+            setIsEligible(
+              eligibilityArr.length > 0 ? eligibilityArr : undefined
+            );
+            setAuthUser(user?.data || {});
+            const appResult = await getApplication({
+              user_id: user?.data?.user_id,
+              benefit_id: id,
+            });
 
-          const appResult = await getApplication({
-            user_id: user?.data?.user_id,
-            benefit_id: id,
-          });
-
-          if (appResult?.data?.applications?.length > 0) {
-            setIsApplied(true);
+            if (appResult?.data?.applications?.length > 0) {
+              setIsApplied(true);
+            }
           }
           setLoading(false);
         }
@@ -177,6 +208,7 @@ const BenefitsDetails: React.FC = () => {
             setError("An unexpected error occurred");
           }
         }
+        setLoading(false);
       }
     };
     init();
@@ -213,7 +245,7 @@ const BenefitsDetails: React.FC = () => {
         };
 
         await createApplication(payloadCreateApp);
-        setConfirmationConsent({ orderId, name: item?.descriptor?.name });
+        setSubmitDialouge({ orderId, name: item?.descriptor?.name });
         setWebFormProp({});
       } else {
         setError("Error while creating application. Please try again later");
@@ -258,9 +290,24 @@ const BenefitsDetails: React.FC = () => {
       />
     );
   }
+  const closeDialog = async () => {
+    try {
+      await sendConsent(authUser?.user_id, `${id}`, `Application for ${id}`);
 
+      setConfirmationConsent(false);
+      navigate("/applicationStatus");
+    } catch {
+      console.log("Error sending consent");
+    }
+  };
+  const handleRedirect = () => {
+    setSubmitDialouge(false);
+  };
   return (
-    <Layout _heading={{ heading: item?.descriptor?.name || "", handleBack }}>
+    <Layout
+      _heading={{ heading: item?.descriptor?.name || "", handleBack }}
+      isMenu={Boolean(localStorage.getItem("authToken"))}
+    >
       <Box className="card-scroll invisible_scroll">
         <Box maxW="2xl" m={4}>
           <Heading size="md" color="#484848" fontWeight={500}>
@@ -284,14 +331,7 @@ const BenefitsDetails: React.FC = () => {
           </Heading>
           <UnorderedList mt={4}>
             {item?.tags
-              ?.filter((tag) =>
-                [
-                  "educational-eligibility",
-                  "personal-eligibility",
-                  "economical-eligibility",
-                  "geographical-eligibility",
-                ].includes(tag.descriptor?.code)
-              )
+              ?.filter((tag) => ["@eligibility"].includes(tag.descriptor?.code))
               .map((tag, index) => (
                 <ListItem key={"detail" + index}>
                   {tag.descriptor?.short_desc}
@@ -306,20 +346,41 @@ const BenefitsDetails: React.FC = () => {
               <ListItem key={document}>{document}</ListItem>
             ))}
           </UnorderedList>
-          <CommonButton
-            mt={6}
-            onClick={handleConfirmation}
-            label={
-              isApplied
-                ? t("BENEFIT_DETAILS_APPLICATION_SUBMITTED")
-                : t("BENEFIT_DETAILS_PROCEED_TO_APPLY")
-            }
-            isDisabled={isApplied}
-          />
+          {localStorage.getItem("authToken") ? (
+            <CommonButton
+              mt={6}
+              onClick={handleConfirmation}
+              label={
+                isApplied
+                  ? t("BENEFIT_DETAILS_APPLICATION_SUBMITTED")
+                  : t("BENEFIT_DETAILS_PROCEED_TO_APPLY")
+              }
+              isDisabled={isApplied}
+            />
+          ) : (
+            <CommonButton
+              mt={6}
+              onClick={() => {
+                localStorage.setItem("redirectUrl", window.location.href);
+                navigate("/signin");
+              }}
+              label={t("BENEFIT_DETAILS_LOGIN_TO_APPLY")}
+            />
+          )}
         </Box>
       </Box>
-
-      <ConfirmationDialog
+      <CommonDialogue
+        isOpen={confirmationConsent}
+        onClose={closeDialog}
+        termsAndConditions={termsAndConditions}
+        handleDialog={handleConfirmation}
+      />
+      <CommonDialogue
+        isOpen={submitDialouge}
+        onClose={handleRedirect}
+        handleDialog={handleRedirect}
+      />
+      {/* <ConfirmationDialog
         dialogVisible={isOpen}
         closeDialog={onClose}
         handleConfirmation={handleConfirmation}
@@ -331,7 +392,7 @@ const BenefitsDetails: React.FC = () => {
           confirmationConsent as { name?: string; orderId?: string }
         }
         closeSubmit={setConfirmationConsent}
-      />
+      /> */}
     </Layout>
   );
 };

@@ -58,6 +58,7 @@ const ExploreBenefits: React.FC = () => {
         if (token) {
           const user = await getUser();
           const income = getIncomeRangeValue(user?.data?.annualIncome);
+
           const filters: Filter = {
             caste: user?.data?.caste,
             annualIncome: income,
@@ -90,7 +91,7 @@ const ExploreBenefits: React.FC = () => {
             filters: {
               ...filter,
               annualIncome: filter?.["annualIncome"]
-                ? `0-${filter?.["annualIncome"]}`
+                ? `${filter?.["annualIncome"]}`
                 : "",
             },
             search,
@@ -106,6 +107,7 @@ const ExploreBenefits: React.FC = () => {
     };
     init();
   }, [filter, search, initState]);
+  console.log("filter", filter);
 
   return (
     <Layout

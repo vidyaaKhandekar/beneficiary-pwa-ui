@@ -1,5 +1,4 @@
 import axios from "axios";
-import { removeToken } from "./asyncStorage";
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 interface UserData {
@@ -21,6 +20,8 @@ export const loginUser = async (loginData: object) => {
         "Content-Type": "application/json",
       },
     });
+
+    console.log("response.data", response.data);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
@@ -33,7 +34,9 @@ export const loginUser = async (loginData: object) => {
   }
 };
 
-export const logoutUser = async (accessToken: string, refreshToken: string) => {
+export const logoutUser = async () => {
+  const accessToken = localStorage.getItem("authToken");
+  const refreshToken = localStorage.getItem("refreshToken");
   try {
     const response = await axios.post(
       `${apiBaseUrl}/auth/logout`,
@@ -47,8 +50,9 @@ export const logoutUser = async (accessToken: string, refreshToken: string) => {
         },
       }
     );
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("refreshToken");
 
-    await removeToken();
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {

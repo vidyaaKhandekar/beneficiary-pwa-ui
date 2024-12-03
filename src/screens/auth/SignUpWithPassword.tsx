@@ -15,11 +15,12 @@ import FloatingPasswordInput from "../../components/common/input/PasswordInput";
 import CommonButton from "../../components/common/button/Button";
 import { useTranslation } from "react-i18next";
 import Loader from "../../components/common/Loader";
+import { registerWithPassword } from "../../services/auth/auth";
 
 interface UserDetails {
   firstName: string;
   lastName: string;
-  mobile: string;
+  phoneNumber: string;
   password: string;
 }
 
@@ -31,7 +32,7 @@ const SignUpWithPassword: React.FC = () => {
   const [userDetails, setUserDetails] = useState<UserDetails>({
     firstName: "",
     lastName: "",
-    mobile: "",
+    phoneNumber: "",
     password: "",
   });
   const [confirmPassword, setConfirmPassword] = useState<string>("");
@@ -79,15 +80,15 @@ const SignUpWithPassword: React.FC = () => {
       };
 
       // Generate username based on available values
-      const { firstName, lastName, mobile } = updatedDetails;
+      const { firstName, lastName, phoneNumber } = updatedDetails;
 
       SetUserName(
         `${firstName?.trim() || ""}_${lastName?.charAt(0) || ""}_${
-          mobile?.slice(-4) || ""
+          phoneNumber?.slice(-4) || ""
         }`
       );
 
-      if (key === "mobile") {
+      if (key === "phoneNumber") {
         const errorMessage = validateMobile(value);
         if (errorMessage !== "") {
           setMobileError(errorMessage);
@@ -101,7 +102,8 @@ const SignUpWithPassword: React.FC = () => {
   };
 
   const handleSignUp = async () => {
-    if (!validateMobile(userDetails.mobile)) {
+    const errorMessage = validateMobile(userDetails.phoneNumber);
+    if (errorMessage !== "") {
       toast({
         title: t("SIGNUP_INVALID_MOBILE_NUMBER"),
         status: "error",
@@ -121,17 +123,23 @@ const SignUpWithPassword: React.FC = () => {
     }
     try {
       setLoading(true);
-      toast({
-        title: t("SIGNUP_SUCCESS"),
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-      navigate("/signin");
+      const response = await registerWithPassword(userDetails);
+      console.log("response", response);
+
+      if (response) {
+        toast({
+          title: "Sign Up Successfully",
+          status: "success",
+          description: "werfghj",
+          duration: 3000,
+          isClosable: true,
+        });
+        navigate("/signin");
+      }
     } catch (error) {
       toast({
-        title: t("SIGNUP_FAILED"),
-        description: error.message || t("SIGNUP_TRY_AGAIN_LATER"),
+        title: "Sign Up Failed",
+        description: error,
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -142,19 +150,22 @@ const SignUpWithPassword: React.FC = () => {
   };
 
   useEffect(() => {
-    const { firstName, lastName, mobile } = userDetails;
+    const { firstName, lastName, phoneNumber } = userDetails;
 
-    if (firstName && lastName && mobile.length >= 6) {
-      const username = `${firstName}_${lastName?.charAt(0)}_${mobile?.slice(
-        -4
-      )}`;
-      setUserDetails((prev) => ({
-        ...prev,
-        username,
-      }));
+    if (firstName && lastName && phoneNumber.length >= 6) {
+      const username = `${firstName}_${lastName?.charAt(
+        0
+      )}_${phoneNumber?.slice(-4)}`;
+      SetUserName(username);
     }
-  }, [userDetails.firstName, userDetails.lastName, userDetails.mobile]);
-
+  }, [userDetails.firstName, userDetails.lastName, userDetails.phoneNumber]);
+  const validate = (phoneNumber) => {
+    const value = validateMobile(phoneNumber);
+    if (value === "") {
+      return true;
+    }
+    return false;
+  };
   return (
     <Layout
       isMenu={false}
@@ -185,11 +196,11 @@ const SignUpWithPassword: React.FC = () => {
               errorMessage={t("SIGNUP_LAST_NAME_REQUIRED")}
             />
             <FloatingInput
-              name="mobile"
+              name="phoneNumber"
               label={t("SIGNUP_MOBILE_NUMBER")}
-              value={userDetails.mobile}
-              onChange={(e) => handleInputChange(e, "mobile")}
-              isInvalid={!validateMobile(userDetails.mobile)}
+              value={userDetails.phoneNumber}
+              onChange={(e) => handleInputChange(e, "phoneNumber")}
+              isInvalid={!validate(userDetails.phoneNumber)}
               errorMessage={mobileError}
             />
             <FloatingPasswordInput

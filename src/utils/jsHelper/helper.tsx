@@ -415,7 +415,7 @@ export function checkEligibilityCriteria({
 }
 export function getIncomeRangeValue(annualIncome: string): string {
   const income = parseFloat(annualIncome);
-  if (isNaN(income)) return undefined;
+  if (isNaN(income)) return "";
 
   for (const range of IncomeRange) {
     if (range.value === "") continue;

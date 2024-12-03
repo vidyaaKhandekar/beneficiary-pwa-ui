@@ -9,7 +9,6 @@ export const Gender: FilterOption[] = [
   { id: 3, label: "Both", value: "both" },
 ];
 export const IncomeRange: FilterOption[] = [
-  { id: 1, label: "All", value: "" },
   { id: 2, label: "Below 1,00,000", value: "100000" },
   { id: 3, label: "Below 2,50,000", value: "250000" },
   { id: 4, label: "Below 5,00,000", value: "500000" },
@@ -17,7 +16,6 @@ export const IncomeRange: FilterOption[] = [
   { id: 6, label: "Other", value: "other" },
 ];
 export const Castes: FilterOption[] = [
-  { id: 1, label: "All", value: "" },
   { id: 2, label: "SC", value: "sc" },
   { id: 3, label: "ST", value: "st" },
   { id: 4, label: "OBC", value: "obc" },

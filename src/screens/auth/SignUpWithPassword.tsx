@@ -209,7 +209,7 @@ const SignUpWithPassword: React.FC = () => {
               value={userDetails.password}
               onChange={(e) => handleInputChange(e, "password")}
               isInvalid={!userDetails.password.trim()}
-              errorMessage={t("SIGNUP_PASSWORD_REQUIRED")}
+              errorMessage={t("SIGNUP_CREATE_PASSWORD_IS_REQUIRED")}
             />
 
             <FloatingPasswordInput
@@ -217,7 +217,7 @@ const SignUpWithPassword: React.FC = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               isInvalid={confirmPassword.trim() === ""}
-              errorMessage={t("SIGNUP_CONFIRM_PASSWORD_REQUIRED")}
+              errorMessage={t("SIGNUP_CONFIRM_PASSWORD_IS_REQUIRED")}
             />
             {UserName.length > 0 && (
               <Text textAlign="center" fontSize="14px" mt={4}>

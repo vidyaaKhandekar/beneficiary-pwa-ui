@@ -29,8 +29,6 @@ const Navbar: React.FC<{ isMenu?: boolean }> = ({ isMenu = true }) => {
   const toast = useToast();
   // const { keycloak } = useKeycloak();
   const handleLogout = async () => {
-    // localStorage.removeItem("authToken");
-
     // keycloak.logout({ redirectUri: window.location.origin });
     try {
       const response = await logoutUser();

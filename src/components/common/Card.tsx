@@ -39,7 +39,21 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ item }) => {
       if (item.list && Array.isArray(item.list)) {
         item.list.forEach((subItem) => {
           if (descriptorCodes.includes(subItem.descriptor.code)) {
-            values.push(subItem.value);
+            try {
+              // Parse subItem.value as a JSON string
+              const parsedValue = JSON.parse(subItem.value);
+
+              // Check if parsedValue contains `conditionValues`
+              if (parsedValue && Array.isArray(parsedValue.conditionValues)) {
+                // Join `conditionValues` array into a comma-separated string
+                values.push(parsedValue.conditionValues.join(", "));
+              } else if (parsedValue && parsedValue.conditionValues) {
+                // If conditionValues is not an array, push it as is
+                values.push(parsedValue.conditionValues);
+              }
+            } catch (error) {
+              console.error("Error parsing JSON:", subItem.value, error);
+            }
           }
         });
       }
@@ -52,9 +66,9 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ item }) => {
   const dateStr = item?.item?.time?.range?.end;
   const formattedDate = dateStr ? formatDateString(dateStr) : "";
   const eligibility = extractValuesByDescriptors(item?.item?.tags, [
-    "caste-eligibility",
-    "Gender-eligibility",
-    "state-eligibility",
+    "caste",
+    "gender",
+    "state",
   ]);
 
   return (

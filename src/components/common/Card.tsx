@@ -44,7 +44,7 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ item }) => {
               const parsedValue = JSON.parse(subItem.value);
 
               // Check if parsedValue contains `conditionValues`
-              if (parsedValue && Array.isArray(parsedValue.conditionValues)) {
+              if (parsedValue && Array.isArray(parsedValue?.conditionValues)) {
                 // Join `conditionValues` array into a comma-separated string
                 values.push(parsedValue.conditionValues.join(", "));
               } else if (parsedValue && parsedValue.conditionValues) {

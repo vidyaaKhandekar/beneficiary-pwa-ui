@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, HStack, IconButton, Text } from "@chakra-ui/react";
 import { FaFileAlt } from "react-icons/fa";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { MdHome } from "react-icons/md";
 import { HiDocumentSearch } from "react-icons/hi";
 import useDeviceSize from "./useDeviceSize";
@@ -12,16 +12,16 @@ interface FooterProps {
 const BottomBar: React.FC<FooterProps> = ({ setRef, ...props }) => {
   const { width } = useDeviceSize();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleNavigation = (path: string) => {
     navigate(path);
   };
-
-  const getTabColor = (path: string) => {
-    return location.pathname === path ? "#3C5FDD" : "#433E3F";
+  const getTabColor = (paths: string[]) => {
+    const currentPath = window.location.pathname; // Get the current path
+    return paths.some((path) => currentPath.startsWith(path))
+      ? "#3C5FDD"
+      : "#433E3F";
   };
-
   return (
     <Box
       width={width}
@@ -53,9 +53,9 @@ const BottomBar: React.FC<FooterProps> = ({ setRef, ...props }) => {
             icon={<MdHome />}
             fontSize="29px"
             variant="ghost"
-            color={getTabColor("/home")}
+            color={getTabColor(["/home"])}
           />
-          <Text fontSize="xs" color={getTabColor("/home")}>
+          <Text fontSize="xs" color={getTabColor(["/home"])}>
             Home
           </Text>
         </Box>
@@ -72,9 +72,12 @@ const BottomBar: React.FC<FooterProps> = ({ setRef, ...props }) => {
             icon={<HiDocumentSearch />}
             fontSize="29px"
             variant="ghost"
-            color={getTabColor("/explorebenefits")}
+            color={getTabColor(["/explorebenefits", "/benefits"])}
           />
-          <Text fontSize="xs" color={getTabColor("/explorebenefits")}>
+          <Text
+            fontSize="xs"
+            color={getTabColor(["/explorebenefits", "/benefits"])}
+          >
             Search
           </Text>
         </Box>
@@ -91,9 +94,12 @@ const BottomBar: React.FC<FooterProps> = ({ setRef, ...props }) => {
             icon={<FaFileAlt />}
             fontSize="24px"
             variant="ghost"
-            color={getTabColor("/applicationstatus")}
+            color={getTabColor(["/applicationstatus", "/previewapplication"])}
           />
-          <Text fontSize="xs" color={getTabColor("/applicationstatus")}>
+          <Text
+            fontSize="xs"
+            color={getTabColor(["/applicationstatus", "/previewapplication"])}
+          >
             My Applications
           </Text>
         </Box>

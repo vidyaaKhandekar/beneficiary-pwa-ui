@@ -32,6 +32,7 @@ const SignIn: React.FC = () => {
     // Set form validity
     setIsFormValid(isValid);
   }, [username, password]);
+  const [token, setToken] = useState();
 
   const handleLogin = async () => {
     try {
@@ -45,7 +46,9 @@ const SignIn: React.FC = () => {
           duration: 3000,
           isClosable: true,
         });
+        setToken(response);
         localStorage.setItem("authToken", response.data.access_token);
+        localStorage.setItem("refreshToken", response.data.refresh_token);
         navigate(0);
       }
     } catch (error) {
@@ -63,6 +66,7 @@ const SignIn: React.FC = () => {
   const handleBack = () => {
     navigate("/");
   };
+  console.log("response", token);
 
   return (
     <Layout

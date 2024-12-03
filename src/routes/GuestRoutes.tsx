@@ -2,7 +2,7 @@ import { lazy } from "react";
 import SignIn from "../screens/auth/SignIn";
 
 const Splash = lazy(() => import("../screens/auth/Splash"));
-const Signup = lazy(() => import("../screens/auth/SignUp"));
+const Signup = lazy(() => import("../screens/auth/SignUpWithPassword"));
 
 const routes = [
   {

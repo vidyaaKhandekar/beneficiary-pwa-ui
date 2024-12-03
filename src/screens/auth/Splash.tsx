@@ -15,7 +15,7 @@ import "../../assets/styles/App.css";
 import CommonButton from "../../components/common/button/Button";
 import FloatingSelect from "../../components/common/input/FloatingSelect";
 
-import frameImage from "../../assets/images/frame.png";
+import frameImage from "../../assets/images/piramal.png";
 import { changeLanguage } from "i18next";
 
 const Splash: React.FC = () => {
@@ -65,12 +65,16 @@ const Splash: React.FC = () => {
         alignItems="center"
         borderRadius="md"
       >
-        <Flex height="50%" justifyContent="flex-end" className="purple-bg">
+        <Flex
+          height="50%"
+          justifyContent="center"
+          alignItems="center"
+          className="purple-bg"
+        >
           <Image
             src={frameImage}
             alt="Login Image"
             objectFit="contain"
-            transform="translateX(-50%)"
             width="60%"
             height="400px"
           />

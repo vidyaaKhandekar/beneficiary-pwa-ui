@@ -80,7 +80,6 @@ const ApplicationStatus: React.FC = () => {
         heading: "My Applications",
         subHeading: "Track your application progress",
         isFilter: true,
-        onSearch: init,
       }}
       isSearchbar={true}
     >

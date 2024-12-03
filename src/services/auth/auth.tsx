@@ -21,7 +21,6 @@ export const loginUser = async (loginData: object) => {
       },
     });
 
-    console.log("response.data", response.data);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
@@ -83,8 +82,6 @@ export const getUser = async () => {
     if (axios.isAxiosError(error) && error.response) {
       return Promise.reject(error.response.data);
     } else {
-      console.log("get user failed");
-
       return Promise.reject(new Error("Network Error"));
     }
   }
@@ -252,10 +249,9 @@ export const registerUser = async (userData: UserData) => {
       `${apiBaseUrl}/auth/register_with_password`,
       userData
     );
-    console.log(response);
+
     return response?.data;
   } catch (error) {
-    console.log(error);
     return error;
   }
 };
@@ -265,15 +261,13 @@ export const registerWithPassword = async (userData) => {
       `${apiBaseUrl}/auth/register_with_password`,
       userData
     );
-    console.log(response.data);
 
     return response.data; // Handle the response data
   } catch (error) {
-    console.log(error);
     console.error(
       "Error during registration:",
       error.response?.data?.message?.[0] || ""
     );
-    throw error.response?.data?.message?.[0];
+    throw error.response;
   }
 };

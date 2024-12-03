@@ -15,7 +15,7 @@ import "../../assets/styles/App.css";
 import CommonButton from "../../components/common/button/Button";
 import FloatingSelect from "../../components/common/input/FloatingSelect";
 
-import frameImage from "../../assets/images/piramal.png";
+import frameImage from "../../assets/images/frame.png";
 import { changeLanguage } from "i18next";
 
 const Splash: React.FC = () => {

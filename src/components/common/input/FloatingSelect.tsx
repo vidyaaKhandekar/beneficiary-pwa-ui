@@ -58,7 +58,7 @@ const FloatingSelect: React.FC<FloatingSelectProps> = ({
         }}
         onBlur={() => setIsFocused(value !== "")}
         onFocus={() => setIsFocused(true)}
-        placeholder={All}
+        placeholder={"All"}
         border="2px"
         style={{ borderColor: "var(--input-color)" }}
         _focus={{

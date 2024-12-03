@@ -114,7 +114,7 @@ const SignUpWithPassword: React.FC = () => {
     }
     if (userDetails.password !== confirmPassword) {
       toast({
-        title: t("SIGNUP_PASSWORDS_DO_NOT_MATCH"),
+        title: t("SIGNUP_PASSWORD_NOT_MATCHING"),
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -127,7 +127,7 @@ const SignUpWithPassword: React.FC = () => {
 
       if (response) {
         toast({
-          title: "Register Successfull!!",
+          title: t("SIGNUP_SUCCESSFULL"),
           status: "success",
           description: `Your Username is ${response?.data?.userName}`,
           duration: 10000,
@@ -136,10 +136,8 @@ const SignUpWithPassword: React.FC = () => {
         navigate("/signin");
       }
     } catch (error) {
-      console.log(error);
-
       toast({
-        title: "Register Failed",
+        title: t("SIGNUP_FAILED"),
         description: error?.data?.error,
         status: "error",
         duration: 15000,

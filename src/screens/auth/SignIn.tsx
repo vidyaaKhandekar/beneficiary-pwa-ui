@@ -32,7 +32,6 @@ const SignIn: React.FC = () => {
     // Set form validity
     setIsFormValid(isValid);
   }, [username, password]);
-  const [token, setToken] = useState();
 
   const handleLogin = async () => {
     try {
@@ -41,12 +40,12 @@ const SignIn: React.FC = () => {
       const response = await loginUser({ username, password });
       if (response) {
         toast({
-          title: "Login Successfull",
+          title: t("SIGNIN_SUCCESSFULL"),
           status: "success",
           duration: 3000,
           isClosable: true,
         });
-        setToken(response);
+
         localStorage.setItem("authToken", response.data.access_token);
         localStorage.setItem("refreshToken", response.data.refresh_token);
         navigate(0);
@@ -55,7 +54,7 @@ const SignIn: React.FC = () => {
       console.log("error", error);
 
       toast({
-        title: "Login Failed",
+        title: t("SIGNIN_FAILED"),
         status: "error",
         duration: 10000,
         isClosable: true,
@@ -69,8 +68,6 @@ const SignIn: React.FC = () => {
   const handleBack = () => {
     navigate("/");
   };
-  console.log("response", token);
-
   return (
     <Layout
       isMenu={false}

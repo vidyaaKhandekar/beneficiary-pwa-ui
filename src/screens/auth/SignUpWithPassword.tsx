@@ -130,8 +130,8 @@ const SignUpWithPassword: React.FC = () => {
         toast({
           title: "Sign Up Successfully",
           status: "success",
-          description: "werfghj",
-          duration: 3000,
+          description: `Your Username is ${response?.data?.userName}`,
+          duration: 15000,
           isClosable: true,
         });
         navigate("/signin");

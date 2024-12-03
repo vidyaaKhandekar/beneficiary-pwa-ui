@@ -1,5 +1,4 @@
-name: DEV - PWA Build and Deploy to S3
-
+name: Deploy to DEV
 on: [push]
 jobs:
   build_and_test:

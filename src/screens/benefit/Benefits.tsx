@@ -36,7 +36,7 @@ interface Benefit {
   };
 }
 interface Filter {
-  "caste-eligibility"?: string;
+  caste?: string;
   annualIncome?: string;
   [key: string]: string | undefined; // This allows any string key to be used
 }
@@ -58,7 +58,7 @@ const ExploreBenefits: React.FC = () => {
           const user = await getUser();
 
           const filters: Filter = {
-            "caste-eligibility": user?.data?.caste,
+            caste: user?.data?.caste,
             annualIncome: user?.data?.annualIncome,
           };
 
@@ -119,8 +119,8 @@ const ExploreBenefits: React.FC = () => {
           {
             label: "Caste",
             data: Castes,
-            value: filter?.["caste-eligibility"]?.toLowerCase() || "",
-            key: "caste-eligibility",
+            value: filter?.["caste"]?.toLowerCase() || "",
+            key: "caste",
           },
           {
             label: "Income Range",

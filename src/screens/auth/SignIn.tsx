@@ -72,7 +72,7 @@ const SignIn: React.FC = () => {
     <Layout
       isMenu={false}
       _heading={{
-        heading: "Sign In",
+        heading: t("LOGIN_LOGIN_BUTTON"),
         handleBack,
       }}
       isBottombar={false}
@@ -100,7 +100,7 @@ const SignIn: React.FC = () => {
           <CommonButton
             isDisabled={!isFormValid || loading}
             onClick={() => handleLogin()}
-            label="Sign In"
+            label={t("LOGIN_LOGIN_BUTTON")}
           />
         </VStack>
 
@@ -112,7 +112,7 @@ const SignIn: React.FC = () => {
                 to="/signup"
                 className="text-color text-decoration-underline"
               >
-                {t("SIGNUP_SIGN_UP")}
+                {t("LOGIN_REGISTER_BUTTON")}
               </Link>
             </Box>
           </Text>

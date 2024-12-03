@@ -204,7 +204,7 @@ const SignUpWithPassword: React.FC = () => {
               errorMessage={mobileError}
             />
             <FloatingPasswordInput
-              label={t("SIGNUP_PASSWORD")}
+              label={t("SIGNUP_CREATE_PASSWORD")}
               value={userDetails.password}
               onChange={(e) => handleInputChange(e, "password")}
               isInvalid={!userDetails.password.trim()}
@@ -228,7 +228,7 @@ const SignUpWithPassword: React.FC = () => {
             )}
             <CommonButton
               mt={4}
-              label={"Register"}
+              label={t("LOGIN_REGISTER_BUTTON")}
               onClick={handleSignUp}
               //
             />

@@ -107,7 +107,7 @@ const SignUpWithPassword: React.FC = () => {
       toast({
         title: t("SIGNUP_INVALID_MOBILE_NUMBER"),
         status: "error",
-        duration: 3000,
+        duration: 5000,
         isClosable: true,
       });
       return;
@@ -116,7 +116,7 @@ const SignUpWithPassword: React.FC = () => {
       toast({
         title: t("SIGNUP_PASSWORDS_DO_NOT_MATCH"),
         status: "error",
-        duration: 3000,
+        duration: 5000,
         isClosable: true,
       });
       return;
@@ -124,24 +124,25 @@ const SignUpWithPassword: React.FC = () => {
     try {
       setLoading(true);
       const response = await registerWithPassword(userDetails);
-      console.log("response", response);
 
       if (response) {
         toast({
-          title: "Sign Up Successfully",
+          title: "Register Successfull!!",
           status: "success",
           description: `Your Username is ${response?.data?.userName}`,
-          duration: 15000,
+          duration: 10000,
           isClosable: true,
         });
         navigate("/signin");
       }
     } catch (error) {
+      console.log(error);
+
       toast({
-        title: "Sign Up Failed",
-        description: error,
+        title: "Register Failed",
+        description: error?.data?.error,
         status: "error",
-        duration: 3000,
+        duration: 15000,
         isClosable: true,
       });
     } finally {

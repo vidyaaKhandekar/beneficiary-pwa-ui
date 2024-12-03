@@ -41,7 +41,7 @@ const SignIn: React.FC = () => {
       const response = await loginUser({ username, password });
       if (response) {
         toast({
-          title: t("SIGNIN_LOGGEDIN_SUCCESSFULLY"),
+          title: "Login Successfull",
           status: "success",
           duration: 3000,
           isClosable: true,
@@ -52,11 +52,14 @@ const SignIn: React.FC = () => {
         navigate(0);
       }
     } catch (error) {
+      console.log("error", error);
+
       toast({
-        title: t("SIGNIN_INVALID_USERNAME_PASSWORD_MESSAGE"),
+        title: "Login Failed",
         status: "error",
-        duration: 1000,
+        duration: 10000,
         isClosable: true,
+        description: t("SIGNIN_INVALID_USERNAME_PASSWORD_MESSAGE"),
       });
     } finally {
       setLoading(false);

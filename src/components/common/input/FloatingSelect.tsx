@@ -21,8 +21,6 @@ const FloatingSelect: React.FC<FloatingSelectProps> = ({
   name,
   options,
 }) => {
-  console.log("options", options, value);
-
   const [isFocused, setIsFocused] = useState(false);
 
   return (

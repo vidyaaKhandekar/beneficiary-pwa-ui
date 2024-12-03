@@ -13,7 +13,7 @@ function handleError(error: any) {
 export const getAll = async (userData: {
   filters: {
     annualIncome: string;
-    "caste-eligibility"?: string;
+    caste?: string;
   };
   search: string;
 }) => {

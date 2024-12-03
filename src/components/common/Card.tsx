@@ -71,9 +71,9 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ item }) => {
         <Heading size="md" mt={2}>
           {item?.title}
         </Heading>
-        <Heading size="sm" color="#484848" fontWeight={400} mt={2}>
+        {/* <Heading size="sm" color="#484848" fontWeight={400} mt={2}>
           {item?.provider_name}
-        </Heading>
+        </Heading> */}
         {item?.item?.price?.value && (
           <HStack
             align="center"

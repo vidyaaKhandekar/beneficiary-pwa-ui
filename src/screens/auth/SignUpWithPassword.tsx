@@ -83,9 +83,9 @@ const SignUpWithPassword: React.FC = () => {
       const { firstName, lastName, phoneNumber } = updatedDetails;
 
       SetUserName(
-        `${firstName?.trim() || ""}_${lastName?.charAt(0) || ""}_${
-          phoneNumber?.slice(-4) || ""
-        }`
+        `${firstName?.trim().toLowerCase() || ""}_${
+          lastName?.charAt(0).toLowerCase() || ""
+        }_${phoneNumber?.slice(-4) || ""}`
       );
 
       if (key === "phoneNumber") {

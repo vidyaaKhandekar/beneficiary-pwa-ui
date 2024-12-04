@@ -107,7 +107,6 @@ const ExploreBenefits: React.FC = () => {
     };
     init();
   }, [filter, search, initState]);
-  console.log("filter", filter);
 
   return (
     <Layout

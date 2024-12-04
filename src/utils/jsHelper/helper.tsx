@@ -1,3 +1,4 @@
+import { IncomeRange } from "../../assets/mockdata/FilterData";
 interface DocumentItem {
   descriptor?: {
     code?: string;
@@ -411,4 +412,27 @@ export function checkEligibilityCriteria({
       // Return false for unrecognized conditions
       return false;
   }
+}
+export function getIncomeRangeValue(annualIncome: string): string | undefined {
+  const income = parseFloat(annualIncome);
+  if (isNaN(income)) return "";
+
+  for (const range of IncomeRange) {
+    if (range.value === "") continue;
+    
+    const [minStr, maxStr] = range.value.split("-");
+    const min = Number(minStr);
+    const max = Number(maxStr);
+    
+    if (Number.isNaN(min) || Number.isNaN(max)) {
+      console.warn(`Invalid range format in IncomeRange: ${range.value}`);
+      continue;
+    }
+    
+    if (income >= min && income <= max) {
+      return range.value;
+    }
+  }
+
+  return "";
 }

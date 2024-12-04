@@ -99,7 +99,7 @@ const Preview: React.FC = () => {
     <Layout
       _heading={{
         heading: "My Applications",
-        subHeading: `Application ID ${benefitName}`,
+        subHeading: `Order ID ${benefitName}`,
         handleBack,
       }}
     >

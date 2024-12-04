@@ -413,7 +413,7 @@ export function checkEligibilityCriteria({
       return false;
   }
 }
-export function getIncomeRangeValue(annualIncome: string): string {
+export function getIncomeRangeValue(annualIncome: string): string | undefined {
   const income = parseFloat(annualIncome);
   if (isNaN(income)) return "";
 

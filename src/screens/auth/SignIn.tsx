@@ -44,6 +44,10 @@ const SignIn: React.FC = () => {
           status: "success",
           duration: 3000,
           isClosable: true,
+          containerStyle: {
+            padding: "16px",
+            margin: "16px",
+          },
         });
 
         localStorage.setItem("authToken", response.data.access_token);

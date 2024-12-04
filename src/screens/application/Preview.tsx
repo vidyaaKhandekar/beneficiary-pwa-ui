@@ -72,7 +72,7 @@ const Preview: React.FC = () => {
         result?.data?.application_data,
         documents.data
       );
-      setBenefitName(result?.data?.internal_application_id);
+      setBenefitName(result?.data?.external_application_id);
       const data = getPreviewDetails(result?.data?.application_data, doc);
       setUserData(data);
 

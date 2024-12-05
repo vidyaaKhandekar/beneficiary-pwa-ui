@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Text, VStack, HStack } from "@chakra-ui/react";
-import { CheckCircleIcon, WarningIcon, CloseIcon } from "@chakra-ui/icons";
+// import { CheckCircleIcon, WarningIcon, CloseIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 
 interface Application {
@@ -16,10 +16,12 @@ interface ApplicationListProps {
 }
 
 const STATUS = {
-  APPROVED: "approved",
-  REJECTED: "rejected",
   SUBMITTED: "submitted",
-  DISBURSAL_COMPLETE: "disbursalComplete",
+  APPROVED: "approved",
+  PENDING_FOR_REVIEW: "pending for review",
+  AMOUNT_TRANSFER_IN_PROGRESS: "amount transfer in progress",
+  SUBMITTED_FOR_DISBURSAL: "submmited for disbursal",
+  AMOUNT_RECEIVED: "amount received",
 } as const;
 
 const COLORS = {
@@ -29,67 +31,71 @@ const COLORS = {
   text: "#1F1B13",
 } as const;
 
-const ICON_SIZES = {
-  small: "8px",
-  default: "18px",
-} as const;
+// const ICON_SIZES = {
+//   small: "8px",
+//   default: "18px",
+// } as const;
 
 const StatusIcon: React.FC<{ status: string }> = ({ status }) => {
-  let icon = (
-    <WarningIcon
-      aria-label={`Status: ${status}`}
-      color={COLORS.error}
-      boxSize={ICON_SIZES.default}
-    />
-  );
-  let text = (
-    <Text fontSize="14px" color={COLORS.text}>
-      {status}
+  // let icon = (
+  //   <WarningIcon
+  //     aria-label={`Status: ${status}`}
+  //     color={COLORS.error}
+  //     boxSize={ICON_SIZES.default}
+  //   />
+  // );
+  // let text = (
+  //   <Text fontSize="14px" color={COLORS.text}>
+  //     {status}
+  //   </Text>
+  // );
+  const text = (
+    <Text fontSize="16px" color={COLORS.text}>
+      {status.charAt(0).toUpperCase() + status.slice(1)}
     </Text>
   );
-
-  if (status === STATUS.APPROVED) {
-    icon = (
-      <CheckCircleIcon color={COLORS.success} boxSize={ICON_SIZES.default} />
-    );
-    text = (
-      <Text fontSize="14px" color={COLORS.text} ml="10px">
-        Approved For Disbursal
-      </Text>
-    );
-  } else if (status === STATUS.REJECTED) {
-    icon = (
-      <CloseIcon
-        boxSize={ICON_SIZES.default}
-        color="white"
-        bg={COLORS.error}
-        p="4px"
-        borderRadius="50px"
-      />
-    );
-  } else if (status === STATUS.SUBMITTED) {
-    icon = (
-      <CheckCircleIcon color={COLORS.warning} boxSize={ICON_SIZES.default} />
-    );
-  } else if (status === STATUS.DISBURSAL_COMPLETE) {
-    icon = (
-      <CheckCircleIcon
-        color={COLORS.success}
-        bg={COLORS.success}
-        boxSize={ICON_SIZES.small}
-        borderRadius="50px"
-      />
-    );
-    text = (
-      <Text fontSize="10px" color={COLORS.success}>
-        Disbursal Complete
-      </Text>
-    );
-  }
+  // if (status === STATUS.APPROVED) {
+  //   icon = (
+  //     <CheckCircleIcon color={COLORS.success} boxSize={ICON_SIZES.default} />
+  //   );
+  //   text = (
+  //     <Text fontSize="14px" color={COLORS.text} ml="10px">
+  //       Approved For Disbursal
+  //     </Text>
+  //   );
+  // } else if (status === STATUS.REJECTED) {
+  //   icon = (
+  //     <CloseIcon
+  //       boxSize={ICON_SIZES.default}
+  //       color="white"
+  //       bg={COLORS.error}
+  //       p="4px"
+  //       borderRadius="50px"
+  //     />
+  //   );
+  // } else if (status === STATUS.SUBMITTED) {
+  //   icon = (
+  //     <CheckCircleIcon color={COLORS.warning} boxSize={ICON_SIZES.default} />
+  //   );
+  // } else if (status === STATUS.DISBURSAL_COMPLETE) {
+  //   icon = (
+  //     <CheckCircleIcon
+  //       color={COLORS.success}
+  //       bg={COLORS.success}
+  //       boxSize={ICON_SIZES.small}
+  //       borderRadius="50px"
+  //     />
+  //   );
+  //   text = (
+  //     <Text fontSize="10px" color={COLORS.success}>
+  //       Disbursal Complete
+  //     </Text>
+  //   );
+  // }
 
   return (
     <HStack alignItems="center">
-      {icon}
+      {/* {icon} */}
       {text}
     </HStack>
   );
@@ -107,12 +113,19 @@ const ApplicationList: React.FC<ApplicationListProps> = ({
         }
         acc[app.status].push(app);
         return acc;
-      }, {} as Record<Application["status"], Application[]>),
+      }, {} as Record<keyof typeof STATUS, Application[]>),
     [applicationList]
   );
 
-  const statusOrder = [STATUS.SUBMITTED, STATUS.APPROVED, STATUS.REJECTED];
-
+  // Define the order of statuses
+  const statusOrder = [
+    STATUS.SUBMITTED,
+    STATUS.PENDING_FOR_REVIEW,
+    STATUS.SUBMITTED_FOR_DISBURSAL,
+    STATUS.AMOUNT_TRANSFER_IN_PROGRESS,
+    STATUS.APPROVED,
+    STATUS.AMOUNT_RECEIVED,
+  ];
   return (
     <Box
       as="section"
@@ -169,9 +182,9 @@ const ApplicationList: React.FC<ApplicationListProps> = ({
                       <Text fontSize="14px" color={COLORS.text} border="none">
                         {app.application_name}
                       </Text>
-                      {status === STATUS.APPROVED && (
+                      {/* {status === STATUS.APPROVED && (
                         <StatusIcon status={STATUS.DISBURSAL_COMPLETE} />
-                      )}
+                      )} */}
                     </HStack>
                   </Box>
                 ))}

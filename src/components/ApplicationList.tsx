@@ -31,67 +31,67 @@ const COLORS = {
   text: "#1F1B13",
 } as const;
 
-// const ICON_SIZES = {
-//   small: "8px",
-//   default: "18px",
-// } as const;
-
+/*const ICON_SIZES = {
+  small: "8px",
+  default: "18px",
+} as const;
+*/
 const StatusIcon: React.FC<{ status: string }> = ({ status }) => {
-  // let icon = (
-  //   <WarningIcon
-  //     aria-label={`Status: ${status}`}
-  //     color={COLORS.error}
-  //     boxSize={ICON_SIZES.default}
-  //   />
-  // );
-  // let text = (
-  //   <Text fontSize="14px" color={COLORS.text}>
-  //     {status}
-  //   </Text>
-  // );
+  /*let icon = (
+    <WarningIcon
+      aria-label={`Status: ${status}`}
+      color={COLORS.error}
+      boxSize={ICON_SIZES.default}
+    />
+  );
+  let text = (
+    <Text fontSize="14px" color={COLORS.text}>
+      {status}
+    </Text>
+  );*/
   const text = (
     <Text fontSize="16px" color={COLORS.text}>
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </Text>
   );
-  // if (status === STATUS.APPROVED) {
-  //   icon = (
-  //     <CheckCircleIcon color={COLORS.success} boxSize={ICON_SIZES.default} />
-  //   );
-  //   text = (
-  //     <Text fontSize="14px" color={COLORS.text} ml="10px">
-  //       Approved For Disbursal
-  //     </Text>
-  //   );
-  // } else if (status === STATUS.REJECTED) {
-  //   icon = (
-  //     <CloseIcon
-  //       boxSize={ICON_SIZES.default}
-  //       color="white"
-  //       bg={COLORS.error}
-  //       p="4px"
-  //       borderRadius="50px"
-  //     />
-  //   );
-  // } else if (status === STATUS.SUBMITTED) {
-  //   icon = (
-  //     <CheckCircleIcon color={COLORS.warning} boxSize={ICON_SIZES.default} />
-  //   );
-  // } else if (status === STATUS.DISBURSAL_COMPLETE) {
-  //   icon = (
-  //     <CheckCircleIcon
-  //       color={COLORS.success}
-  //       bg={COLORS.success}
-  //       boxSize={ICON_SIZES.small}
-  //       borderRadius="50px"
-  //     />
-  //   );
-  //   text = (
-  //     <Text fontSize="10px" color={COLORS.success}>
-  //       Disbursal Complete
-  //     </Text>
-  //   );
-  // }
+  /*  if (status === STATUS.APPROVED) {
+    icon = (
+      <CheckCircleIcon color={COLORS.success} boxSize={ICON_SIZES.default} />
+    );
+    text = (
+      <Text fontSize="14px" color={COLORS.text} ml="10px">
+        Approved For Disbursal
+      </Text>
+    );
+  } else if (status === STATUS.REJECTED) {
+    icon = (
+      <CloseIcon
+        boxSize={ICON_SIZES.default}
+        color="white"
+        bg={COLORS.error}
+        p="4px"
+        borderRadius="50px"
+      />
+    );
+  } else if (status === STATUS.SUBMITTED) {
+    icon = (
+      <CheckCircleIcon color={COLORS.warning} boxSize={ICON_SIZES.default} />
+    );
+  } else if (status === STATUS.DISBURSAL_COMPLETE) {
+    icon = (
+      <CheckCircleIcon
+        color={COLORS.success}
+        bg={COLORS.success}
+        boxSize={ICON_SIZES.small}
+        borderRadius="50px"
+      />
+    );
+    text = (
+      <Text fontSize="10px" color={COLORS.success}>
+        Disbursal Complete
+      </Text>
+    );
+  }*/
 
   return (
     <HStack alignItems="center">

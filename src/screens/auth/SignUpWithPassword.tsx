@@ -37,8 +37,8 @@ const SignUpWithPassword: React.FC = () => {
   });
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  //   const [isFormValid, setIsFormValid] = useState<boolean>(false);
-  const [UserName, SetUserName] = useState<string>("");
+
+  const [UserName, setUserName] = useState<string>("");
   const handleBack = () => {
     navigate(-1);
   };
@@ -82,7 +82,7 @@ const SignUpWithPassword: React.FC = () => {
       // Generate username based on available values
       const { firstName, lastName, phoneNumber } = updatedDetails;
 
-      SetUserName(
+      setUserName(
         `${firstName?.trim().toLowerCase() || ""}_${
           lastName?.charAt(0).toLowerCase() || ""
         }_${phoneNumber?.slice(-4) || ""}`
@@ -155,7 +155,7 @@ const SignUpWithPassword: React.FC = () => {
       const username = `${firstName}_${lastName?.charAt(
         0
       )}_${phoneNumber?.slice(-4)}`;
-      SetUserName(username);
+      setUserName(username);
     }
   }, [userDetails.firstName, userDetails.lastName, userDetails.phoneNumber]);
   const validate = (phoneNumber) => {

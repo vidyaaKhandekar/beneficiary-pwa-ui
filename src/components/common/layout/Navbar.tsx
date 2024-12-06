@@ -16,7 +16,6 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import CustomSelect from "../input/Select";
-// import { useKeycloak } from "@react-keycloak/web";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { logoutUser } from "../../../services/auth/auth";
@@ -27,9 +26,7 @@ const Navbar: React.FC<{ isMenu?: boolean }> = ({ isMenu = true }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const toast = useToast();
-  // const { keycloak } = useKeycloak();
   const handleLogout = async () => {
-    // keycloak.logout({ redirectUri: window.location.origin });
     try {
       const response = await logoutUser();
       if (response) {

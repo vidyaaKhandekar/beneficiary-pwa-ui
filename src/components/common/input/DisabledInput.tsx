@@ -11,9 +11,6 @@ import { CheckIcon } from "@chakra-ui/icons";
 interface CustomSelectProps {
   label: string;
   placeholder?: string;
-  width?: string;
-  height?: string;
-  border?: string;
 }
 
 const CustomDisableInput: React.FC<CustomSelectProps> = ({

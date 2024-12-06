@@ -38,7 +38,7 @@ const SignUpWithPassword: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
-  const [UserName, setUserName] = useState<string>("");
+  const [userName, setUserName] = useState<string>("");
   const handleBack = () => {
     navigate(-1);
   };
@@ -152,10 +152,10 @@ const SignUpWithPassword: React.FC = () => {
     const { firstName, lastName, phoneNumber } = userDetails;
 
     if (firstName && lastName && phoneNumber.length >= 6) {
-      const username = `${firstName}_${lastName?.charAt(
-        0
-      )}_${phoneNumber?.slice(-4)}`;
-      setUserName(username);
+      const name = `${firstName}_${lastName?.charAt(0)}_${phoneNumber?.slice(
+        -4
+      )}`;
+      setUserName(name);
     }
   }, [userDetails.firstName, userDetails.lastName, userDetails.phoneNumber]);
   const validate = (phoneNumber) => {
@@ -217,11 +217,11 @@ const SignUpWithPassword: React.FC = () => {
               isInvalid={confirmPassword.trim() === ""}
               errorMessage={t("SIGNUP_CONFIRM_PASSWORD_IS_REQUIRED")}
             />
-            {UserName.length > 0 && (
+            {userName.length > 0 && (
               <Text textAlign="center" fontSize="14px" mt={4}>
                 {"Your username will be "}
                 <Text as="span" fontWeight="bold" color="#06164B">
-                  {UserName}
+                  {userName}
                 </Text>
               </Text>
             )}

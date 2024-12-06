@@ -5,7 +5,6 @@ import guestRoutes from "./routes/GuestRoutes";
 import { Suspense, useEffect, useState } from "react";
 import Loader from "./components/common/Loader";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import { useKeycloak } from "@react-keycloak/web";
 import { AuthProvider } from "./utils/context/checkToken";
 import "./assets/styles/App.css";
 import Layout from "./components/common/layout/Layout";
@@ -16,7 +15,6 @@ function App() {
     { path: string; component: React.ElementType }[]
   >([]);
   const token = localStorage.getItem("authToken");
-  // const { keycloak } = useKeycloak();
 
   useEffect(() => {
     if (token) {

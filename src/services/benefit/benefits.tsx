@@ -1,5 +1,4 @@
 import axios, { AxiosError } from "axios";
-import { getToken } from "../auth/asyncStorage";
 import { generateUUID } from "../../utils/jsHelper/helper";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const bap_id = import.meta.env.VITE_API_BASE_ID;
@@ -36,10 +35,10 @@ export const getAll = async (userData: {
  * Login a user
  * @param {Object} loginData - Contains phoneNumber, password
  */
-interface getOneParams {
+interface GetOneParams {
   id: string | undefined;
 }
-export const getOne = async ({ id }: getOneParams) => {
+export const getOne = async ({ id }: GetOneParams) => {
   const loginData = {
     context: {
       domain: "onest:financial-support",
@@ -207,7 +206,7 @@ export const confirmApplication = async ({
     handleError(error);
   }
 };
-interface createApplicationParams {
+interface CreateApplicationParams {
   user_id: string | undefined;
   benefit_id: string | undefined;
   benefit_provider_id: string | undefined;
@@ -217,7 +216,7 @@ interface createApplicationParams {
   status: string;
   application_data: unknown;
 }
-export const createApplication = async (data: createApplicationParams) => {
+export const createApplication = async (data: CreateApplicationParams) => {
   try {
     const token = localStorage.getItem("authToken");
 

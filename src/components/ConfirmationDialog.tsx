@@ -24,7 +24,6 @@ interface ConfirmationDialogProps {
   handleConfirmation: () => Promise<void>;
   loading?: boolean;
   consentText?: string;
-  documents?: string[];
 }
 
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
@@ -38,7 +37,6 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 
   consentText = consentText || t("CONFIRMATION_DIALOGUE_CONSENT_TEXT");
 
-  // Function to call the parent's function
   const sendCloseDialog = () => {
     closeDialog(false);
   };
@@ -46,7 +44,6 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   const openSubmitDialog = async () => {
     if (handleConfirmation) {
       handleConfirmation();
-      // navigate("/userprofile");
     }
   };
   const closeSubmitDialog = () => {
@@ -87,7 +84,6 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
                 {consentText}
               </Text>
               <VStack>
-                {/* need to add new document list as per figma {loading ? <Loader /> : <DocumentList documents={documents} />} */}
                 {loading ? <Loader /> : <Text>List of documents</Text>}
               </VStack>
             </ModalBody>

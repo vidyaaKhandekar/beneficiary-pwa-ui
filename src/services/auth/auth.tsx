@@ -13,7 +13,9 @@ interface MobileData {
   token: string;
 }
 function handleError(error: any) {
-  throw error.response ? error.response.data : new Error("Network Error");
+  throw error.response
+    ? error.response.data
+    : new Error("An unexpected error occurred");
 }
 export const loginUser = async (loginData: object) => {
   try {

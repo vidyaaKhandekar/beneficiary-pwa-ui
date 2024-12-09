@@ -12,10 +12,20 @@ interface MobileData {
   otp: number;
   token: string;
 }
-function handleError(error: any) {
-  throw error.response
-    ? error.response.data
-    : new Error("An unexpected error occurred");
+function handleError(error: unknown): never {
+  if (axios.isAxiosError(error)) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "API Error", {
+        cause: error,
+      });
+    }
+    if (error.request) {
+      throw new Error("Network Error - No response received", { cause: error });
+    }
+  }
+  throw error instanceof Error
+    ? error
+    : new Error("An unexpected error occurred", { cause: error });
 }
 export const loginUser = async (loginData: object) => {
   try {

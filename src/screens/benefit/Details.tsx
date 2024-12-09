@@ -5,7 +5,6 @@ import {
   Text,
   UnorderedList,
   ListItem,
-  useDisclosure,
   HStack,
   Icon,
   Modal,
@@ -83,7 +82,6 @@ interface WebFormProps {
 }
 
 const BenefitsDetails: React.FC = () => {
-  const { isOpen, onClose } = useDisclosure();
   const [context, setContext] = useState<FinancialSupportRequest | null>(null);
   const [item, setItem] = useState<BenefitItem | null>(null);
   const [loading, setLoading] = useState<boolean>(true);

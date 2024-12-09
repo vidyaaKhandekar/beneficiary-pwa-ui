@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box, Text, HStack, VStack } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import { formatDate } from "../../utils/jsHelper/helper";

@@ -9,13 +9,11 @@ interface Option {
 
 // Define the props for the CustomSelect component
 interface CustomSelectProps {
-  label: string;
   options: Option[];
   placeholder?: string;
   width?: string;
   height?: string;
   border?: string;
-  labelStyle?: React.CSSProperties; // Optional style for the label
   placeholderStyle?: React.CSSProperties; // Optional style for the placeholder
 }
 
@@ -46,8 +44,8 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
         paddingLeft: 2, // Remove padding from the select input
       }}
     >
-      {options.map((option, index) => (
-        <option key={index} value={option.value}>
+      {options.map((option) => (
+        <option key={option.value} value={option.value}>
           {option.label}
         </option>
       ))}

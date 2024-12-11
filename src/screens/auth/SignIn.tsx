@@ -55,14 +55,12 @@ const SignIn: React.FC = () => {
         navigate(0);
       }
     } catch (error) {
-      console.log("error", error);
-
       toast({
         title: t("SIGNIN_FAILED"),
         status: "error",
         duration: 10000,
         isClosable: true,
-        description: t("SIGNIN_INVALID_USERNAME_PASSWORD_MESSAGE"),
+        description: error?.message,
       });
     } finally {
       setLoading(false);

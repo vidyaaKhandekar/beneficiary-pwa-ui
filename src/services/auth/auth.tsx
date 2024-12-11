@@ -116,14 +116,8 @@ export const logoutUser = async () => {
     localStorage.removeItem("refreshToken");
 
     return response.data;
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error) && error.response) {
-      // Handle the error with specific type if it's an Axios error
-      return Promise.reject(error.response.data);
-    } else {
-      // For other types of errors (like network errors)
-      return Promise.reject(new Error("Network Error"));
-    }
+  } catch (error) {
+    handleError(error);
   }
 };
 

@@ -12,6 +12,75 @@ interface MobileData {
   otp: number;
   token: string;
 }
+function handleClientError(error: any): never {
+  const errorMessage =
+    error.response.data?.message ||
+    error.response.data?.error ||
+    `Client Error: ${error.message}`;
+
+  switch (error.response.status) {
+    case 400:
+      throw new Error(`Bad Request: ${errorMessage}`, { cause: error });
+    case 401:
+      throw new Error(`Unauthorized: ${errorMessage}`, { cause: error });
+    case 403:
+      throw new Error(`Forbidden: ${errorMessage}`, { cause: error });
+    case 404:
+      throw new Error(`Not Found: ${errorMessage}`, { cause: error });
+    default:
+      throw new Error(
+        `Client Error (${error.response.status}): ${errorMessage}`,
+        {
+          cause: error,
+        }
+      );
+  }
+}
+
+function handleServerError(error: any): never {
+  const errorMessage =
+    error.response.data?.message ||
+    `Server Error: ${error.response.statusText}`;
+
+  switch (error.response.status) {
+    case 500:
+      throw new Error(`Internal Server Error: ${errorMessage}`, {
+        cause: error,
+      });
+    case 502:
+      throw new Error(`Bad Gateway: ${errorMessage}`, { cause: error });
+    case 503:
+      throw new Error(`Service Unavailable: ${errorMessage}`, { cause: error });
+    case 504:
+      throw new Error(`Gateway Timeout: ${errorMessage}`, { cause: error });
+    default:
+      throw new Error(
+        `Server Error (${error.response.status}): ${errorMessage}`,
+        {
+          cause: error,
+        }
+      );
+  }
+}
+
+function handleError(error: unknown): never {
+  if (axios.isAxiosError(error)) {
+    if (error.response) {
+      if (error.response.status >= 400 && error.response.status < 500) {
+        handleClientError(error);
+      } else if (error.response.status >= 500 && error.response.status < 600) {
+        handleServerError(error);
+      }
+    } else if (error.request) {
+      throw new Error("Network Error - No response received", { cause: error });
+    }
+  }
+
+  // Fallback for non-Axios errors or unexpected error types
+  throw error instanceof Error
+    ? error
+    : new Error("An unexpected error occurred", { cause: error });
+}
 
 export const loginUser = async (loginData: object) => {
   try {
@@ -22,14 +91,8 @@ export const loginUser = async (loginData: object) => {
     });
 
     return response.data;
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error) && error.response) {
-      // Handle the error with specific type if it's an Axios error
-      return Promise.reject(error.response.data);
-    } else {
-      // For other types of errors (like network errors)
-      return Promise.reject(new Error("Network Error"));
-    }
+  } catch (error) {
+    handleError(error);
   }
 };
 
@@ -78,12 +141,8 @@ export const getUser = async () => {
     );
 
     return response.data;
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error) && error.response) {
-      return Promise.reject(error.response.data);
-    } else {
-      return Promise.reject(new Error("Network Error"));
-    }
+  } catch (error) {
+    handleError(error);
   }
 };
 export const getUserConsents = async () => {
@@ -98,8 +157,7 @@ export const getUserConsents = async () => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error fetching consents:", error);
-    throw new Error("Error fetching consents");
+    handleError(error);
   }
 };
 export const sendConsent = async (
@@ -125,14 +183,8 @@ export const sendConsent = async (
       headers,
     });
     return response.data;
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error) && error.response) {
-      // Handle the error with specific type if it's an Axios error
-      return Promise.reject(error.response.data);
-    } else {
-      // For other types of errors (like network errors)
-      return Promise.reject(new Error("Network Error"));
-    }
+  } catch (error) {
+    handleError(error);
   }
 };
 export const getDocumentsList = async () => {
@@ -147,14 +199,8 @@ export const getDocumentsList = async () => {
 
     // Return the documents list data
     return response.data;
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error) && error.response) {
-      // Handle the error with specific type if it's an Axios error
-      return Promise.reject(error.response.data);
-    } else {
-      // For other types of errors (like network errors)
-      return Promise.reject(new Error("Network Error"));
-    }
+  } catch (error) {
+    handleError(error);
   }
 };
 export const getApplicationList = async (
@@ -190,14 +236,8 @@ export const getApplicationList = async (
     );
 
     return response.data;
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error) && error.response) {
-      // Handle the error with specific type if it's an Axios error
-      return Promise.reject(error.response.data);
-    } else {
-      // For other types of errors (like network errors)
-      return Promise.reject(new Error("Network Error"));
-    }
+  } catch (error) {
+    handleError(error);
   }
 };
 
@@ -219,8 +259,7 @@ export const getApplicationDetails = async (applicationId: string | number) => {
       console.error("Token not found");
     }
   } catch (error) {
-    console.error("Failed to fetch application details:", error);
-    throw error;
+    handleError(error);
   }
 };
 export const sendOTP = async (mobileNumber: string) => {
@@ -231,7 +270,7 @@ export const sendOTP = async (mobileNumber: string) => {
     const response = await axios.post(`${apiBaseUrl}/otp/send_otp`, payload);
     return response?.data?.data;
   } catch (error) {
-    console.log(error);
+    handleError(error);
   }
 };
 export const verifyOTP = async (payload: MobileData) => {
@@ -240,7 +279,7 @@ export const verifyOTP = async (payload: MobileData) => {
     console.log(response);
     return response?.data;
   } catch (error) {
-    console.log(error);
+    handleError(error);
   }
 };
 export const registerUser = async (userData: UserData) => {
@@ -252,7 +291,7 @@ export const registerUser = async (userData: UserData) => {
 
     return response?.data;
   } catch (error) {
-    return error;
+    handleError(error);
   }
 };
 export const registerWithPassword = async (userData) => {

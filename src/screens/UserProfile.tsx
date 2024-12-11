@@ -1,14 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Avatar,
-  Box,
-  Flex,
-  HStack,
-  // IconButton,
-  Text,
-  // Tooltip,
-  VStack,
-} from "@chakra-ui/react";
+import { Avatar, Box, Flex, HStack, Text, VStack } from "@chakra-ui/react";
 
 import { getUser, getDocumentsList } from "../services/auth/auth";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +12,6 @@ import UserDetails from "../components/common/UserDetails";
 
 import UploadDocumentEwallet from "../components/common/UploadDocumentEwallet";
 import CommonButton from "../components/common/button/Button";
-// import { EditIcon } from "@chakra-ui/icons";
 
 const UserProfile: React.FC = () => {
   const [showIframe, setShowIframe] = useState(true);
@@ -102,15 +92,6 @@ const UserProfile: React.FC = () => {
           >
             Basic Details
           </Text>
-          {/* <Tooltip label="Edit" aria-label="Edit tooltip">
-            <IconButton
-              icon={<EditIcon />}
-              variant="ghost"
-              aria-label="Edit"
-              _hover={{ bg: "transparent" }}
-              onClick={() => navigate("/editProfile")}
-            />
-          </Tooltip> */}
         </Flex>
 
         <UserDetails userData={{ ...userData }} />

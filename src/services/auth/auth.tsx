@@ -12,67 +12,66 @@ interface MobileData {
   otp: number;
   token: string;
 }
+function handleClientError(error: any): never {
+  const errorMessage =
+    error.response.data?.message ||
+    error.response.data?.error ||
+    `Client Error: ${error.message}`;
+
+  switch (error.response.status) {
+    case 400:
+      throw new Error(`Bad Request: ${errorMessage}`, { cause: error });
+    case 401:
+      throw new Error(`Unauthorized: ${errorMessage}`, { cause: error });
+    case 403:
+      throw new Error(`Forbidden: ${errorMessage}`, { cause: error });
+    case 404:
+      throw new Error(`Not Found: ${errorMessage}`, { cause: error });
+    default:
+      throw new Error(
+        `Client Error (${error.response.status}): ${errorMessage}`,
+        {
+          cause: error,
+        }
+      );
+  }
+}
+
+function handleServerError(error: any): never {
+  const errorMessage =
+    error.response.data?.message ||
+    `Server Error: ${error.response.statusText}`;
+
+  switch (error.response.status) {
+    case 500:
+      throw new Error(`Internal Server Error: ${errorMessage}`, {
+        cause: error,
+      });
+    case 502:
+      throw new Error(`Bad Gateway: ${errorMessage}`, { cause: error });
+    case 503:
+      throw new Error(`Service Unavailable: ${errorMessage}`, { cause: error });
+    case 504:
+      throw new Error(`Gateway Timeout: ${errorMessage}`, { cause: error });
+    default:
+      throw new Error(
+        `Server Error (${error.response.status}): ${errorMessage}`,
+        {
+          cause: error,
+        }
+      );
+  }
+}
+
 function handleError(error: unknown): never {
   if (axios.isAxiosError(error)) {
-    // Handle HTTP 400 series errors (Client Errors)
-    if (
-      error.response &&
-      error.response.status >= 400 &&
-      error.response.status < 500
-    ) {
-      const errorMessage =
-        error.response.data?.message ||
-        error.response.data?.error ||
-        `Client Error: ${error.message}`;
-
-      switch (error.response.status) {
-        case 400:
-          throw new Error(`Bad Request: ${errorMessage}`, { cause: error });
-        case 401:
-          throw new Error(`Unauthorized: ${errorMessage}`, { cause: error });
-        case 403:
-          throw new Error(`Forbidden: ${errorMessage}`, { cause: error });
-        case 404:
-          throw new Error(`Not Found: ${errorMessage}`, { cause: error });
-        default:
-          throw new Error(
-            `Client Error (${error.response.status}): ${errorMessage}`,
-            { cause: error }
-          );
+    if (error.response) {
+      if (error.response.status >= 400 && error.response.status < 500) {
+        handleClientError(error);
+      } else if (error.response.status >= 500 && error.response.status < 600) {
+        handleServerError(error);
       }
-    }
-    // Handle HTTP 500 series errors (Server Errors)
-    if (
-      error.response &&
-      error.response.status >= 500 &&
-      error.response.status < 600
-    ) {
-      const errorMessage =
-        error.response.data?.message ||
-        `Server Error: ${error.response.statusText}`;
-
-      switch (error.response.status) {
-        case 500:
-          throw new Error(`Internal Server Error: ${errorMessage}`, {
-            cause: error,
-          });
-        case 502:
-          throw new Error(`Bad Gateway: ${errorMessage}`, { cause: error });
-        case 503:
-          throw new Error(`Service Unavailable: ${errorMessage}`, {
-            cause: error,
-          });
-        case 504:
-          throw new Error(`Gateway Timeout: ${errorMessage}`, { cause: error });
-        default:
-          throw new Error(
-            `Server Error (${error.response.status}): ${errorMessage}`,
-            { cause: error }
-          );
-      }
-    }
-
-    if (error.request) {
+    } else if (error.request) {
       throw new Error("Network Error - No response received", { cause: error });
     }
   }
@@ -82,6 +81,7 @@ function handleError(error: unknown): never {
     ? error
     : new Error("An unexpected error occurred", { cause: error });
 }
+
 export const loginUser = async (loginData: object) => {
   try {
     const response = await axios.post(`${apiBaseUrl}/auth/login`, loginData, {

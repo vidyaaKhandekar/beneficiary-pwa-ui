@@ -270,7 +270,7 @@ export const sendOTP = async (mobileNumber: string) => {
     const response = await axios.post(`${apiBaseUrl}/otp/send_otp`, payload);
     return response?.data?.data;
   } catch (error) {
-    console.log(error);
+    handleError(error);
   }
 };
 export const verifyOTP = async (payload: MobileData) => {
@@ -291,7 +291,7 @@ export const registerUser = async (userData: UserData) => {
 
     return response?.data;
   } catch (error) {
-    return error;
+    handleError(error);
   }
 };
 export const registerWithPassword = async (userData) => {

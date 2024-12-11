@@ -299,7 +299,6 @@ const BenefitsDetails: React.FC = () => {
     }
   };
   const handleRedirect = () => {
-    // setSubmitDialouge(false);
     navigate("/applicationStatus");
   };
   return (
@@ -315,7 +314,6 @@ const BenefitsDetails: React.FC = () => {
           <HStack mt={2}>
             <Icon as={MdCurrencyRupee} boxSize={5} color="#484848" />
             <Text>{item?.price?.value}</Text>
-            {/* <Text>{item?.price?.currency}</Text> */}
           </HStack>
           <Heading size="md" mt={6} color="#484848" fontWeight={500}>
             {t("BENEFIT_DETAILS_HEADING_DETAILS")}
@@ -379,19 +377,6 @@ const BenefitsDetails: React.FC = () => {
         onClose={handleRedirect}
         handleDialog={handleRedirect}
       />
-      {/* <ConfirmationDialog
-        dialogVisible={isOpen}
-        closeDialog={onClose}
-        handleConfirmation={handleConfirmation}
-        // documents={item?.document}
-      />
-
-      <SubmitDialog
-        dialogVisible={
-          confirmationConsent as { name?: string; orderId?: string }
-        }
-        closeSubmit={setConfirmationConsent}
-      /> */}
     </Layout>
   );
 };

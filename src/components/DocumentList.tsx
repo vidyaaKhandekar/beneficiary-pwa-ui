@@ -1,9 +1,18 @@
 import * as React from "react";
-import { VStack, Text, Icon, HStack, useTheme } from "@chakra-ui/react";
+import {
+  VStack,
+  Text,
+  Icon,
+  HStack,
+  useTheme,
+  Tooltip,
+  IconButton,
+  Box,
+} from "@chakra-ui/react";
 import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
 import Loader from "./common/Loader";
 import { findDocumentStatus } from "../utils/jsHelper/helper";
-
+import { FaTrashAlt, FaEye } from "react-icons/fa";
 interface StatusIconProps {
   status: boolean;
   size?: number;
@@ -77,9 +86,25 @@ const DocumentList: React.FC<DocumentListProps> = ({ documents, userData }) => {
         >
           {/* Default status to false if not provided */}
           <StatusIcon status={document.documentSubType} userData={userData} />
-          <Text fontSize="16px" fontWeight="400" color={theme.colors.text}>
-            {document.name}
-          </Text>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            width={"100%"}
+          >
+            <Text fontSize="16px" fontWeight="400" color={theme.colors.text}>
+              {document.name}
+            </Text>
+
+            <Tooltip label="Delete" aria-label="Delete Tooltip">
+              <IconButton
+                icon={<FaTrashAlt />}
+                aria-label="Delete"
+                size="md"
+                color={"grey"}
+              />
+            </Tooltip>
+          </Box>
         </HStack>
       ))}
     </VStack>

@@ -49,7 +49,7 @@ export const getTokenData = async (): Promise<JwtPayload | null> => {
   const tokenResponse = await getToken();
   if (tokenResponse?.token) {
     try {
-      const decoded = jwtDecode<JwtPayload>(tokenResponse.token as string); // Type assertion here
+      const decoded = jwtDecode<JwtPayload>(tokenResponse.token);
       return decoded;
     } catch (e) {
       console.error("Error decoding token:", e);

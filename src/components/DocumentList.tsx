@@ -12,7 +12,7 @@ import {
 import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
 import Loader from "./common/Loader";
 import { findDocumentStatus } from "../utils/jsHelper/helper";
-import { FaTrashAlt, FaEye } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
 interface StatusIconProps {
   status: boolean;
   size?: number;

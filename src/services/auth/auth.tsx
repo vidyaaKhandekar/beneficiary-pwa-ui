@@ -99,6 +99,9 @@ export const loginUser = async (loginData: object) => {
 export const logoutUser = async () => {
   const accessToken = localStorage.getItem("authToken");
   const refreshToken = localStorage.getItem("refreshToken");
+  if (!accessToken || !refreshToken) {
+    throw new Error("No active session found");
+  }
   try {
     const response = await axios.post(
       `${apiBaseUrl}/auth/logout`,
@@ -112,10 +115,13 @@ export const logoutUser = async () => {
         },
       }
     );
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("refreshToken");
+    if (response) {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("refreshToken");
+    }
 
-    return response.data;
+    // return response.data ;
+    return response.data as { success: boolean; message: string };
   } catch (error) {
     handleError(error);
   }

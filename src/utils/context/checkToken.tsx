@@ -1,4 +1,10 @@
-import React, { createContext, useState, useEffect, ReactNode } from "react";
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  ReactNode,
+  useMemo,
+} from "react";
 import { getToken } from "../../services/auth/asyncStorage";
 
 // Define types for the context
@@ -58,7 +64,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [documents, setDocuments] = useState<string[]>([]);
 
-  // Function to check token and update login status
   const checkToken = async () => {
     try {
       const token = await getToken();
@@ -88,22 +93,23 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     checkToken();
   }, []);
 
+  const contextValue = useMemo(
+    () => ({
+      isLoggedIn,
+      checkToken,
+      setIsLoggedIn,
+      userData,
+      documents,
+      updateUserData,
+      updateApplicationId,
+      applicationId,
+      removeContextData,
+    }),
+    [isLoggedIn, userData, documents, applicationId] // Dependencies
+  );
+
   return (
-    <AuthContext.Provider
-      value={{
-        isLoggedIn,
-        checkToken,
-        setIsLoggedIn,
-        userData,
-        documents,
-        updateUserData,
-        updateApplicationId,
-        applicationId,
-        removeContextData,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
 

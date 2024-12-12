@@ -99,6 +99,9 @@ export const loginUser = async (loginData: object) => {
 export const logoutUser = async () => {
   const accessToken = localStorage.getItem("authToken");
   const refreshToken = localStorage.getItem("refreshToken");
+  if (!accessToken || !refreshToken) {
+    throw new Error("No active session found");
+  }
   try {
     const response = await axios.post(
       `${apiBaseUrl}/auth/logout`,
@@ -112,18 +115,14 @@ export const logoutUser = async () => {
         },
       }
     );
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("refreshToken");
-
-    return response.data;
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error) && error.response) {
-      // Handle the error with specific type if it's an Axios error
-      return Promise.reject(error.response.data);
-    } else {
-      // For other types of errors (like network errors)
-      return Promise.reject(new Error("Network Error"));
+    if (response) {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("refreshToken");
     }
+
+    return response.data as { success: boolean; message: string };
+  } catch (error) {
+    handleError(error);
   }
 };
 

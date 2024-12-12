@@ -136,9 +136,6 @@ const Signup: React.FC = () => {
           );
           setToastMessage(true);
           navigate("/home");
-          // setTimeout(() => {
-          //   navigate("/home");
-          // }, 3000);
         } else {
           setLoading(false);
           setToastMessage(true);
@@ -187,7 +184,6 @@ const Signup: React.FC = () => {
               label={t("SIGNUP_MOBILE_NUMBER")}
               value={userDetails.mobile}
               onChange={(e) => handleChange(e)}
-              // onChange={(e) => setFirstName(e.target.value)}
               isInvalid={!!mobileError}
               errorMessage={mobileError}
             />
@@ -197,7 +193,6 @@ const Signup: React.FC = () => {
               mt={4}
               label={t("OTP_SEND")}
               onClick={sendOTPAPI}
-              // onClick={openModal}
               isDisabled={!isFormValid}
             />
           )}
@@ -251,7 +246,6 @@ const Signup: React.FC = () => {
               mt={4}
               label={t("GENERAL_PROCEED")}
               onClick={handleSignUp}
-              // onClick={openModal}
               isDisabled={!isFormValid}
             />
           )}

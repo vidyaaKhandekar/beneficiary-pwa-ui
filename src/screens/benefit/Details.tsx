@@ -127,88 +127,113 @@ const BenefitsDetails: React.FC = () => {
   const handleBack = () => {
     navigate(-1);
   };
+  const extractResultItem = (result) => {
+    return (
+      (result as { data: { responses: Array<any> } }).data?.responses?.[0]
+        ?.message?.order?.items?.[0] || {}
+    );
+  };
 
+  const extractRequiredDocs = (resultItem) => {
+    return (
+      resultItem?.tags
+        ?.find(
+          (e: { descriptor: { code: string } }) =>
+            e?.descriptor?.code === "required-docs"
+        )
+        ?.list?.filter((e: { value: unknown }) => e.value)
+        .map((e: { value: unknown }) => e.value) || []
+    );
+  };
+
+  const extractContext = (result) => {
+    return (result as { data: { responses: Array<any> } }).data?.responses?.[0]
+      ?.context as FinancialSupportRequest;
+  };
+
+  const handleAuthenticatedFlow = async (resultItem, id) => {
+    const user = await getUser();
+    const eligibilityArr = checkEligibility(resultItem, user);
+    setIsEligible(eligibilityArr.length > 0 ? eligibilityArr : undefined);
+    setAuthUser(user?.data || {});
+
+    const appResult = await getApplication({
+      user_id: user?.data?.user_id,
+      benefit_id: id,
+    });
+
+    if (appResult?.data?.applications?.length > 0) {
+      setIsApplied(true);
+    }
+  };
+
+  const checkEligibility = (resultItem, user) => {
+    const eligibilityArr = [];
+
+    if (Array.isArray(resultItem?.tags)) {
+      resultItem?.tags?.forEach((e: any) => {
+        if (e?.descriptor?.code === "@eligibility") {
+          if (Array.isArray(e.list)) {
+            e.list.forEach((item: any) => {
+              const code = item?.descriptor?.code;
+              try {
+                const valueObj = JSON.parse(item.value || "{}");
+                const payload = {
+                  ...valueObj,
+                  value: user?.data?.[code],
+                };
+                const result = checkEligibilityCriteria(payload);
+                if (!result) {
+                  eligibilityArr.push(code);
+                }
+              } catch (error) {
+                console.error(`Failed to parse eligibility criteria: ${error}`);
+                eligibilityArr.push(code);
+              }
+            });
+          }
+        }
+      });
+    }
+
+    return eligibilityArr;
+  };
+
+  const handleError = (e) => {
+    if (mounted) {
+      if (e instanceof Error) {
+        setError(`Error: ${e.message}`);
+      } else {
+        setError("An unexpected error occurred");
+      }
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     let mounted = true;
     const init = async () => {
       try {
         const result = await getOne({ id });
-        const resultItem =
-          (result as { data: { responses: Array<any> } }).data?.responses?.[0]
-            ?.message?.order?.items?.[0] || {};
-        setContext(
-          (result as { data: { responses: Array<any> } }).data?.responses?.[0]
-            ?.context as FinancialSupportRequest
-        );
+        const resultItem = extractResultItem(result);
+        const docs = extractRequiredDocs(resultItem);
 
-        const docs =
-          resultItem?.tags
-            ?.find(
-              (e: { descriptor: { code: string } }) =>
-                e?.descriptor?.code === "required-docs"
-            )
-            ?.list?.filter((e: { value: unknown }) => e.value)
-            .map((e: { value: unknown }) => e.value) || [];
+        setContext(extractContext(result));
+
         if (mounted) {
           setItem({ ...resultItem, document: docs });
-
           const token = localStorage.getItem("authToken");
-          if (token) {
-            const user = await getUser();
-            const eligibilityArr = [];
-            if (Array.isArray(resultItem?.tags)) {
-              resultItem?.tags?.forEach((e: any) => {
-                if (e?.descriptor?.code === "@eligibility") {
-                  if (Array.isArray(e.list)) {
-                    e.list.forEach((item: any) => {
-                      const code = item?.descriptor?.code;
-                      try {
-                        const valueObj = JSON.parse(item.value || "{}");
-                        const payload = {
-                          ...valueObj,
-                          value: user?.data?.[code],
-                        };
-                        const result = checkEligibilityCriteria(payload);
-                        if (!result) {
-                          eligibilityArr.push(code);
-                        }
-                      } catch (error) {
-                        console.error(
-                          `Failed to parse eligibility criteria: ${error}`
-                        );
-                        eligibilityArr.push(code);
-                      }
-                    });
-                  }
-                }
-              });
-            }
-            setIsEligible(
-              eligibilityArr.length > 0 ? eligibilityArr : undefined
-            );
-            setAuthUser(user?.data || {});
-            const appResult = await getApplication({
-              user_id: user?.data?.user_id,
-              benefit_id: id,
-            });
 
-            if (appResult?.data?.applications?.length > 0) {
-              setIsApplied(true);
-            }
+          if (token) {
+            await handleAuthenticatedFlow(resultItem, id);
           }
+
           setLoading(false);
         }
       } catch (e: unknown) {
-        if (mounted) {
-          if (e instanceof Error) {
-            setError(`Error: ${e.message}`);
-          } else {
-            setError("An unexpected error occurred");
-          }
-        }
-        setLoading(false);
+        handleError(e);
       }
     };
+
     init();
     return () => {
       mounted = false;
@@ -299,7 +324,6 @@ const BenefitsDetails: React.FC = () => {
     }
   };
   const handleRedirect = () => {
-    // setSubmitDialouge(false);
     navigate("/applicationStatus");
   };
   return (
@@ -315,7 +339,6 @@ const BenefitsDetails: React.FC = () => {
           <HStack mt={2}>
             <Icon as={MdCurrencyRupee} boxSize={5} color="#484848" />
             <Text>{item?.price?.value}</Text>
-            {/* <Text>{item?.price?.currency}</Text> */}
           </HStack>
           <Heading size="md" mt={6} color="#484848" fontWeight={500}>
             {t("BENEFIT_DETAILS_HEADING_DETAILS")}
@@ -379,19 +402,6 @@ const BenefitsDetails: React.FC = () => {
         onClose={handleRedirect}
         handleDialog={handleRedirect}
       />
-      {/* <ConfirmationDialog
-        dialogVisible={isOpen}
-        closeDialog={onClose}
-        handleConfirmation={handleConfirmation}
-        // documents={item?.document}
-      />
-
-      <SubmitDialog
-        dialogVisible={
-          confirmationConsent as { name?: string; orderId?: string }
-        }
-        closeSubmit={setConfirmationConsent}
-      /> */}
     </Layout>
   );
 };

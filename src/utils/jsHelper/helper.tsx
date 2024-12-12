@@ -179,7 +179,11 @@ export function findDocumentStatus(documents, status) {
   for (let doc of documents) {
     if (doc.doc_subtype === status) {
       // Return true and the doc_verified value for the matched object
-      return { matchFound: true, doc_verified: doc.doc_verified };
+      return {
+        matchFound: true,
+        doc_verified: doc.doc_verified,
+        doc_id: doc.doc_id,
+      };
     }
   }
   // If no match is found
@@ -419,16 +423,16 @@ export function getIncomeRangeValue(annualIncome: string): string | undefined {
 
   for (const range of IncomeRange) {
     if (range.value === "") continue;
-    
+
     const [minStr, maxStr] = range.value.split("-");
     const min = Number(minStr);
     const max = Number(maxStr);
-    
+
     if (Number.isNaN(min) || Number.isNaN(max)) {
       console.warn(`Invalid range format in IncomeRange: ${range.value}`);
       continue;
     }
-    
+
     if (income >= min && income <= max) {
       return range.value;
     }

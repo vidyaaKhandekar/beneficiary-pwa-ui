@@ -199,16 +199,6 @@ const BenefitsDetails: React.FC = () => {
     return eligibilityArr;
   };
 
-  const handleError = (e) => {
-    if (mounted) {
-      if (e instanceof Error) {
-        setError(`Error: ${e.message}`);
-      } else {
-        setError("An unexpected error occurred");
-      }
-      setLoading(false);
-    }
-  };
   useEffect(() => {
     let mounted = true;
     const init = async () => {
@@ -233,7 +223,16 @@ const BenefitsDetails: React.FC = () => {
         handleError(e);
       }
     };
-
+    const handleError = (e) => {
+      if (mounted) {
+        if (e instanceof Error) {
+          setError(`Error: ${e.message}`);
+        } else {
+          setError("An unexpected error occurred");
+        }
+        setLoading(false);
+      }
+    };
     init();
     return () => {
       mounted = false;

@@ -120,7 +120,6 @@ export const logoutUser = async () => {
       localStorage.removeItem("refreshToken");
     }
 
-    // return response.data ;
     return response.data as { success: boolean; message: string };
   } catch (error) {
     handleError(error);

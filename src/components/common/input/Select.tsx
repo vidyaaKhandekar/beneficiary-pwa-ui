@@ -9,7 +9,6 @@ interface Option {
 
 // Define the props for the CustomSelect component
 interface CustomSelectProps {
-  label?: string;
   options: Option[];
   placeholder?: string;
   width?: string;

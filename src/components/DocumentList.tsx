@@ -38,6 +38,26 @@ const StatusIcon: React.FC<StatusIconProps> = ({
     />
   );
 };
+const DeleteDocument: React.FC<StatusIconProps> = ({ status, userData }) => {
+  const result = findDocumentStatus(userData, status);
+
+  if (result?.matchFound) {
+    return (
+      <Tooltip label="Delete" aria-label="Delete Tooltip">
+        <IconButton
+          icon={<FaTrashAlt />}
+          aria-label="Delete"
+          size="md"
+          color={"grey"}
+          onClick={() => handleDelete(result?.doc_id)}
+        />
+      </Tooltip>
+    );
+  }
+};
+const handleDelete = (doc_id) => {
+  console.log("userData", doc_id);
+};
 
 interface Document {
   name: string;
@@ -96,14 +116,10 @@ const DocumentList: React.FC<DocumentListProps> = ({ documents, userData }) => {
               {document.name}
             </Text>
 
-            <Tooltip label="Delete" aria-label="Delete Tooltip">
-              <IconButton
-                icon={<FaTrashAlt />}
-                aria-label="Delete"
-                size="md"
-                color={"grey"}
-              />
-            </Tooltip>
+            <DeleteDocument
+              status={document.documentSubType}
+              userData={userData}
+            />
           </Box>
         </HStack>
       ))}

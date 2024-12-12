@@ -133,6 +133,12 @@ const BenefitsDetails: React.FC = () => {
         ?.message?.order?.items?.[0] || {}
     );
   };
+  const extractResultItem = (result) => {
+    return (
+      (result as { data: { responses: Array<any> } }).data?.responses?.[0]
+        ?.message?.order?.items?.[0] || {}
+    );
+  };
 
   const extractRequiredDocs = (resultItem) => {
     return (

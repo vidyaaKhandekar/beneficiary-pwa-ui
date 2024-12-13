@@ -5,14 +5,23 @@ import {
   Icon,
   HStack,
   useTheme,
-  Tooltip,
   IconButton,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Code,
   Box,
 } from "@chakra-ui/react";
+
 import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
 import Loader from "./common/Loader";
 import { findDocumentStatus } from "../utils/jsHelper/helper";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaTrashAlt, FaEye } from "react-icons/fa";
+import CommonButton from "./common/button/Button";
 interface StatusIconProps {
   status: boolean;
   size?: number;
@@ -38,20 +47,65 @@ const StatusIcon: React.FC<StatusIconProps> = ({
     />
   );
 };
-const DeleteDocument: React.FC<StatusIconProps> = ({ status, userData }) => {
+const DocumentActions: React.FC<StatusIconProps> = ({ status, userData }) => {
   const result = findDocumentStatus(userData, status);
-
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [document, setDocument] = React.useState();
+  const handlepreview = () => {
+    setDocument(JSON.parse(result?.doc_data));
+    setIsOpen(true);
+  };
+  const onClose = () => {
+    setIsOpen(false);
+  };
   if (result?.matchFound) {
+    console.log("result", result?.doc_data);
+
     return (
-      <Tooltip label="Delete" aria-label="Delete Tooltip">
-        <IconButton
-          icon={<FaTrashAlt />}
-          aria-label="Delete"
-          size="md"
-          color={"grey"}
-          onClick={() => handleDelete(result?.doc_id)}
-        />
-      </Tooltip>
+      <>
+        <Box>
+          <IconButton
+            icon={<FaEye />}
+            aria-label="Preview"
+            size="sm"
+            color={"grey"}
+            onClick={() => handlepreview()}
+          />
+          <IconButton
+            icon={<FaTrashAlt />}
+            aria-label="Delete"
+            size="sm"
+            color={"grey"}
+            onClick={() => handleDelete(result?.doc_id)}
+          />
+        </Box>
+        <Modal isOpen={isOpen} onClose={onClose} size="lg">
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Preview Document</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Box
+                as="pre"
+                p={4}
+                bg="gray.100"
+                rounded="md"
+                overflowX="auto"
+                overflowY="auto"
+                fontSize="sm"
+                whiteSpace="pre-wrap"
+                maxHeight="500px"
+                width="auto"
+              >
+                <Code>{JSON.stringify(document, null, 2)}</Code>
+              </Box>
+            </ModalBody>
+            <ModalFooter>
+              <CommonButton label="Close" onClick={onClose} width="100px" />
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </>
     );
   }
 };
@@ -112,11 +166,16 @@ const DocumentList: React.FC<DocumentListProps> = ({ documents, userData }) => {
             justifyContent="space-between"
             width={"100%"}
           >
-            <Text fontSize="16px" fontWeight="400" color={theme.colors.text}>
+            <Text
+              fontSize="16px"
+              fontWeight="400"
+              color={theme.colors.text}
+              width={"80%"}
+            >
               {document.name}
             </Text>
 
-            <DeleteDocument
+            <DocumentActions
               status={document.documentSubType}
               userData={userData}
             />

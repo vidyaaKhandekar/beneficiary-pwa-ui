@@ -28,7 +28,10 @@ interface StatusIconProps {
   "aria-label"?: string;
   userData: object;
 }
-
+interface DocumentActionsProps {
+  status: boolean;
+  userData: object;
+}
 const StatusIcon: React.FC<StatusIconProps> = ({
   status,
   size = 5,
@@ -47,7 +50,10 @@ const StatusIcon: React.FC<StatusIconProps> = ({
     />
   );
 };
-const DocumentActions: React.FC<StatusIconProps> = ({ status, userData }) => {
+const DocumentActions: React.FC<DocumentActionsProps> = ({
+  status,
+  userData,
+}) => {
   const result = findDocumentStatus(userData, status);
   const [isOpen, setIsOpen] = React.useState(false);
   const [document, setDocument] = React.useState();

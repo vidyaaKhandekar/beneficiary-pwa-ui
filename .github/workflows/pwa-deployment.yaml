@@ -22,9 +22,7 @@ jobs:
           fi
           echo '${{ secrets.ENV }}' > .env
           ls -ltra
-          # yarn install
           npm install
-          # yarn build
           npm run build
           ls -ltra
       - name: Show PWD

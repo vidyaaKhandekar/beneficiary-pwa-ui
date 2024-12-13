@@ -1,28 +1,61 @@
-import js from "@eslint/js";
-import globals from "globals";
-import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
-import tseslint from "typescript-eslint";
+import globals from 'globals';
+import pluginJs from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import pluginReact from 'eslint-plugin-react';
+import pluginReactHooks from 'eslint-plugin-react-hooks';
+import pluginReactRefresh from 'eslint-plugin-react-refresh';
+import pluginJsxA11y from 'eslint-plugin-jsx-a11y';
+import pluginEslintPrettieRecommendedConfig from 'eslint-plugin-prettier/recommended';
 
-export default tseslint.config(
-  { ignores: ["dist"] },
-  {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    files: ["**/*.{ts,tsx}"],
-    languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
-    },
-    plugins: {
-      "react-hooks": reactHooks,
-      "react-refresh": reactRefresh,
-    },
-    rules: {
-      ...reactHooks.configs.recommended.rules,
-      "react-refresh/only-export-components": [
-        "warn",
-        { allowConstantExport: true },
-      ],
-    },
-  }
-);
+/** @type {import('eslint').Linter.Config[]} */
+export default [
+	{
+		files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
+	},
+	{
+		languageOptions: {
+			globals: {
+				...globals.browser,
+			},
+		},
+	},
+	pluginJs.configs.recommended,
+	...tseslint.configs.recommended,
+	pluginReact.configs.flat.recommended,
+	pluginJsxA11y.flatConfigs.recommended,
+	pluginEslintPrettieRecommendedConfig,
+	{
+		plugins: {
+			'react-hooks': pluginReactHooks,
+			'react-refresh': pluginReactRefresh,
+		},
+		settings: {
+			react: {
+				version: 'detect',
+			},
+		},
+		rules: {
+			'react-hooks/rules-of-hooks': 'error',
+			'react-hooks/exhaustive-deps': 'warn',
+			'react-refresh/only-export-components': 'warn',
+			// Prettier and Indentation Rules
+			'prettier/prettier': [
+				'error',
+				{
+					arrowParens: 'always',
+					endOfLine: 'lf',
+					semi: true,
+					singleQuote: true,
+					tabWidth: 4,
+					trailingComma: 'es5',
+					useTabs: true,
+				},
+			],
+			indent: ['error', 'tab'],
+		},
+	},
+	{
+		// Optional: ignore specific files or patterns
+		ignores: ['**/node_modules/**', 'dist/**', 'build/**'],
+	},
+];

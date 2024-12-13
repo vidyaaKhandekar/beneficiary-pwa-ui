@@ -13,7 +13,7 @@ export const saveToken = async (token: string, refreshToken: string) => {
 
 // Function to retrieve the token
 export const getToken = async (): Promise<{
-  token: string | unknown;
+  token: string;
   refreshToken: string | null;
 } | null> => {
   try {
@@ -47,9 +47,9 @@ interface JwtPayload {
 
 export const getTokenData = async (): Promise<JwtPayload | null> => {
   const tokenResponse = await getToken();
-  if (tokenResponse && tokenResponse.token) {
+  if (tokenResponse?.token) {
     try {
-      const decoded = jwtDecode<JwtPayload>(tokenResponse.token as string); // Type assertion here
+      const decoded = jwtDecode<JwtPayload>(tokenResponse.token);
       return decoded;
     } catch (e) {
       console.error("Error decoding token:", e);

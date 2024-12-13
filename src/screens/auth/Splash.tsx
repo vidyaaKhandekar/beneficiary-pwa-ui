@@ -7,7 +7,6 @@ import {
   Stack,
   Box,
 } from "@chakra-ui/react";
-// import { useKeycloak } from "@react-keycloak/web";
 import React, { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +20,6 @@ import { changeLanguage } from "i18next";
 const Splash: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  // const { keycloak } = useKeycloak();
   const [formData, setFormData] = useState({ name: "en" });
   const options = [{ label: t("LOGIN_ENGLISH"), value: "en" }];
 
@@ -37,18 +35,6 @@ const Splash: React.FC = () => {
   const handleRedirect = () => {
     navigate("/SignUp");
   };
-
-  // const handleLogin = async () => {
-  //   try {
-  //     await keycloak.login();
-  //   } catch (error) {
-  //     console.error(
-  //       "Login failed:",
-  //       error instanceof Error ? error.message : "Unknown error"
-  //     );
-  //   }
-  // };
-
   return (
     <Box
       display="flex"

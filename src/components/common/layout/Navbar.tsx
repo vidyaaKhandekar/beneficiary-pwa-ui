@@ -97,7 +97,7 @@ const Navbar: React.FC<{ isMenu?: boolean }> = ({ isMenu = true }) => {
           )}
         </Box>
 
-        <CustomSelect label="EN" options={options} placeholder="EN" />
+        <CustomSelect options={options} placeholder="EN" />
       </Flex>
     </Stack>
   );

@@ -21,12 +21,13 @@ const DocumentActions: React.FC<DocumentActionsProps> = ({
   userData,
 }) => {
   const documentStatus = findDocumentStatus(userData, status);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [document, setDocument] = useState();
 
   const { updateUserData } = useContext(AuthContext)!;
   const toast = useToast();
-  const [opneConfirmation, setOpneConfirmation] = useState(false);
+
   const init = async () => {
     try {
       const result = await getUser();
@@ -39,7 +40,7 @@ const DocumentActions: React.FC<DocumentActionsProps> = ({
   const handleDelete = async () => {
     try {
       const response = await deleteDocument(documentStatus.doc_id);
-      setOpneConfirmation(false);
+      setIsConfirmationOpen(false);
       if (response) {
         toast({
           title: "Document deleted successfully",
@@ -72,7 +73,7 @@ const DocumentActions: React.FC<DocumentActionsProps> = ({
     setIsOpen(true);
   };
   const handleOpneConfirmation = () => {
-    setOpneConfirmation(true);
+    setIsConfirmationOpen(true);
   };
   if (documentStatus?.matchFound) {
     return (
@@ -95,16 +96,16 @@ const DocumentActions: React.FC<DocumentActionsProps> = ({
         </Box>
 
         <CommonDialogue
-          isOpen={opneConfirmation}
-          onClose={() => setOpneConfirmation(false)}
+          isOpen={isConfirmationOpen}
+          onClose={() => setIsConfirmationOpen(false)}
           handleDialog={handleDelete}
-          deleteConfirmation={opneConfirmation}
+          deleteConfirmation={isConfirmationOpen}
           documentName={documentStatus.doc_name}
         />
         <CommonDialogue
-          isOpen={isOpen}
+          isOpen={isPreviewOpen}
           previewDocument={true}
-          onClose={() => setIsOpen(false)}
+          onClose={() => setIsPreviewOpen(false)}
           document={document}
         />
       </>

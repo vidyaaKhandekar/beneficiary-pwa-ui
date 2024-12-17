@@ -9,7 +9,12 @@ import CommonDialogue from "./common/Dialogue";
 
 interface DocumentActionsProps {
   status: boolean;
-  userData: object;
+  userData: {
+    doc_id: string;
+    doc_data: string;
+    doc_name: string;
+    [key: string]: any;
+  };
 }
 const DocumentActions: React.FC<DocumentActionsProps> = ({
   status,

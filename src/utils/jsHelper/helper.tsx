@@ -174,7 +174,14 @@ export function processDocuments(documents, userId) {
   });
 }
 
-export function findDocumentStatus(documents, status) {
+interface DocumentStatus {
+  matchFound: boolean;
+  doc_verified: boolean | null;
+  doc_id?: string;
+  doc_data?: unknown;
+  doc_name?: string;
+}
+export function findDocumentStatus(documents, status): DocumentStatus {
   // Iterate through the documents array
   for (let doc of documents) {
     if (doc.doc_subtype === status) {
@@ -190,7 +197,13 @@ export function findDocumentStatus(documents, status) {
     }
   }
   // If no match is found
-  return { matchFound: false, doc_verified: null };
+  return {
+    matchFound: false,
+    doc_verified: null,
+    doc_id: "",
+    doc_data: null,
+    doc_name: "",
+  };
 }
 export const convertToEditPayload = (formData) => {
   const { personalInfo, academicInfo, bankDetails } = formData;

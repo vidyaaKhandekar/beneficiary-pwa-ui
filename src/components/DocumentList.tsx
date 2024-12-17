@@ -1,20 +1,10 @@
 import * as React from "react";
-import {
-  VStack,
-  Text,
-  Icon,
-  HStack,
-  useTheme,
-  Box,
-,
-} from "@chakra-ui/react";
+import { VStack, Text, Icon, HStack, useTheme, Box } from "@chakra-ui/react";
 
 import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
 import Loader from "./common/Loader";
 import { findDocumentStatus } from "../utils/jsHelper/helper";
-import { FaTrashAlt, FaEye } from "react-icons/fa";
-import CommonButton from "./common/button/Button";
-import { deleteDocument } from "../services/user/User";
+
 import DocumentActions from "./DocumentActions";
 interface StatusIconProps {
   status: boolean;

@@ -73,7 +73,7 @@ export const deleteDocument = async (id) => {
     return response.data;
   } catch (error) {
     console.error(
-      "Error In Deleteing Document:",
+      "Error in Deleteing Document:",
       error.response?.data || error.message
     );
     throw error;

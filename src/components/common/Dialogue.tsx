@@ -53,7 +53,7 @@ const CommonDialogue: React.FC<CommonDialogueProps> = ({
   const { t } = useTranslation();
   if (previewDocument) {
     return (
-      <Modal isOpen={isOpen} onClose={onClose} size="lg">
+      <Modal isOpen={previewDocument} onClose={onClose} size="lg">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Preview Document</ModalHeader>

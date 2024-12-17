@@ -69,8 +69,9 @@ const DocumentActions: React.FC<DocumentActionsProps> = ({
     }
   };
   const handlepreview = () => {
-    setDocument(JSON.parse(documentStatus?.doc_data));
-    setIsOpen(true);
+    setDocument(JSON.parse(documentStatus?.doc_data as string));
+
+    setIsPreviewOpen(true);
   };
   const handleOpneConfirmation = () => {
     setIsConfirmationOpen(true);
@@ -104,7 +105,7 @@ const DocumentActions: React.FC<DocumentActionsProps> = ({
         />
         <CommonDialogue
           isOpen={isPreviewOpen}
-          previewDocument={true}
+          previewDocument={isPreviewOpen}
           onClose={() => setIsPreviewOpen(false)}
           document={document}
         />

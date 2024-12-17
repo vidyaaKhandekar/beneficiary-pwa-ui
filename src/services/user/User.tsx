@@ -58,3 +58,24 @@ export const updateUserDetails = async (userId, data) => {
     throw error; // Re-throw the error for the caller to handle
   }
 };
+
+export const deleteDocument = async (id) => {
+  const token = localStorage.getItem("authToken");
+
+  try {
+    const url = `${apiBaseUrl}/users/delete-doc/${id}`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    const response = await axios.delete(url, { headers });
+
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error In Deleteing Document:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};

@@ -5,16 +5,8 @@ import {
   Icon,
   HStack,
   useTheme,
-  IconButton,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Code,
   Box,
+,
 } from "@chakra-ui/react";
 
 import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
@@ -22,102 +14,14 @@ import Loader from "./common/Loader";
 import { findDocumentStatus } from "../utils/jsHelper/helper";
 import { FaTrashAlt, FaEye } from "react-icons/fa";
 import CommonButton from "./common/button/Button";
+import { deleteDocument } from "../services/user/User";
+import DocumentActions from "./DocumentActions";
 interface StatusIconProps {
   status: boolean;
   size?: number;
   "aria-label"?: string;
   userData: object;
 }
-interface DocumentActionsProps {
-  status: boolean;
-  userData: object;
-}
-const StatusIcon: React.FC<StatusIconProps> = ({
-  status,
-  size = 5,
-  "aria-label": ariaLabel,
-  userData,
-}) => {
-  const result = findDocumentStatus(userData, status);
-  return (
-    <Icon
-      as={result?.matchFound ? CheckCircleIcon : WarningIcon}
-      color={result?.matchFound ? "#0B7B69" : "#EDA145"}
-      boxSize={size}
-      aria-label={
-        ariaLabel || `Document status: ${status ? "Available" : "Incomplete"}`
-      }
-    />
-  );
-};
-const DocumentActions: React.FC<DocumentActionsProps> = ({
-  status,
-  userData,
-}) => {
-  const result = findDocumentStatus(userData, status);
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [document, setDocument] = React.useState();
-  const handlepreview = () => {
-    setDocument(JSON.parse(result?.doc_data));
-    setIsOpen(true);
-  };
-  const onClose = () => {
-    setIsOpen(false);
-  };
-  if (result?.matchFound) {
-    console.log("result", result?.doc_data);
-
-    return (
-      <>
-        <Box>
-          <IconButton
-            icon={<FaEye />}
-            aria-label="Preview"
-            size="sm"
-            color={"grey"}
-            onClick={() => handlepreview()}
-          />
-          <IconButton
-            icon={<FaTrashAlt />}
-            aria-label="Delete"
-            size="sm"
-            color={"grey"}
-            onClick={() => handleDelete(result?.doc_id)}
-          />
-        </Box>
-        <Modal isOpen={isOpen} onClose={onClose} size="lg">
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Preview Document</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <Box
-                as="pre"
-                p={4}
-                bg="gray.100"
-                rounded="md"
-                overflowX="auto"
-                overflowY="auto"
-                fontSize="sm"
-                whiteSpace="pre-wrap"
-                maxHeight="500px"
-                width="auto"
-              >
-                <Code>{JSON.stringify(document, null, 2)}</Code>
-              </Box>
-            </ModalBody>
-            <ModalFooter>
-              <CommonButton label="Close" onClick={onClose} width="100px" />
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </>
-    );
-  }
-};
-const handleDelete = (doc_id) => {
-  console.log("userData", doc_id);
-};
 
 interface Document {
   name: string;
@@ -141,6 +45,24 @@ interface DocumentListProps {
   documents: Document[] | string[];
   userData: UserDocument;
 }
+const StatusIcon: React.FC<StatusIconProps> = ({
+  status,
+  size = 5,
+  "aria-label": ariaLabel,
+  userData,
+}) => {
+  const result = findDocumentStatus(userData, status);
+  return (
+    <Icon
+      as={result?.matchFound ? CheckCircleIcon : WarningIcon}
+      color={result?.matchFound ? "#0B7B69" : "#EDA145"}
+      boxSize={size}
+      aria-label={
+        ariaLabel || `Document status: ${status ? "Available" : "Incomplete"}`
+      }
+    />
+  );
+};
 
 const DocumentList: React.FC<DocumentListProps> = ({ documents, userData }) => {
   const theme = useTheme();

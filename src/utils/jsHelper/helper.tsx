@@ -185,6 +185,7 @@ export function findDocumentStatus(documents, status) {
         doc_verified: doc.doc_verified,
         doc_id: doc.doc_id,
         doc_data: doc.doc_data,
+        doc_name: doc.doc_name,
       };
     }
   }

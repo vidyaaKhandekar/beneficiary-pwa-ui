@@ -6,6 +6,7 @@ import keycloak from './keycloak';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 
 const rootElement = document.getElementById('root');
+
 if (rootElement) {
 	createRoot(rootElement).render(
 		<ReactKeycloakProvider authClient={keycloak}>

@@ -1,311 +1,336 @@
-import axios from "axios";
+import axios from 'axios';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 interface UserData {
-  firstName?: string;
-  lastName?: string;
-  phoneNumber?: string;
+	firstName?: string;
+	lastName?: string;
+	phoneNumber?: string;
 }
 
 interface MobileData {
-  phoneNumber: string;
-  otp: number;
-  token: string;
+	phoneNumber: string;
+	otp: number;
+	token: string;
 }
 function handleClientError(error: any): never {
-  const errorMessage =
-    error.response.data?.message ||
-    error.response.data?.error ||
-    `Client Error: ${error.message}`;
+	const errorMessage =
+		error.response.data?.message ||
+		error.response.data?.error ||
+		`Client Error: ${error.message}`;
 
-  switch (error.response.status) {
-    case 400:
-      throw new Error(`Bad Request: ${errorMessage}`, { cause: error });
-    case 401:
-      throw new Error(`Unauthorized: ${errorMessage}`, { cause: error });
-    case 403:
-      throw new Error(`Forbidden: ${errorMessage}`, { cause: error });
-    case 404:
-      throw new Error(`Not Found: ${errorMessage}`, { cause: error });
-    default:
-      throw new Error(
-        `Client Error (${error.response.status}): ${errorMessage}`,
-        {
-          cause: error,
-        }
-      );
-  }
+	switch (error.response.status) {
+	case 400:
+		throw new Error(`Bad Request: ${errorMessage}`, { cause: error });
+	case 401:
+		throw new Error(`Unauthorized: ${errorMessage}`, { cause: error });
+	case 403:
+		throw new Error(`Forbidden: ${errorMessage}`, { cause: error });
+	case 404:
+		throw new Error(`Not Found: ${errorMessage}`, { cause: error });
+	default:
+		throw new Error(
+			`Client Error (${error.response.status}): ${errorMessage}`,
+			{
+				cause: error,
+			}
+		);
+	}
 }
 
 function handleServerError(error: any): never {
-  const errorMessage =
-    error.response.data?.message ||
-    `Server Error: ${error.response.statusText}`;
+	const errorMessage =
+		error.response.data?.message ||
+		`Server Error: ${error.response.statusText}`;
 
-  switch (error.response.status) {
-    case 500:
-      throw new Error(`Internal Server Error: ${errorMessage}`, {
-        cause: error,
-      });
-    case 502:
-      throw new Error(`Bad Gateway: ${errorMessage}`, { cause: error });
-    case 503:
-      throw new Error(`Service Unavailable: ${errorMessage}`, { cause: error });
-    case 504:
-      throw new Error(`Gateway Timeout: ${errorMessage}`, { cause: error });
-    default:
-      throw new Error(
-        `Server Error (${error.response.status}): ${errorMessage}`,
-        {
-          cause: error,
-        }
-      );
-  }
+	switch (error.response.status) {
+	case 500:
+		throw new Error(`Internal Server Error: ${errorMessage}`, {
+			cause: error,
+		});
+	case 502:
+		throw new Error(`Bad Gateway: ${errorMessage}`, { cause: error });
+	case 503:
+			throw new Error(`Service Unavailable: ${errorMessage}`, {
+				cause: error,
+			});
+	case 504:
+			throw new Error(`Gateway Timeout: ${errorMessage}`, {
+				cause: error,
+			});
+	default:
+		throw new Error(
+			`Server Error (${error.response.status}): ${errorMessage}`,
+			{
+				cause: error,
+			}
+		);
+	}
 }
 
 function handleError(error: unknown): never {
-  if (axios.isAxiosError(error)) {
-    if (error.response) {
-      if (error.response.status >= 400 && error.response.status < 500) {
-        handleClientError(error);
-      } else if (error.response.status >= 500 && error.response.status < 600) {
-        handleServerError(error);
-      }
-    } else if (error.request) {
-      throw new Error("Network Error - No response received", { cause: error });
-    }
-  }
+	if (axios.isAxiosError(error)) {
+		if (error.response) {
+			if (error.response.status >= 400 && error.response.status < 500) {
+				handleClientError(error);
+			} else if (
+				error.response.status >= 500 &&
+				error.response.status < 600
+			) {
+				handleServerError(error);
+			}
+		} else if (error.request) {
+			throw new Error('Network Error - No response received', {
+				cause: error,
+			});
+		}
+	}
 
-  // Fallback for non-Axios errors or unexpected error types
-  throw error instanceof Error
-    ? error
-    : new Error("An unexpected error occurred", { cause: error });
+	// Fallback for non-Axios errors or unexpected error types
+	throw error instanceof Error
+		? error
+		: new Error('An unexpected error occurred', { cause: error });
 }
 
 export const loginUser = async (loginData: object) => {
-  try {
-    const response = await axios.post(`${apiBaseUrl}/auth/login`, loginData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+	try {
+		const response = await axios.post(
+			`${apiBaseUrl}/auth/login`,
+			loginData,
+			{
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			}
+		);
 
-    return response.data;
-  } catch (error) {
-    handleError(error);
-  }
+		return response.data;
+	} catch (error) {
+		handleError(error);
+	}
 };
 
 export const logoutUser = async () => {
-  const accessToken = localStorage.getItem("authToken");
-  const refreshToken = localStorage.getItem("refreshToken");
-  if (!accessToken || !refreshToken) {
-    throw new Error("No active session found");
-  }
-  try {
-    const response = await axios.post(
-      `${apiBaseUrl}/auth/logout`,
-      {
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    if (response) {
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("refreshToken");
-    }
+	const accessToken = localStorage.getItem('authToken');
+	const refreshToken = localStorage.getItem('refreshToken');
+	if (!accessToken || !refreshToken) {
+		throw new Error('No active session found');
+	}
+	try {
+		const response = await axios.post(
+			`${apiBaseUrl}/auth/logout`,
+			{
+				access_token: accessToken,
+				refresh_token: refreshToken,
+			},
+			{
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			}
+		);
+		if (response) {
+			localStorage.removeItem('authToken');
+			localStorage.removeItem('refreshToken');
+		}
 
-    return response.data as { success: boolean; message: string };
-  } catch (error) {
-    handleError(error);
-  }
+		return response.data as { success: boolean; message: string };
+	} catch (error) {
+		handleError(error);
+	}
 };
 
 export const getUser = async () => {
-  const token = localStorage.getItem("authToken");
-  try {
-    const response = await axios.get(
-      `${apiBaseUrl}/users/get_one/?decryptData=true`,
-      {
-        headers: {
-          Accept: "application/json", // 'application/json' is more specific and commonly used for APIs
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+	const token = localStorage.getItem('authToken');
+	try {
+		const response = await axios.get(
+			`${apiBaseUrl}/users/get_one/?decryptData=true`,
+			{
+				headers: {
+					Accept: 'application/json', // 'application/json' is more specific and commonly used for APIs
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
 
-    return response.data;
-  } catch (error) {
-    handleError(error);
-  }
+		return response.data;
+	} catch (error) {
+		handleError(error);
+	}
 };
 export const getUserConsents = async () => {
-  try {
-    const token = localStorage.getItem("authToken");
-    const response = await axios.get(`${apiBaseUrl}/users/get_my_consents`, {
-      headers: {
-        Accept: "*/*",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    handleError(error);
-  }
+	try {
+		const token = localStorage.getItem('authToken');
+		const response = await axios.get(
+			`${apiBaseUrl}/users/get_my_consents`,
+			{
+				headers: {
+					Accept: '*/*',
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
+		return response.data;
+	} catch (error) {
+		handleError(error);
+	}
 };
 export const sendConsent = async (
-  user_id: string | number,
-  purpose?: string,
-  purpose_text?: string
+	user_id: string | number,
+	purpose?: string,
+	purpose_text?: string
 ) => {
-  const token = localStorage.getItem("authToken");
-  const data = {
-    user_id: user_id,
-    purpose: purpose,
-    purpose_text: purpose_text,
-    accepted: true,
-  };
-  const headers = {
-    Accept: "*/*",
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-  };
+	const token = localStorage.getItem('authToken');
+	const data = {
+		user_id: user_id,
+		purpose: purpose,
+		purpose_text: purpose_text,
+		accepted: true,
+	};
+	const headers = {
+		Accept: '*/*',
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
+	};
 
-  try {
-    const response = await axios.post(`${apiBaseUrl}/users/consent`, data, {
-      headers,
-    });
-    return response.data;
-  } catch (error) {
-    handleError(error);
-  }
+	try {
+		const response = await axios.post(`${apiBaseUrl}/users/consent`, data, {
+			headers,
+		});
+		return response.data;
+	} catch (error) {
+		handleError(error);
+	}
 };
 export const getDocumentsList = async () => {
-  try {
-    const token = localStorage.getItem("authToken");
-    const response = await axios.get(`${apiBaseUrl}/content/documents_list`, {
-      headers: {
-        Accept: "*/*",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+	try {
+		const token = localStorage.getItem('authToken');
+		const response = await axios.get(
+			`${apiBaseUrl}/content/documents_list`,
+			{
+				headers: {
+					Accept: '*/*',
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
 
-    // Return the documents list data
-    return response.data;
-  } catch (error) {
-    handleError(error);
-  }
+		// Return the documents list data
+		return response.data;
+	} catch (error) {
+		handleError(error);
+	}
 };
 export const getApplicationList = async (
-  searchText: string,
-  user_id: string | number
+	searchText: string,
+	user_id: string | number
 ) => {
-  try {
-    const requestBody =
-      searchText !== ""
-        ? {
-            filters: {
-              user_id: user_id, // Reference the user_id variable directly
-            },
-            search: searchText,
-          }
-        : {
-            filters: {
-              user_id: user_id, // Reference the user_id variable directly
-            },
-          };
+	try {
+		const requestBody =
+			searchText !== ''
+				? {
+					filters: {
+						user_id: user_id, // Reference the user_id variable directly
+					},
+					search: searchText,
+				}
+				: {
+					filters: {
+						user_id: user_id, // Reference the user_id variable directly
+					},
+				};
 
-    // Send the dynamically created requestBody in the axios post request
-    const token = localStorage.getItem("authToken");
-    const response = await axios.post(
-      `${apiBaseUrl}/users/user_applications_list`,
-      requestBody, // Use the dynamically created requestBody
-      {
-        headers: {
-          Accept: "*/*",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+		// Send the dynamically created requestBody in the axios post request
+		const token = localStorage.getItem('authToken');
+		const response = await axios.post(
+			`${apiBaseUrl}/users/user_applications_list`,
+			requestBody, // Use the dynamically created requestBody
+			{
+				headers: {
+					Accept: '*/*',
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
 
-    return response.data;
-  } catch (error) {
-    handleError(error);
-  }
+		return response.data;
+	} catch (error) {
+		handleError(error);
+	}
 };
 
 export const getApplicationDetails = async (applicationId: string | number) => {
-  try {
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      const response = await axios.get(
-        `${apiBaseUrl}/users/user_application/${applicationId}`,
-        {
-          headers: {
-            Accept: "*/*",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return response.data;
-    } else {
-      console.error("Token not found");
-    }
-  } catch (error) {
-    handleError(error);
-  }
+	try {
+		const token = localStorage.getItem('authToken');
+		if (token) {
+			const response = await axios.get(
+				`${apiBaseUrl}/users/user_application/${applicationId}`,
+				{
+					headers: {
+						Accept: '*/*',
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+			return response.data;
+		} else {
+			console.error('Token not found');
+		}
+	} catch (error) {
+		handleError(error);
+	}
 };
 export const sendOTP = async (mobileNumber: string) => {
-  try {
-    const payload = {
-      phoneNumber: mobileNumber,
-    };
-    const response = await axios.post(`${apiBaseUrl}/otp/send_otp`, payload);
-    return response?.data?.data;
-  } catch (error) {
-    handleError(error);
-  }
+	try {
+		const payload = {
+			phoneNumber: mobileNumber,
+		};
+		const response = await axios.post(
+			`${apiBaseUrl}/otp/send_otp`,
+			payload
+		);
+		return response?.data?.data;
+	} catch (error) {
+		handleError(error);
+	}
 };
 export const verifyOTP = async (payload: MobileData) => {
-  try {
-    const response = await axios.post(`${apiBaseUrl}/otp/verify_otp`, payload);
-    console.log(response);
-    return response?.data;
-  } catch (error) {
-    handleError(error);
-  }
+	try {
+		const response = await axios.post(
+			`${apiBaseUrl}/otp/verify_otp`,
+			payload
+		);
+		console.log(response);
+		return response?.data;
+	} catch (error) {
+		handleError(error);
+	}
 };
 export const registerUser = async (userData: UserData) => {
-  try {
-    const response = await axios.post(
-      `${apiBaseUrl}/auth/register_with_password`,
-      userData
-    );
+	try {
+		const response = await axios.post(
+			`${apiBaseUrl}/auth/register_with_password`,
+			userData
+		);
 
-    return response?.data;
-  } catch (error) {
-    handleError(error);
-  }
+		return response?.data;
+	} catch (error) {
+		handleError(error);
+	}
 };
 export const registerWithPassword = async (userData) => {
-  try {
-    const response = await axios.post(
-      `${apiBaseUrl}/auth/register_with_password`,
-      userData
-    );
+	try {
+		const response = await axios.post(
+			`${apiBaseUrl}/auth/register_with_password`,
+			userData
+		);
 
-    return response.data; // Handle the response data
-  } catch (error) {
-    console.error(
-      "Error during registration:",
-      error.response?.data?.message?.[0] || ""
-    );
-    throw error.response;
-  }
+		return response.data; // Handle the response data
+	} catch (error) {
+		console.error(
+			'Error during registration:',
+			error.response?.data?.message?.[0] || ''
+		);
+		throw error.response;
+	}
 };

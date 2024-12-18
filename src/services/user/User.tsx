@@ -1,28 +1,28 @@
-import axios from "axios";
+import axios from 'axios';
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 export const uploadUserDocuments = async (documents) => {
-  const token = localStorage.getItem("authToken");
-  try {
-    const response = await axios.post(
-      `${apiBaseUrl}/users/wallet/user_docs`,
-      documents,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+	const token = localStorage.getItem('authToken');
+	try {
+		const response = await axios.post(
+			`${apiBaseUrl}/users/wallet/user_docs`,
+			documents,
+			{
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
 
-    // Return response data
-    return response.data;
-  } catch (error) {
-    console.error(
-      "Error uploading documents:",
-      error.response || error.message
-    );
-    throw error; // Rethrow error to handle it in the calling code
-  }
+		// Return response data
+		return response.data;
+	} catch (error) {
+		console.error(
+			'Error uploading documents:',
+			error.response || error.message
+		);
+		throw error; // Rethrow error to handle it in the calling code
+	}
 };
 
 /**
@@ -33,49 +33,49 @@ export const uploadUserDocuments = async (documents) => {
  * @returns {Promise} - Promise representing the API response.
  */
 export const updateUserDetails = async (userId, data) => {
-  const token = localStorage.getItem("authToken");
-  console.log("UserID", userId, data);
-  try {
-    const response = await axios.put(
-      `${apiBaseUrl}/users/update/${userId}`,
-      data,
-      {
-        headers: {
-          Accept: "*/*",
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+	const token = localStorage.getItem('authToken');
+	console.log('UserID', userId, data);
+	try {
+		const response = await axios.put(
+			`${apiBaseUrl}/users/update/${userId}`,
+			data,
+			{
+				headers: {
+					Accept: '*/*',
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
+				},
+			}
+		);
 
-    console.log("User updated successfully:", response.data);
-    return response.data; // Return response for further handling
-  } catch (error) {
-    console.error(
-      "Error updating user:",
-      error.response?.data || error.message
-    );
-    throw error; // Re-throw the error for the caller to handle
-  }
+		console.log('User updated successfully:', response.data);
+		return response.data; // Return response for further handling
+	} catch (error) {
+		console.error(
+			'Error updating user:',
+			error.response?.data || error.message
+		);
+		throw error; // Re-throw the error for the caller to handle
+	}
 };
 
 export const deleteDocument = async (id) => {
-  const token = localStorage.getItem("authToken");
+	const token = localStorage.getItem('authToken');
 
-  try {
-    const url = `${apiBaseUrl}/users/delete-doc/${id}`;
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
+	try {
+		const url = `${apiBaseUrl}/users/delete-doc/${id}`;
+		const headers = {
+			Authorization: `Bearer ${token}`,
+		};
 
-    const response = await axios.delete(url, { headers });
+		const response = await axios.delete(url, { headers });
 
-    return response.data;
-  } catch (error) {
-    console.error(
-      "Error in Deleteing Document:",
-      error.response?.data || error.message
-    );
-    throw error;
-  }
+		return response.data;
+	} catch (error) {
+		console.error(
+			'Error in Deleteing Document:',
+			error.response?.data || error.message
+		);
+		throw error;
+	}
 };

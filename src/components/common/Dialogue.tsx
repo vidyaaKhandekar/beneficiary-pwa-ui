@@ -13,6 +13,7 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  Code,
 } from "@chakra-ui/react";
 import CommonButton from "./button/Button";
 import { useState } from "react";
@@ -30,19 +31,85 @@ interface CommonDialogueProps {
   onClose?: () => void;
   termsAndConditions?: Term[];
   handleDialog?: () => void;
+  deleteConfirmation?: boolean;
+  documentName?: string;
+  document?: object;
+  previewDocument?: boolean;
 }
 const CommonDialogue: React.FC<CommonDialogueProps> = ({
   isOpen,
   onClose,
   termsAndConditions,
   handleDialog,
+  deleteConfirmation,
+  documentName,
+  document,
+  previewDocument,
 }) => {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   const handleAccordionChange = (expandedIndex) => {
     setIsAccordionOpen(expandedIndex.length > 0);
   };
   const { t } = useTranslation();
-
+  if (previewDocument) {
+    return (
+      <Modal isOpen={previewDocument} onClose={onClose} size="lg">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Preview Document</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Box
+              as="pre"
+              p={4}
+              bg="gray.100"
+              rounded="md"
+              overflowX="auto"
+              overflowY="auto"
+              fontSize="sm"
+              whiteSpace="pre-wrap"
+              maxHeight="500px"
+              width="auto"
+            >
+              <Code>{JSON.stringify(document, null, 2)}</Code>
+            </Box>
+          </ModalBody>
+          <ModalFooter>
+            <CommonButton label="Close" onClick={onClose} width="100px" />
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    );
+  }
+  if (deleteConfirmation) {
+    return (
+      <Modal isOpen={Boolean(isOpen)} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent borderRadius="md">
+          <ModalHeader className="border-bottom">
+            <Box className="heading">Confirmation</Box>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody
+            className="border-bottom"
+            maxHeight="400px" // Fixed height for Modal Body
+            overflowY="auto" // Enables scrolling for Modal Body
+            p={5}
+          >
+            Are you sure you want to delete the document{" "}
+            <strong>{documentName}</strong>? This action cannot be undone.
+          </ModalBody>
+          <ModalFooter>
+            <CommonButton
+              onClick={handleDialog}
+              width={"40%"}
+              label={t("SUBMIT_DIALOGUE_BUTTON")}
+            />
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    );
+  }
   return (
     <Modal isOpen={Boolean(isOpen)} onClose={onClose}>
       <ModalOverlay />

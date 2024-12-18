@@ -1,34 +1,17 @@
 import * as React from "react";
-import { VStack, Text, Icon, HStack, useTheme } from "@chakra-ui/react";
+import { VStack, Text, Icon, HStack, useTheme, Box } from "@chakra-ui/react";
+
 import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
 import Loader from "./common/Loader";
 import { findDocumentStatus } from "../utils/jsHelper/helper";
 
+import DocumentActions from "./DocumentActions";
 interface StatusIconProps {
   status: boolean;
   size?: number;
   "aria-label"?: string;
   userData: object;
 }
-
-const StatusIcon: React.FC<StatusIconProps> = ({
-  status,
-  size = 5,
-  "aria-label": ariaLabel,
-  userData,
-}) => {
-  const result = findDocumentStatus(userData, status);
-  return (
-    <Icon
-      as={result?.matchFound ? CheckCircleIcon : WarningIcon}
-      color={result?.matchFound ? "#0B7B69" : "#EDA145"}
-      boxSize={size}
-      aria-label={
-        ariaLabel || `Document status: ${status ? "Available" : "Incomplete"}`
-      }
-    />
-  );
-};
 
 interface Document {
   name: string;
@@ -52,6 +35,24 @@ interface DocumentListProps {
   documents: Document[] | string[];
   userData: UserDocument;
 }
+const StatusIcon: React.FC<StatusIconProps> = ({
+  status,
+  size = 5,
+  "aria-label": ariaLabel,
+  userData,
+}) => {
+  const result = findDocumentStatus(userData, status);
+  return (
+    <Icon
+      as={result?.matchFound ? CheckCircleIcon : WarningIcon}
+      color={result?.matchFound ? "#0B7B69" : "#EDA145"}
+      boxSize={size}
+      aria-label={
+        ariaLabel || `Document status: ${status ? "Available" : "Incomplete"}`
+      }
+    />
+  );
+};
 
 const DocumentList: React.FC<DocumentListProps> = ({ documents, userData }) => {
   const theme = useTheme();
@@ -77,9 +78,26 @@ const DocumentList: React.FC<DocumentListProps> = ({ documents, userData }) => {
         >
           {/* Default status to false if not provided */}
           <StatusIcon status={document.documentSubType} userData={userData} />
-          <Text fontSize="16px" fontWeight="400" color={theme.colors.text}>
-            {document.name}
-          </Text>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            width={"100%"}
+          >
+            <Text
+              fontSize="16px"
+              fontWeight="400"
+              color={theme.colors.text}
+              width={"80%"}
+            >
+              {document.name}
+            </Text>
+
+            <DocumentActions
+              status={document.documentSubType}
+              userData={userData}
+            />
+          </Box>
         </HStack>
       ))}
     </VStack>

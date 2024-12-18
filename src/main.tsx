@@ -1,4 +1,4 @@
-import { StrictMode } from 'react';
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import './components/common/i18n';
@@ -9,9 +9,9 @@ const rootElement = document.getElementById('root');
 if (rootElement) {
 	createRoot(rootElement).render(
 		<ReactKeycloakProvider authClient={keycloak}>
-			<StrictMode>
+			<React.StrictMode>
 				<App />
-			</StrictMode>
+			</React.StrictMode>
 		</ReactKeycloakProvider>
 	);
 } else {

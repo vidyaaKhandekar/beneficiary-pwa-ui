@@ -1,6 +1,6 @@
 import { Box, IconButton, useToast } from '@chakra-ui/react';
 import { findDocumentStatus } from '../utils/jsHelper/helper';
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { deleteDocument } from '../services/user/User';
 import { FaEye, FaTrashAlt } from 'react-icons/fa';
 import { getDocumentsList, getUser } from '../services/auth/auth';

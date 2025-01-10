@@ -2,6 +2,8 @@
   "LOGIN_SELECT_PREFERRED_LANGUAGE": "Select Preferred Language",
   "LOGIN_CHANGE_LATER": "You can change this later",
   "LOGIN_ENGLISH": "English",
+  "LOGIN_HINDI": "Hindi",
+    "LOGIN_MARATHI": "Marathi",
   "LOGIN_SELECT_LANGUAGE": "Select Language",
   "LOGIN_REGISTER_BUTTON": "Register",
   "LOGIN_LOGIN_BUTTON": "Log in",

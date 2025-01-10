@@ -94,7 +94,7 @@ const Splash: React.FC = () => {
 						onClick={() => {
 							navigate('/Signin');
 						}}
-						label={t('LOGIN_LOGIN_BUTTON')}
+						label={t('LOGIN_BUTTON')}
 						mt={8}
 						variant="outline"
 					/>

@@ -77,7 +77,7 @@ const SignIn: React.FC = () => {
 		<Layout
 			isMenu={false}
 			_heading={{
-				heading: t('LOGIN_LOGIN_BUTTON'),
+				heading: t('LOGIN_BUTTON'),
 				handleBack,
 			}}
 			isBottombar={false}
@@ -105,7 +105,7 @@ const SignIn: React.FC = () => {
 					<CommonButton
 						isDisabled={!isFormValid || loading}
 						onClick={() => handleLogin()}
-						label={t('LOGIN_LOGIN_BUTTON')}
+						label={t('LOGIN_BUTTON')}
 					/>
 				</VStack>
 

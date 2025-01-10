@@ -18,8 +18,8 @@ interface AuthContextType {
 	updateApplicationId: (id: string) => void;
 	applicationId: string | null;
 	removeContextData: () => void;
-	language: (name: string) => void;
-	selectLanguage: (object) => void;
+	language: { name: string };
+	selectLanguage: (lang: string) => void;
 }
 
 // Define UserData type

@@ -42,7 +42,7 @@ const UserProfile: React.FC = () => {
 	return (
 		<Layout
 			_heading={{
-				heading: 'My Profile',
+				heading: t('USER_PROFILE_HEADING'),
 				handleBack: () => {
 					handleBack();
 				},
@@ -97,7 +97,7 @@ const UserProfile: React.FC = () => {
 						color="#433E3F"
 						mr={2} // Adds spacing between Text and IconButton
 					>
-						Basic Details
+						{t('USER_PROFILE_BASIC_DETAILS')}
 					</Text>
 				</Flex>
 

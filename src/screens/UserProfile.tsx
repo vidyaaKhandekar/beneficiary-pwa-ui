@@ -12,11 +12,13 @@ import UserDetails from '../components/common/UserDetails';
 
 import UploadDocumentEwallet from '../components/common/UploadDocumentEwallet';
 import CommonButton from '../components/common/button/Button';
+import { useTranslation } from 'react-i18next';
 
 const UserProfile: React.FC = () => {
 	const [showIframe, setShowIframe] = useState(true);
 	const { userData, documents, updateUserData } = useContext(AuthContext)!;
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 	const handleBack = () => {
 		navigate(-2);
 	};
@@ -72,7 +74,7 @@ const UserProfile: React.FC = () => {
 					>
 						{userData?.phoneNumber
 							? ` +91 ${userData?.phoneNumber}`
-							: 'Phone Number'}
+							: t('USER_PROFILE_PHONE_NUMBER')}
 					</Text>
 				</VStack>
 			</HStack>

@@ -86,14 +86,14 @@ const SignIn: React.FC = () => {
 				<VStack align="stretch">
 					<FormControl>
 						<FloatingInput
-							label="Enter User Name"
+							label={t('SIGNIN_ENTER_USERNAME')}
 							value={username}
 							onChange={(e) => setUsername(e.target.value)}
 							isInvalid={username.trim() === ''}
 							errorMessage={t('SIGNIN_USER_NAME_IS_REQUIRED')}
 						/>
 						<FloatingPasswordInput
-							label="Enter Password"
+							label={t('SIGNIN_ENTER_PASSWORD')}
 							value={password}
 							onChange={(
 								e: React.ChangeEvent<HTMLInputElement>

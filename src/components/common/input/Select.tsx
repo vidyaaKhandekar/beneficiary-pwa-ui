@@ -31,7 +31,6 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
 }) => {
 	return (
 		<Select
-			placeholder={placeholder}
 			width={width}
 			height={height}
 			border={border}

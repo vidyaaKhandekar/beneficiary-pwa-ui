@@ -116,7 +116,6 @@ const Navbar: React.FC<{ isMenu?: boolean }> = ({ isMenu = true }) => {
 					options={options}
 					value={language.name}
 					onChange={handleChange}
-					placeholder={t('LOGIN_SELECT_PREFERRED_LANGUAGE')}
 				/>
 			</Flex>
 		</Stack>

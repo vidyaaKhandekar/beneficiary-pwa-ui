@@ -10,4 +10,4 @@ fs.writeFileSync(
     JSON.stringify(version, null, 2)
 )
 
-console.log('✅ version.json generated')
+console.log('✅ version.json generated ')

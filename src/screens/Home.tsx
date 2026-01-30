@@ -16,6 +16,7 @@ import DocumentList from '../components/DocumentList';
 // import { useKeycloak } from '@react-keycloak/web'; // NOSONAR
 import '../assets/styles/App.css';
 import UploadDocumentEwallet from '../components/common/UploadDocumentEwallet';
+import { isWalletUploadEnabled } from '../utils/envUtils';
 import CommonDialogue from '../components/common/Dialogue';
 import termsAndConditions from '../assets/termsAndConditions.json';
 /* import { getAadhar, getDigiLockerRequest } from '../services/dhiway/aadhar'; */ // NOSONAR
@@ -92,6 +93,14 @@ const Home: React.FC = () => {
 		try {
 			await sendConsent(userData?.user_id, purpose, purpose_text);
 			setConsentSaved(false);
+
+			// Check if isFirstTimeLogin is true in sessionStorage
+			const isFirstTimeLogin = sessionStorage.getItem('isFirstTimeLogin');
+			if (isFirstTimeLogin === 'true') {
+				// Redirect to edit-user-profile page
+				navigate('/edit-user-profile');
+				return;
+			}
 		} catch {
 			console.log(t('HOME_CONSENT_SEND_ERROR'));
 		}
@@ -108,10 +117,27 @@ const Home: React.FC = () => {
 				setUserName('');
 			}
 		}
-		if (!userData || !documents || documents.length === 0) {
-			init();
-		}
-	}, [userData, documents]);
+		// Always fetch fresh data when Home component mounts
+		init();
+	}, []);
+
+	// Listen for language change events to refresh data
+	useEffect(() => {
+		const handleLanguageChange = async () => {
+			try {
+				const result = await getUser();
+				const data = await getDocumentsList();
+				updateUserData(result?.data, data?.data?.value);
+			} catch (error) {
+				console.error('Error refreshing data after language change:', error);
+			}
+		};
+
+		globalThis.addEventListener('languageChanged', handleLanguageChange);
+		return () => {
+			globalThis.removeEventListener('languageChanged', handleLanguageChange);
+		};
+	}, [updateUserData]);
 
 	useEffect(() => {
 		getConsent();
@@ -186,7 +212,7 @@ const Home: React.FC = () => {
 		<Layout
 			_heading={{
 				beneficiary: true,
-				heading: `${userData?.firstName || ''} ${userData?.lastName || ''}`,
+				heading: `${userData?.name || ''}`,
 				profileSubHeading: `${userName}`,
 				// label: keycloak.tokenParsed?.preferred_username,
 			}}
@@ -211,14 +237,15 @@ const Home: React.FC = () => {
 						onClick={handleRedirect}
 						label={t('PROFILE_EXPLORE_BENEFITS')}
 					/>
-					{!showIframe ? (
-						<UploadDocumentEwallet />
-					) : (
-						<CommonButton
-							onClick={() => setShowIframe(false)}
-							label={t('HIDE_DIGILOCKER')}
-						/>
-					)}
+					{isWalletUploadEnabled() &&
+						(!showIframe ? (
+							<UploadDocumentEwallet />
+						) : (
+							<CommonButton
+								onClick={() => setShowIframe(false)}
+								label={t('HIDE_DIGILOCKER')}
+							/>
+						))}
 				</VStack>
 			</Box>
 

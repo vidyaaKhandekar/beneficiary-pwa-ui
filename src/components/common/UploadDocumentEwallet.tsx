@@ -2,9 +2,18 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { uploadUserDocuments } from '../../services/user/User';
 import { getDocumentsList, getUser } from '../../services/auth/auth';
 import { AuthContext } from '../../utils/context/checkToken';
+import { isWalletUploadEnabled } from '../../utils/envUtils';
 import CommonButton from './button/Button';
 import { useTranslation } from 'react-i18next';
-import { Box, Text, Alert, AlertIcon, IconButton, useToast, Progress } from '@chakra-ui/react';
+import {
+	Box,
+	Text,
+	Alert,
+	AlertIcon,
+	IconButton,
+	useToast,
+	Progress,
+} from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 
 // Type definitions for better type safety
@@ -30,6 +39,7 @@ interface UploadPayload {
 	imported_from: string;
 	doc_datatype: string;
 	doc_data_link: string;
+	issuer?: string;
 }
 
 interface ProcessResult {
@@ -66,6 +76,10 @@ const VITE_EWALLET_ORIGIN = import.meta.env.VITE_EWALLET_ORIGIN;
 const VITE_EWALLET_IFRAME_SRC = import.meta.env.VITE_EWALLET_IFRAME_SRC;
 
 const UploadDocumentEwallet = () => {
+	// Check if wallet upload is enabled via environment variable
+	if (!isWalletUploadEnabled()) {
+		return null;
+	}
 	const { t } = useTranslation();
 	const { updateUserData } = useContext(AuthContext);
 	const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -118,7 +132,9 @@ const UploadDocumentEwallet = () => {
 			new URL(VITE_EWALLET_IFRAME_SRC);
 		} catch (error) {
 			console.error('Invalid wallet URL configuration:', error);
-			setError('Invalid wallet URL configuration. Please check your environment variables.');
+			setError(
+				'Invalid wallet URL configuration. Please check your environment variables.'
+			);
 			return;
 		}
 
@@ -134,13 +150,15 @@ const UploadDocumentEwallet = () => {
 	// Send authentication data to iframe
 	const sendAuthToIframe = () => {
 		if (!iframeRef.current) return;
-		
+
 		// Get specific wallet authentication data
 		const walletToken = localStorage.getItem('walletToken');
 		const userStr = localStorage.getItem('user');
-		
+
 		if (!walletToken || !userStr) {
-			setError('Wallet authentication data not found. Please ensure wallet is properly configured.');
+			setError(
+				'Wallet authentication data not found. Please ensure wallet is properly configured.'
+			);
 			return;
 		}
 
@@ -148,7 +166,9 @@ const UploadDocumentEwallet = () => {
 		try {
 			user = JSON.parse(userStr);
 		} catch {
-			setError('Invalid user data found. Please check wallet configuration.');
+			setError(
+				'Invalid user data found. Please check wallet configuration.'
+			);
 			return;
 		}
 
@@ -239,6 +259,7 @@ const UploadDocumentEwallet = () => {
 				imported_from: 'e-wallet',
 				doc_datatype: 'Application/JSON',
 				doc_data_link: doc_data_link,
+				issuer: 'dhiway',
 			},
 		];
 	};
@@ -268,18 +289,29 @@ const UploadDocumentEwallet = () => {
 							Failed to Upload:
 						</Text>
 						{failedDocs.map((doc, idx) => {
-							const showFullError = doc.fullError && doc.error === 'Document type not accepted';
+							const showFullError =
+								doc.fullError &&
+								doc.error === 'Document type not accepted';
 							return (
 								<Box key={doc.docName ?? idx} ml={2} mb={2}>
 									<Text color="red.700" fontWeight="semibold">
 										• {doc.docName}
 									</Text>
 									{showFullError ? (
-										<Text ml={4} fontSize="sm" mt={1} color="red.600">
+										<Text
+											ml={4}
+											fontSize="sm"
+											mt={1}
+											color="red.600"
+										>
 											{doc.fullError}
 										</Text>
 									) : (
-										<Text ml={4} fontSize="sm" color="red.600">
+										<Text
+											ml={4}
+											fontSize="sm"
+											color="red.600"
+										>
 											{doc.error}
 										</Text>
 									)}
@@ -316,12 +348,19 @@ const UploadDocumentEwallet = () => {
 		} else {
 			parsedJson = vc.json;
 		}
-		const documentName = parsedJson?.credentialSchema?.title ?? 'Unknown document';
+		const documentName =
+			parsedJson?.credentialSchema?.title ?? 'Unknown document';
 		let errorMessage;
-		if (docError instanceof Error && docError.message.includes('does not match any of the accepted document types')) {
+		if (
+			docError instanceof Error &&
+			docError.message.includes(
+				'does not match any of the accepted document types'
+			)
+		) {
 			errorMessage = 'Document type not accepted';
 		} else if (isApiError(docError)) {
-			errorMessage = docError.response?.data?.message || 'API error occurred';
+			errorMessage =
+				docError.response?.data?.message || 'API error occurred';
 		} else if (docError instanceof Error) {
 			errorMessage = docError.message;
 		} else {
@@ -331,7 +370,7 @@ const UploadDocumentEwallet = () => {
 			success: false,
 			docName: documentName,
 			error: errorMessage,
-			fullError: docError instanceof Error ? docError.message : undefined
+			fullError: docError instanceof Error ? docError.message : undefined,
 		};
 	};
 
@@ -408,7 +447,9 @@ const UploadDocumentEwallet = () => {
 
 	// Listen for messages from the iframe
 	useEffect(() => {
-		const processingToastIdRef = { current: undefined as string | number | undefined };
+		const processingToastIdRef = {
+			current: undefined as string | number | undefined,
+		};
 
 		const handleMessage = async (event: MessageEvent) => {
 			if (event.origin !== VITE_EWALLET_ORIGIN) return;
@@ -416,7 +457,10 @@ const UploadDocumentEwallet = () => {
 			try {
 				// Type check the event data structure
 				if (!event.data || typeof event.data !== 'object') {
-					console.warn('Received invalid message format:', event.data);
+					console.warn(
+						'Received invalid message format:',
+						event.data
+					);
 					return;
 				}
 
@@ -424,7 +468,10 @@ const UploadDocumentEwallet = () => {
 				console.log('Received message from wallet:', type, data);
 
 				if (!type || typeof type !== 'string') {
-					console.warn('Received message without valid type:', event.data);
+					console.warn(
+						'Received message without valid type:',
+						event.data
+					);
 					return;
 				}
 
@@ -442,7 +489,11 @@ const UploadDocumentEwallet = () => {
 						}
 						toast({
 							title: 'Error',
-							description: (error instanceof Error ? error.message : undefined) ?? 'Failed to process documents',
+							description:
+								(error instanceof Error
+									? error.message
+									: undefined) ??
+								'Failed to process documents',
 							status: 'error',
 							duration: 5000,
 							isClosable: true,
@@ -548,7 +599,9 @@ const UploadDocumentEwallet = () => {
 								setTimeout(() => sendAuthToIframe());
 							}}
 							onError={() => {
-								setError('Failed to load wallet interface. Please check your connection and try again.');
+								setError(
+									'Failed to load wallet interface. Please check your connection and try again.'
+								);
 							}}
 							allow="camera"
 							style={{
@@ -582,7 +635,11 @@ const UploadDocumentEwallet = () => {
 									textAlign="center"
 									maxW="sm"
 								>
-									<Text mb={4} fontSize="lg" fontWeight="medium">
+									<Text
+										mb={4}
+										fontSize="lg"
+										fontWeight="medium"
+									>
 										Processing Documents...
 									</Text>
 									<Progress

@@ -1,6 +1,6 @@
 import { Box, IconButton, useToast } from '@chakra-ui/react';
 import { findDocumentStatus } from '../utils/jsHelper/helper';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { deleteDocument } from '../services/user/User';
 import { FaEye, FaTrashAlt } from 'react-icons/fa';
 import { getDocumentsList, getUser } from '../services/auth/auth';
@@ -8,6 +8,7 @@ import { AuthContext } from '../utils/context/checkToken';
 import CommonDialogue from './common/Dialogue';
 import { VscPreview } from 'react-icons/vsc';
 import { useTranslation } from 'react-i18next';
+import { ConfigService } from '../services/configService';
 
 interface DocumentActionsProps {
 	status: string;
@@ -17,6 +18,7 @@ interface DocumentActionsProps {
 		doc_name: string;
 	}[];
 	isDelete?: boolean;
+	documentName?: string;
 }
 interface ImageEntry {
 	mimetype?: string;
@@ -25,6 +27,7 @@ interface ImageEntry {
 const DocumentActions: React.FC<DocumentActionsProps> = ({
 	status,
 	userDocuments,
+	documentName,
 	isDelete = true,
 }) => {
 	const { t } = useTranslation();
@@ -34,8 +37,60 @@ const DocumentActions: React.FC<DocumentActionsProps> = ({
 	const [document, setDocument] = useState();
 	const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
 	const [docImageList, setdocImageList] = useState<string[]>([]);
+	const [issueVC, setIssueVC] = useState<boolean | null>(null);
+	const [isLoadingVC, setIsLoadingVC] = useState(true);
 	const { updateUserData } = useContext(AuthContext)!;
 	const toast = useToast();
+
+	// Fetch VC configuration to check if issueVC is "yes"
+	useEffect(() => {
+		const fetchVCConfig = async () => {
+			if (
+				documentStatus?.matchFound &&
+				documentStatus?.docType &&
+				documentStatus?.docSubtype
+			) {
+				try {
+					const vcConfig = await ConfigService.getVCConfiguration(
+						documentStatus.docType,
+						documentStatus.docSubtype
+					);
+					setIssueVC(vcConfig.issue_vc);
+				} catch (error) {
+					console.warn('Failed to fetch VC configuration:', error);
+					setIssueVC(null);
+				} finally {
+					setIsLoadingVC(false);
+				}
+			} else {
+				setIsLoadingVC(false);
+			}
+		};
+
+		fetchVCConfig();
+	}, [
+		documentStatus?.matchFound,
+		documentStatus?.docType,
+		documentStatus?.docSubtype,
+	]);
+
+	// Determine button states based on issueVC, vc_status, and doc_verified
+	const vcStatus = documentStatus?.vc_status;
+
+	// Disable preview buttons when:
+	// 1. issueVc: yes, vc_status: pending
+	// 2. issueVc: yes, vc_status: deleted
+	const isPreviewDisabled =
+		documentStatus?.matchFound &&
+		issueVC === true &&
+		(vcStatus === 'pending' || vcStatus === 'deleted');
+
+	// Disable delete button when:
+	// 1. issueVc: yes, vc_status: pending
+	const isDeleteDisabled =
+		documentStatus?.matchFound &&
+		issueVC === true &&
+		vcStatus === 'pending';
 
 	const init = async () => {
 		try {
@@ -85,6 +140,15 @@ const DocumentActions: React.FC<DocumentActionsProps> = ({
 
 	const handleImagePreview = () => {
 		try {
+			// Check if download_url is present (S3 presigned URL)
+			if (documentStatus?.download_url) {
+				setdocImageList([documentStatus.download_url]);
+				setIsImageDialogOpen(true);
+				return;
+			}
+
+			// Fallback to old logic for base64 preview
+			console.log('documentStatus?.doc_data:', documentStatus);
 			const parseData = JSON.parse(documentStatus?.doc_data as string);
 			const credentialSubject = parseData?.credentialSubject;
 
@@ -137,6 +201,7 @@ const DocumentActions: React.FC<DocumentActionsProps> = ({
 						size="sm"
 						color={'grey'}
 						onClick={() => handlepreview()}
+						isDisabled={isPreviewDisabled || isLoadingVC}
 					/>
 					<IconButton
 						icon={<VscPreview />}
@@ -144,6 +209,7 @@ const DocumentActions: React.FC<DocumentActionsProps> = ({
 						size="sm"
 						color="grey"
 						onClick={handleImagePreview}
+						isDisabled={isPreviewDisabled || isLoadingVC}
 					/>
 					{isDelete && (
 						<IconButton
@@ -152,6 +218,7 @@ const DocumentActions: React.FC<DocumentActionsProps> = ({
 							size="sm"
 							color={'grey'}
 							onClick={() => handleOpneConfirmation()}
+							isDisabled={isDeleteDisabled || isLoadingVC}
 						/>
 					)}
 				</Box>
@@ -161,7 +228,7 @@ const DocumentActions: React.FC<DocumentActionsProps> = ({
 					onClose={() => setIsConfirmationOpen(false)}
 					handleDialog={handleDelete}
 					deleteConfirmation={isConfirmationOpen}
-					documentName={documentStatus.doc_name}
+					documentName={documentName}
 				/>
 				<CommonDialogue
 					isOpen={isImageDialogOpen}
@@ -170,7 +237,7 @@ const DocumentActions: React.FC<DocumentActionsProps> = ({
 						setdocImageList([]);
 					}}
 					docImageList={docImageList}
-					documentName={documentStatus.doc_name}
+					documentName={documentName}
 				/>
 
 				<CommonDialogue
@@ -178,7 +245,7 @@ const DocumentActions: React.FC<DocumentActionsProps> = ({
 					previewDocument={isPreviewOpen}
 					onClose={() => setIsPreviewOpen(false)}
 					document={document}
-					documentName={documentStatus.doc_name}
+					documentName={documentName}
 				/>
 			</>
 		);

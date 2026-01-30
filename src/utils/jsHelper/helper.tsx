@@ -1,4 +1,6 @@
+import { t } from 'i18next';
 import { IncomeRange } from '../../assets/mockdata/FilterData';
+
 interface DocumentItem {
 	descriptor?: {
 		code?: string;
@@ -192,12 +194,18 @@ export function processDocuments(documents, userId) {
 	});
 }
 
-interface DocumentStatus {
+export interface DocumentStatus {
 	matchFound: boolean;
 	doc_verified: boolean | null;
 	doc_id?: string;
 	doc_data?: unknown;
 	doc_name?: string;
+	download_url?: string | null;
+	doc_datatype?: string;
+	docType?: string;
+	docSubtype?: string;
+	imported_from?: string;
+	vc_status?: string;
 }
 export function findDocumentStatus(documents, status): DocumentStatus {
 	// Iterate through the documents array
@@ -211,6 +219,12 @@ export function findDocumentStatus(documents, status): DocumentStatus {
 				doc_id: doc.doc_id,
 				doc_data: doc.doc_data,
 				doc_name: doc.doc_name,
+				download_url: doc.download_url,
+				doc_datatype: doc.doc_datatype,
+				docType: doc.doc_type,
+				docSubtype: doc.doc_subtype,
+				imported_from: doc.imported_from,
+				vc_status: doc.vc_status,
 			};
 		}
 	}
@@ -221,6 +235,12 @@ export function findDocumentStatus(documents, status): DocumentStatus {
 		doc_id: '',
 		doc_data: null,
 		doc_name: '',
+		download_url: null,
+		doc_datatype: '',
+		docType: '',
+		docSubtype: '',
+		imported_from: '',
+		vc_status: undefined,
 	};
 }
 export const convertToEditPayload = (formData) => {
@@ -481,8 +501,8 @@ export function checkEligibilityCriteria({
 		typeof conditionValues === 'string'
 			? [conditionValues.toLowerCase()]
 			: (conditionValues as (string | number)[]).map((cv) =>
-					cv?.toString().toLowerCase()
-				);
+				cv?.toString().toLowerCase()
+			);
 
 	// Evaluate the condition
 	switch (condition.trim()) {
@@ -696,9 +716,8 @@ export function getExpiredRequiredDocsMessage(
 
 	if (expiredLabels.length === 0) return null;
 
-	return `⚠️ ${expiredLabels.join(', ')} ${
-		expiredLabels.length === 1 ? 'has' : 'have'
-	} expired and no valid alternatives found. Please upload valid documents to proceed further.`;
+	return `⚠️ ${expiredLabels.join(', ')} ${expiredLabels.length === 1 ? 'has' : 'have'
+		} expired and no valid alternatives found. Please upload valid documents to proceed further.`;
 }
 /**
  * Utility function to format a user-readable label for a document.
@@ -891,7 +910,7 @@ export const validateRequiredDocuments = (
 		if (missingDocuments.length > 0) {
 			return {
 				isValid: false,
-				errorMessage: `⚠️ Please upload the following required documents to proceed: ${missingDocuments.join(', ')}`,
+				errorMessage: `⚠️ ${t('USER_PROFILE_UPLOAD_MISSING_DOCUMENTS_DESC')} ${missingDocuments.join(', ')}`,
 				missingDocuments,
 			};
 		}

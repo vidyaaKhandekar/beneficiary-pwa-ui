@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Avatar, Box, Flex, HStack, Text, VStack } from '@chakra-ui/react';
+import { Avatar, Box, Flex, HStack, Text, VStack, Image } from '@chakra-ui/react';
 
 import { getUser, getDocumentsList } from '../services/auth/auth';
 import { useNavigate } from 'react-router-dom';
@@ -11,12 +11,13 @@ import ProgressBar from '../components/common/ProgressBar';
 import UserDetails from '../components/common/UserDetails';
 
 import UploadDocumentEwallet from '../components/common/UploadDocumentEwallet';
+import { isWalletUploadEnabled } from '../utils/envUtils';
 import CommonButton from '../components/common/button/Button';
 import { useTranslation } from 'react-i18next';
-
+import { EditIcon } from '@chakra-ui/icons';
 const UserProfile: React.FC = () => {
 	const [showIframe, setShowIframe] = useState(true);
-	const { userData, documents, updateUserData } = useContext(AuthContext)!;
+	const { userData, documents, updateUserData } = useContext(AuthContext);
 	const navigate = useNavigate();
 	const { t } = useTranslation();
 	const [userName, setUserName] = useState('');
@@ -33,6 +34,11 @@ const UserProfile: React.FC = () => {
 			console.error('Error fetching user data or documents:', error);
 		}
 	};
+
+	const redirectToEditProfile = () => {
+		console.log('redirectToEditProfile');
+		navigate('/edit-user-profile');
+	}
 
 	useEffect(() => {
 		const storedUser = localStorage.getItem('user');
@@ -60,21 +66,64 @@ const UserProfile: React.FC = () => {
 			}}
 		>
 			<HStack m={5} mt={0} p={0} h={82}>
-				<Avatar
-					variant="solid"
-					name={`${userData?.firstName || ''}  ${userData?.lastName || ''}`}
-					mr={2}
-				/>
+				<Box position="relative" display="inline-block" mr={2}>
+					{userData?.pictureUrl ? (
+						<>
+							<Image
+								src={userData.pictureUrl}
+								alt="Profile Picture"
+								borderRadius="full"
+								boxSize="60px"
+								objectFit="cover"
+							/>
+
+							{/* Edit Icon Overlay */}
+							<EditIcon
+								boxSize={5}
+								color="white"
+								position="absolute"
+								bottom="10"
+								right="0"
+								bg="gray.700"
+								borderRadius="full"
+								p={1}
+								cursor="pointer"
+								onClick={redirectToEditProfile}
+							/>
+						</>
+					) : (
+						<>
+							<Avatar
+								variant="solid"
+								name={userData?.name || ''}
+								boxSize="60px"
+							/>
+
+							<EditIcon
+								boxSize={5}
+								color="white"
+								position="absolute"
+								bottom="10"
+								right="0"
+								bg="gray.700"
+								borderRadius="full"
+								p={1}
+								cursor="pointer"
+								onClick={redirectToEditProfile}
+							/>
+						</>
+					)}
+				</Box>
+
 				<VStack mt={8}>
 					<Text
 						fontSize="16px"
 						fontWeight="500"
 						lineHeight="24px"
 						color="#433E3F"
-						textAlign={'start'}
+						alignSelf={'flex-start'}
 					>
-						{userData?.firstName || ''} {userData?.middleName || ''}{' '}
-						{userData?.lastName || ''}
+						{userData?.name || ''}
 					</Text>
 					<Text
 						fontSize="12px"
@@ -94,7 +143,7 @@ const UserProfile: React.FC = () => {
 					>
 						{userData?.phoneNumber
 							? ` +91 ${userData?.phoneNumber}`
-							: t('USER_PROFILE_PHONE_NUMBER')}
+							: ''}
 					</Text>
 				</VStack>
 			</HStack>
@@ -123,9 +172,7 @@ const UserProfile: React.FC = () => {
 
 				<UserDetails
 					userData={{
-						firstName: userData?.firstName,
-						middleName: userData?.middleName,
-						lastName: userData?.lastName,
+						name: userData?.name,
 						dob: userData?.dob,
 						customFields:
 							userData?.customFields?.map((field) => ({
@@ -146,14 +193,17 @@ const UserProfile: React.FC = () => {
 							documents={documents}
 							userDocuments={userData?.docs}
 						/>
-						{showIframe ? (
-							<UploadDocumentEwallet />
-						) : (
-							<CommonButton
-								onClick={() => setShowIframe(true)}
-								label={t('USER_PROFILE_UPLOAD_DOCUMENT_BUTTON')}
-							/>
-						)}
+						{isWalletUploadEnabled() &&
+							(showIframe ? (
+								<UploadDocumentEwallet />
+							) : (
+								<CommonButton
+									onClick={() => setShowIframe(true)}
+									label={t(
+										'USER_PROFILE_UPLOAD_DOCUMENT_BUTTON'
+									)}
+								/>
+							))}
 					</VStack>
 				</Box>
 			</Box>

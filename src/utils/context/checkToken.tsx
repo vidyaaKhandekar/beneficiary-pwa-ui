@@ -45,6 +45,9 @@ interface UserData {
 	class?: string;
 	previousYearMarks?: string;
 	phoneNumber?: string;
+	whosePhoneNumber?: string;
+	picture?: string;
+	pictureUrl?: string;
 	fatherName?: string;
 	firstName?: string;
 	lastName?: string;
@@ -71,7 +74,9 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 	const [applicationId, setApplicationId] = useState<string | null>(null);
 	const [userData, setUserData] = useState<UserData | null>(null);
 	const [documents, setDocuments] = useState<string[]>([]);
-	const [language, setLanguage] = useState<{ name: string }>({ name: 'en' });
+	const [language, setLanguage] = useState<{ name: string }>({
+		name: localStorage.getItem('i18nextLng') || 'en',
+	});
 	const checkToken = async () => {
 		try {
 			const token = await getToken();
@@ -98,6 +103,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 	};
 	const selectLanguage = (lang: string) => {
 		setLanguage({ name: lang });
+		// Explicitly save to localStorage for API client
+		localStorage.setItem('i18nextLng', lang);
 	};
 	useEffect(() => {
 		checkToken();

@@ -9,13 +9,15 @@ import {
 	Tooltip,
 } from '@chakra-ui/react';
 
-import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons';
+import { CheckCircleIcon, WarningIcon, TimeIcon } from '@chakra-ui/icons';
 import Loader from './common/Loader';
 import { findDocumentStatus, getExpiryDate } from '../utils/jsHelper/helper';
 import { AiFillCloseCircle } from 'react-icons/ai';
+import { FaTrashAlt } from 'react-icons/fa';
 import DocumentActions from './DocumentActions';
 import DocumentExpiry from './DocumentExpiry';
 import { useTranslation } from 'react-i18next';
+import { ConfigService } from '../services/configService';
 interface StatusIconProps {
 	status: string;
 	size?: number;
@@ -40,6 +42,7 @@ interface UserDocument {
 	doc_verified: boolean;
 	uploaded_at: string;
 	is_uploaded: boolean;
+	vc_status?: string;
 }
 interface DocumentListProps {
 	documents: Document[] | string[];
@@ -53,21 +56,95 @@ const StatusIcon: React.FC<StatusIconProps> = ({
 	userDocuments,
 }) => {
 	const { t } = useTranslation();
+	const [issueVC, setIssueVC] = React.useState<boolean | null>(null);
+	const [isLoading, setIsLoading] = React.useState(true);
+
 	const result = findDocumentStatus(userDocuments, status);
 	const { success, isExpired } = getExpiryDate(userDocuments, status);
 	const documentExpired = success && isExpired;
+
+	// Fetch VC configuration to check if issueVC is "yes"
+	React.useEffect(() => {
+		const fetchVCConfig = async () => {
+			if (result?.matchFound && result?.docType && result?.docSubtype) {
+				try {
+					const vcConfig = await ConfigService.getVCConfiguration(
+						result.docType,
+						result.docSubtype
+					);
+					setIssueVC(vcConfig.issue_vc);
+				} catch (error) {
+					console.warn('Failed to fetch VC configuration:', error);
+					setIssueVC(null);
+				} finally {
+					setIsLoading(false);
+				}
+			} else {
+				setIsLoading(false);
+			}
+		};
+
+		fetchVCConfig();
+	}, [result?.matchFound, result?.docType, result?.docSubtype]);
+
 	let iconComponent;
 	let iconColor;
+	let statusText;
 
 	if (documentExpired) {
 		iconComponent = AiFillCloseCircle;
 		iconColor = '#C03744';
+		statusText = t('DOCUMENT_LIST_STATUS_EXPIRED');
+	} else if (result?.matchFound && issueVC === true) {
+		// Handle VC-related statuses
+		const vcStatus = result?.vc_status;
+
+		if (vcStatus === 'pending') {
+			// issueVc: yes, vc_status: pending
+			iconComponent = TimeIcon;
+			iconColor = '#FF9800'; // Orange color for pending
+			statusText = t('DOCUMENT_LIST_STATUS_PENDING_VERIFICATION');
+		} else if (vcStatus === 'revoked') {
+			// issueVc: yes, vc_status: revoked
+			iconComponent = AiFillCloseCircle;
+			iconColor = '#C03744'; // Red color for revoked
+			statusText = t('DOCUMENT_LIST_STATUS_REVOKED');
+		} else if (vcStatus === 'deleted') {
+			// issueVc: yes, vc_status: deleted
+			iconComponent = FaTrashAlt;
+			iconColor = '#C03744'; // Red color for deleted
+			statusText = t('DOCUMENT_LIST_STATUS_DELETED');
+		} else if (
+			result?.doc_verified === true &&
+			vcStatus !== 'pending' &&
+			vcStatus !== 'revoked' &&
+			vcStatus !== 'deleted'
+		) {
+			// issueVc: yes, vc_status: issued (or any other non-error status), doc_verified: true
+			iconComponent = CheckCircleIcon;
+			iconColor = '#0B7B69'; // Green color for verified
+			statusText = t('DOCUMENT_LIST_STATUS_ISSUED');
+		} else {
+			// Default verified state
+			iconComponent = CheckCircleIcon;
+			iconColor = '#0B7B69';
+			statusText = t('DOCUMENT_LIST_STATUS_AVAILABLE');
+		}
+	} else if (result?.matchFound && issueVC === false && result?.doc_verified === true) {
+		// issueVc: no, doc_verified: true
+		iconComponent = CheckCircleIcon;
+		iconColor = '#0B7B69'; // Green color for verified
+		statusText = t('DOCUMENT_LIST_STATUS_VERIFIED');
 	} else if (result?.matchFound) {
+		// Document found but not verified
 		iconComponent = CheckCircleIcon;
 		iconColor = '#0B7B69';
+		statusText = t('DOCUMENT_LIST_STATUS_AVAILABLE');
 	} else {
+		// Document not found
 		iconComponent = WarningIcon;
 		iconColor = '#EDA145';
+		statusText = t('DOCUMENT_LIST_STATUS_INCOMPLETE');
 	}
 
 	let label;
@@ -75,17 +152,11 @@ const StatusIcon: React.FC<StatusIconProps> = ({
 	if (ariaLabel) {
 		label = ariaLabel;
 	} else {
-		let statusText;
-
-		if (isExpired) {
-			statusText = t('DOCUMENT_LIST_STATUS_EXPIRED');
-		} else if (result?.matchFound) {
-			statusText = t('DOCUMENT_LIST_STATUS_AVAILABLE');
-		} else {
-			statusText = t('DOCUMENT_LIST_STATUS_INCOMPLETE');
-		}
-
 		label = `${t('DOCUMENT_LIST_STATUS_PREFIX')}: ${statusText}`;
+	}
+
+	if (isLoading) {
+		return null; // or a small loading spinner
 	}
 
 	return (
@@ -108,6 +179,15 @@ const DocumentList: React.FC<DocumentListProps> = ({
 }) => {
 	const theme = useTheme();
 
+	const sortedDocuments = React.useMemo(() => {
+		if (!documents) return [];
+		return [...documents].sort((a: any, b: any) => {
+			const nameA = a?.name || '';
+			const nameB = b?.name || '';
+			return nameA.localeCompare(nameB);
+		});
+	}, [documents]);
+
 	return documents && documents.length > 0 ? (
 		<VStack
 			align="stretch"
@@ -115,9 +195,10 @@ const DocumentList: React.FC<DocumentListProps> = ({
 			padding={0}
 			spacing={0}
 		>
-			{documents.map((document) => (
+			{sortedDocuments.map((document: any) => (
+
 				<HStack
-					key={document.docType}
+					key={document.documentSubType}
 					borderBottomWidth="1px"
 					borderBottomColor={theme.colors.border}
 					paddingY={3}
@@ -144,7 +225,7 @@ const DocumentList: React.FC<DocumentListProps> = ({
 								fontWeight="400"
 								color={theme.colors.text}
 							>
-								{document.name}
+								{document.label}
 							</Text>
 							<DocumentExpiry
 								status={document.documentSubType}
@@ -155,6 +236,7 @@ const DocumentList: React.FC<DocumentListProps> = ({
 						<DocumentActions
 							status={document.documentSubType}
 							userDocuments={userDocuments}
+							documentName={document.label}
 						/>
 					</Box>
 				</HStack>
